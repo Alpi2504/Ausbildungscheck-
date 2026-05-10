@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AusbildungsCheck – Deine Ausbildung. Deine Zukunft.</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --dark:#021D3D;
+  --navy:#042C53;
+  --ice:#4FAADF;
+  --ice-light:#EBF5FC;
+  --gray:#F7F9FC;
+  --gray2:#EEF2F7;
+  --text:#0A1929;
+  --text2:#5A7490;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--text);overflow-x:hidden}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 2.5rem;height:60px;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(4,44,83,0.07);
+}
+.logo{font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;color:var(--dark)}
+.logo span{color:var(--ice)}
+.nav-links{display:flex;align-items:center;gap:1.75rem}
+.nav-links a{font-size:13px;color:var(--text2);text-decoration:none;font-weight:500}
+.nav-links a:hover{color:var(--dark)}
+.nav-cta{background:var(--navy);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
+
+.hero{padding:100px 2rem 3rem;text-align:center;background:#fff;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(79,170,223,0.08) 0%,transparent 70%)}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--ice-light);border:1px solid rgba(79,170,223,0.25);color:var(--ice);font-size:12px;font-weight:600;padding:5px 14px;border-radius:20px;margin-bottom:1.25rem;position:relative}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--ice);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-family:'Outfit',sans-serif;font-size:clamp(32px,5vw,56px);font-weight:800;line-height:1.1;letter-spacing:-2px;color:var(--dark);margin-bottom:1rem;position:relative}
+.hero h1 span{color:var(--ice);display:block}
+.hero p{font-size:16px;color:var(--text2);max-width:440px;line-height:1.65;margin:0 auto 2rem;position:relative}
+.search-wrap{width:100%;max-width:560px;margin:0 auto}
+.search-box{display:flex;align-items:center;background:#fff;border:1.5px solid rgba(4,44,83,0.12);border-radius:12px;padding:6px 6px 6px 18px;gap:10px;box-shadow:0 4px 20px rgba(4,44,83,0.07)}
+.search-box input{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:6px 0}
+.search-box input::placeholder{color:rgba(10,25,41,0.35)}
+.search-btn{background:var(--navy);color:#fff;border:none;padding:11px 22px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
+.search-tags{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;justify-content:center}
+.search-tag{font-size:11px;color:var(--text2);background:var(--gray);border:1px solid var(--gray2);padding:4px 12px;border-radius:20px;cursor:pointer}
+.stats{display:flex;justify-content:center;gap:3rem;margin-top:2.5rem;padding-top:2.5rem;border-top:1.5px solid var(--gray2)}
+.stat-icon{font-size:22px;margin-bottom:6px}
+.stat-label{font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;color:var(--dark)}
+.stat-sub{font-size:11px;color:var(--text2);margin-top:2px}
+
+section{padding:3.5rem 2rem}
+.section-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ice);margin-bottom:.5rem}
+.section-title{font-family:'Outfit',sans-serif;font-size:clamp(22px,3vw,32px);font-weight:800;letter-spacing:-0.5px;color:var(--dark);margin-bottom:.35rem}
+.section-sub{font-size:14px;color:var(--text2);margin-bottom:2rem}
+.center{text-align:center}
+.max-w{max-width:1100px;margin:0 auto}
+
+.jobs-section{background:var(--gray)}
+.jobs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;max-width:1100px;margin:0 auto}
+.job-card{background:#fff;border:1.5px solid var(--gray2);border-radius:14px;padding:1.25rem;cursor:pointer;transition:all .2s}
+.job-card:hover{border-color:var(--ice);box-shadow:0 8px 24px rgba(79,170,223,0.1);transform:translateY(-2px)}
+.job-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.75rem}
+.job-icon{width:38px;height:38px;border-radius:10px;background:var(--ice-light);display:flex;align-items:center;justify-content:center;font-size:17px}
+.job-new{font-size:10px;font-weight:700;letter-spacing:1px;background:var(--ice-light);color:var(--ice);padding:2px 8px;border-radius:5px}
+.job-company{font-size:11px;color:var(--text2);margin-bottom:3px}
+.job-title{font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;color:var(--dark);margin-bottom:.75rem}
+.job-footer{display:flex;gap:6px;flex-wrap:wrap}
+.job-chip{font-size:11px;padding:3px 9px;border-radius:6px;background:var(--gray);color:var(--text2)}
+.job-chip.salary{background:var(--ice-light);color:var(--ice);font-weight:600}
+.jobs-cta{text-align:center;margin-top:1.5rem}
+.btn-outline-dark{background:transparent;color:var(--navy);border:1.5px solid rgba(4,44,83,0.2);padding:10px 24px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer}
+
+.how-section{background:#fff}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.5rem;max-width:860px;margin:0 auto}
+.step{text-align:center;padding:1.5rem;background:var(--gray);border-radius:16px;border:1.5px solid var(--gray2)}
+.step-num{font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--ice-light);letter-spacing:-2px}
+.step-icon{font-size:24px;margin:.4rem 0}
+.step-title{font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;color:var(--dark);margin-bottom:.4rem}
+.step-desc{font-size:12px;color:var(--text2);line-height:1.6}
+
+.video-section{background:var(--gray)}
+.video-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:2rem;max-width:950px;margin:0 auto;align-items:center}
+.video-card{background:#fff;border-radius:16px;overflow:hidden;border:1.5px solid var(--gray2);box-shadow:0 4px 20px rgba(4,44,83,0.06)}
+.video-thumb{height:190px;background:linear-gradient(135deg,var(--navy),#0A4A8A);display:flex;align-items:center;justify-content:center;position:relative}
+.video-thumb-label{position:absolute;top:12px;left:12px;background:var(--ice);color:#fff;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:5px}
+.play-circle{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.5);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.play-circle span{font-size:20px;margin-left:3px;color:#fff}
+.video-info{padding:1rem 1.25rem}
+.video-title{font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;color:var(--dark);margin-bottom:5px}
+.video-meta{font-size:11px;color:var(--text2)}
+.video-text h3{font-family:'Outfit',sans-serif;font-size:24px;font-weight:800;letter-spacing:-0.5px;color:var(--dark);margin-bottom:.75rem}
+.video-text p{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:1.25rem}
+.video-list{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.video-list li{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text)}
+.video-list li::before{content:'✓';color:var(--ice);font-weight:800}
+
+.cta-section{background:var(--navy);text-align:center;padding:4rem 2rem}
+.cta-section h2{font-family:'Outfit',sans-serif;font-size:clamp(24px,4vw,40px);font-weight:800;letter-spacing:-1px;color:#fff;margin-bottom:.75rem}
+.cta-section p{font-size:15px;color:rgba(255,255,255,0.7);max-width:420px;margin:0 auto 2rem;line-height:1.6}
+.cta-btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+.btn-ice{background:var(--ice);color:#fff !important;border:none;padding:13px 30px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;-webkit-text-fill-color:#fff !important}
+.btn-white-outline{background:transparent;color:#fff !important;border:2px solid #fff;padding:13px 30px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;-webkit-text-fill-color:#fff !important}
+
+footer{background:var(--dark);border-top:1px solid rgba(255,255,255,0.06);padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
+.footer-logo{font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;color:#fff}
+.footer-logo span{color:var(--ice)}
+.footer-links{display:flex;gap:1.25rem}
+.footer-links a{font-size:12px;color:rgba(255,255,255,0.45);text-decoration:none}
+.footer-copy{font-size:11px;color:rgba(255,255,255,0.3)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Ausbildungs<span>Check</span></div>
+  <div class="nav-links">
+    <a href="#">Berufe</a>
+    <a href="#">Stellen</a>
+    <a href="#">Videos</a>
+    <a href="#">Für Betriebe</a>
+    <button class="nav-cta">Stelle ausschreiben</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-badge"><span class="badge-dot"></span>Jetzt neu – AusbildungsCheck</div>
+  <h1>Deine Ausbildung.<span>Deine Zukunft.</span></h1>
+  <p>Echte Einblicke in Ausbildungsberufe, faire Gehaltsinfos und direkte Bewerbung – alles auf einer Plattform.</p>
+  <div class="search-wrap">
+    <div class="search-box">
+      <input type="text" placeholder="z.B. Kfz-Mechatroniker, Köln...">
+      <button class="search-btn">Suchen</button>
+    </div>
+    <div class="search-tags">
+      <span class="search-tag">Fachinformatiker</span>
+      <span class="search-tag">Kfz-Mechatroniker</span>
+      <span class="search-tag">Kaufmann</span>
+      <span class="search-tag">Elektriker</span>
+      <span class="search-tag">Koch</span>
+    </div>
+  </div>
+  <div class="stats">
+    <div><div class="stat-icon">📍</div><div class="stat-label">Neue Stellen</div><div class="stat-sub">jede Woche mehr</div></div>
+    <div><div class="stat-icon">🏢</div><div class="stat-label">Ausgewählte Betriebe</div><div class="stat-sub">geprüfte Partner</div></div>
+    <div><div class="stat-icon">🎥</div><div class="stat-label">Berufsvideos</div><div class="stat-sub">wöchentlich neu</div></div>
+  </div>
+</section>
+
+<section class="jobs-section">
+  <div class="max-w">
+    <div class="center" style="margin-bottom:2rem">
+      <div class="section-label">Ausbildungsstellen</div>
+      <div class="section-title">Aktuelle Stellen bei Partnerbetrieben</div>
+      <div class="section-sub">Direkt bewerben – Lebenslauf hochladen, fertig.</div>
+    </div>
+    <div class="jobs-grid">
+      <div class="job-card">
+        <div class="job-top"><div class="job-icon">🔧</div><span class="job-new">NEU</span></div>
+        <div class="job-company">AutoHaus Müller GmbH · Essen</div>
+        <div class="job-title">Kfz-Mechatroniker/in</div>
+        <div class="job-footer"><span class="job-chip salary">820 € / Monat</span><span class="job-chip">Sep 2025</span><span class="job-chip">3,5 Jahre</span></div>
+      </div>
+      <div class="job-card">
+        <div class="job-top"><div class="job-icon">💻</div><span class="job-new">NEU</span></div>
+        <div class="job-company">TechWerk GmbH · Dortmund</div>
+        <div class="job-title">Fachinformatiker/in</div>
+        <div class="job-footer"><span class="job-chip salary">900 € / Monat</span><span class="job-chip">Aug 2025</span><span class="job-chip">3 Jahre</span></div>
+      </div>
+      <div class="job-card">
+        <div class="job-top"><div class="job-icon">🏪</div></div>
+        <div class="job-company">Kaufland · Bochum</div>
+        <div class="job-title">Kaufmann/frau Einzelhandel</div>
+        <div class="job-footer"><span class="job-chip salary">750 € / Monat</span><span class="job-chip">Sep 2025</span><span class="job-chip">3 Jahre</span></div>
+      </div>
+      <div class="job-card">
+        <div class="job-top"><div class="job-icon">⚡</div></div>
+        <div class="job-company">Stadtwerke Wuppertal · Wuppertal</div>
+        <div class="job-title">Elektroniker/in</div>
+        <div class="job-footer"><span class="job-chip salary">860 € / Monat</span><span class="job-chip">Aug 2025</span><span class="job-chip">3,5 Jahre</span></div>
+      </div>
+    </div>
+    <div class="jobs-cta"><button class="btn-outline-dark">Alle Stellen anzeigen →</button></div>
+  </div>
+</section>
+
+<section class="how-section">
+  <div class="max-w">
+    <div class="center" style="margin-bottom:2rem">
+      <div class="section-label">So funktioniert's</div>
+      <div class="section-title">In 3 Schritten zur Ausbildung</div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">01</div><div class="step-icon">🔍</div><div class="step-title">Beruf entdecken</div><div class="step-desc">Stöbere durch echte Berufsvideos und finde heraus was wirklich zu dir passt.</div></div>
+      <div class="step"><div class="step-num">02</div><div class="step-icon">📋</div><div class="step-title">Stelle finden</div><div class="step-desc">Filtere nach Beruf, Ort und Gehalt und finde deinen Wunschbetrieb.</div></div>
+      <div class="step"><div class="step-num">03</div><div class="step-icon">🚀</div><div class="step-title">Direkt bewerben</div><div class="step-desc">Lebenslauf hochladen, Bewerbung abschicken – kein langer Papierkram.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="video-section">
+  <div class="max-w">
+    <div class="video-grid">
+      <div class="video-card">
+        <div class="video-thumb">
+          <span class="video-thumb-label">Aktuell</span>
+          <div class="play-circle"><span>▶</span></div>
+        </div>
+        <div class="video-info">
+          <div class="video-title">Lohnt sich Kfz-Mechatroniker wirklich?</div>
+          <div class="video-meta">AutoHaus Müller · Essen · 14 Min</div>
+        </div>
+      </div>
+      <div class="video-text">
+        <div class="section-label">Berufe im Check</div>
+        <h3>Echte Einblicke statt leere Versprechen</h3>
+        <p>Wir besuchen Betriebe und zeigen dir wie der Job wirklich ist – Alltag, Gehalt, Karrierechancen. Ehrlich und ungefiltert.</p>
+        <ul class="video-list">
+          <li>Echte Betriebsbesuche jede Woche</li>
+          <li>Transparente Gehaltsinformationen</li>
+          <li>Ehrliche Azubi-Erfahrungen</li>
+          <li>Karrierechancen & Weiterbildung</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="max-w">
+    <h2>Du bist Ausbildungsbetrieb?</h2>
+    <p>Liste deine Stellen und erreiche motivierte Bewerber aus deiner Region – kostenlos zum Start.</p>
+    <div class="cta-btns">
+      <button class="btn-ice">Jetzt Stelle eintragen</button>
+      <button class="btn-white-outline">Mehr erfahren</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Ausbildungs<span>Check</span></div>
+  <div class="footer-links"><a href="#">Impressum</a><a href="#">Datenschutz</a><a href="#">Kontakt</a></div>
+  <div class="footer-copy">© 2025 AusbildungsCheck</div>
+</footer>
+
+</body>
+</html>
