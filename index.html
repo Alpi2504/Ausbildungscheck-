@@ -7,34 +7,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --dark:#021D3D;
-  --navy:#042C53;
-  --ice:#4FAADF;
-  --ice-light:#EBF5FC;
-  --gray:#F7F9FC;
-  --gray2:#EEF2F7;
-  --text:#0A1929;
-  --text2:#5A7490;
-}
+:root{--dark:#021D3D;--navy:#042C53;--ice:#4FAADF;--ice-light:#EBF5FC;--gray:#F7F9FC;--gray2:#EEF2F7;--text:#0A1929;--text2:#5A7490}
 html{scroll-behavior:smooth}
 body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--text);overflow-x:hidden}
-
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 2.5rem;height:60px;
-  background:rgba(255,255,255,0.92);
-  backdrop-filter:blur(16px);
-  border-bottom:1px solid rgba(4,44,83,0.07);
-}
-.logo{font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;color:var(--dark)}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:60px;background:rgba(255,255,255,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(4,44,83,0.07)}
+.logo{font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;color:var(--dark);text-decoration:none}
 .logo span{color:var(--ice)}
 .nav-links{display:flex;align-items:center;gap:1.75rem}
 .nav-links a{font-size:13px;color:var(--text2);text-decoration:none;font-weight:500}
 .nav-links a:hover{color:var(--dark)}
+.nav-links a.active{color:var(--ice);font-weight:700}
 .nav-cta{background:var(--navy);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
-
 .hero{padding:100px 2rem 3rem;text-align:center;background:#fff;position:relative;overflow:hidden}
 .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(79,170,223,0.08) 0%,transparent 70%)}
 .hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--ice-light);border:1px solid rgba(79,170,223,0.25);color:var(--ice);font-size:12px;font-weight:600;padding:5px 14px;border-radius:20px;margin-bottom:1.25rem;position:relative}
@@ -54,14 +37,12 @@ nav{
 .stat-icon{font-size:22px;margin-bottom:6px}
 .stat-label{font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;color:var(--dark)}
 .stat-sub{font-size:11px;color:var(--text2);margin-top:2px}
-
 section{padding:3.5rem 2rem}
 .section-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ice);margin-bottom:.5rem}
 .section-title{font-family:'Outfit',sans-serif;font-size:clamp(22px,3vw,32px);font-weight:800;letter-spacing:-0.5px;color:var(--dark);margin-bottom:.35rem}
 .section-sub{font-size:14px;color:var(--text2);margin-bottom:2rem}
 .center{text-align:center}
 .max-w{max-width:1100px;margin:0 auto}
-
 .jobs-section{background:var(--gray)}
 .jobs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;max-width:1100px;margin:0 auto}
 .job-card{background:#fff;border:1.5px solid var(--gray2);border-radius:14px;padding:1.25rem;cursor:pointer;transition:all .2s}
@@ -76,7 +57,6 @@ section{padding:3.5rem 2rem}
 .job-chip.salary{background:var(--ice-light);color:var(--ice);font-weight:600}
 .jobs-cta{text-align:center;margin-top:1.5rem}
 .btn-outline-dark{background:transparent;color:var(--navy);border:1.5px solid rgba(4,44,83,0.2);padding:10px 24px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer}
-
 .how-section{background:#fff}
 .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.5rem;max-width:860px;margin:0 auto}
 .step{text-align:center;padding:1.5rem;background:var(--gray);border-radius:16px;border:1.5px solid var(--gray2)}
@@ -84,7 +64,6 @@ section{padding:3.5rem 2rem}
 .step-icon{font-size:24px;margin:.4rem 0}
 .step-title{font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;color:var(--dark);margin-bottom:.4rem}
 .step-desc{font-size:12px;color:var(--text2);line-height:1.6}
-
 .video-section{background:var(--gray)}
 .video-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:2rem;max-width:950px;margin:0 auto;align-items:center}
 .video-card{background:#fff;border-radius:16px;overflow:hidden;border:1.5px solid var(--gray2);box-shadow:0 4px 20px rgba(4,44,83,0.06)}
@@ -100,14 +79,12 @@ section{padding:3.5rem 2rem}
 .video-list{list-style:none;display:flex;flex-direction:column;gap:.6rem}
 .video-list li{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text)}
 .video-list li::before{content:'✓';color:var(--ice);font-weight:800}
-
 .cta-section{background:var(--navy);text-align:center;padding:4rem 2rem}
 .cta-section h2{font-family:'Outfit',sans-serif;font-size:clamp(24px,4vw,40px);font-weight:800;letter-spacing:-1px;color:#fff;margin-bottom:.75rem}
 .cta-section p{font-size:15px;color:rgba(255,255,255,0.7);max-width:420px;margin:0 auto 2rem;line-height:1.6}
 .cta-btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
 .btn-ice{background:var(--ice);color:#fff !important;border:none;padding:13px 30px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;-webkit-text-fill-color:#fff !important}
 .btn-white-outline{background:transparent;color:#fff !important;border:2px solid #fff;padding:13px 30px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;-webkit-text-fill-color:#fff !important}
-
 footer{background:var(--dark);border-top:1px solid rgba(255,255,255,0.06);padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
 .footer-logo{font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;color:#fff}
 .footer-logo span{color:var(--ice)}
@@ -119,13 +96,12 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,0.06);paddin
 <body>
 
 <nav>
-  <div class="logo">Ausbildungs<span>Check</span></div>
+  <a class="logo" href="index.html">Ausbildungs<span>Check</span></a>
   <div class="nav-links">
-    <a href="#">Berufe</a>
-    <a href="#">Stellen</a>
-    <a href="#">Videos</a>
-    <a href="#">Für Betriebe</a>
-    <button class="nav-cta">Stelle ausschreiben</button>
+    <a href="index.html" class="active">Start</a>
+    <a href="stellen.html">Stellen</a>
+    <a href="betriebe.html">Für Betriebe</a>
+    <button class="nav-cta" onclick="window.location.href='betriebe.html'">Stelle ausschreiben</button>
   </div>
 </nav>
 
@@ -137,14 +113,14 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,0.06);paddin
   <div class="search-wrap">
     <div class="search-box">
       <input type="text" placeholder="z.B. Kfz-Mechatroniker, Köln...">
-      <button class="search-btn">Suchen</button>
+      <button class="search-btn" onclick="window.location.href='stellen.html'">Suchen</button>
     </div>
     <div class="search-tags">
-      <span class="search-tag">Fachinformatiker</span>
-      <span class="search-tag">Kfz-Mechatroniker</span>
-      <span class="search-tag">Kaufmann</span>
-      <span class="search-tag">Elektriker</span>
-      <span class="search-tag">Koch</span>
+      <span class="search-tag" onclick="window.location.href='stellen.html'">Fachinformatiker</span>
+      <span class="search-tag" onclick="window.location.href='stellen.html'">Kfz-Mechatroniker</span>
+      <span class="search-tag" onclick="window.location.href='stellen.html'">Kaufmann</span>
+      <span class="search-tag" onclick="window.location.href='stellen.html'">Elektriker</span>
+      <span class="search-tag" onclick="window.location.href='stellen.html'">Koch</span>
     </div>
   </div>
   <div class="stats">
@@ -162,32 +138,32 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,0.06);paddin
       <div class="section-sub">Direkt bewerben – Lebenslauf hochladen, fertig.</div>
     </div>
     <div class="jobs-grid">
-      <div class="job-card">
+      <div class="job-card" onclick="window.location.href='stellen.html'">
         <div class="job-top"><div class="job-icon">🔧</div><span class="job-new">NEU</span></div>
         <div class="job-company">AutoHaus Müller GmbH · Essen</div>
         <div class="job-title">Kfz-Mechatroniker/in</div>
         <div class="job-footer"><span class="job-chip salary">820 € / Monat</span><span class="job-chip">Sep 2025</span><span class="job-chip">3,5 Jahre</span></div>
       </div>
-      <div class="job-card">
+      <div class="job-card" onclick="window.location.href='stellen.html'">
         <div class="job-top"><div class="job-icon">💻</div><span class="job-new">NEU</span></div>
         <div class="job-company">TechWerk GmbH · Dortmund</div>
         <div class="job-title">Fachinformatiker/in</div>
         <div class="job-footer"><span class="job-chip salary">900 € / Monat</span><span class="job-chip">Aug 2025</span><span class="job-chip">3 Jahre</span></div>
       </div>
-      <div class="job-card">
+      <div class="job-card" onclick="window.location.href='stellen.html'">
         <div class="job-top"><div class="job-icon">🏪</div></div>
         <div class="job-company">Kaufland · Bochum</div>
         <div class="job-title">Kaufmann/frau Einzelhandel</div>
         <div class="job-footer"><span class="job-chip salary">750 € / Monat</span><span class="job-chip">Sep 2025</span><span class="job-chip">3 Jahre</span></div>
       </div>
-      <div class="job-card">
+      <div class="job-card" onclick="window.location.href='stellen.html'">
         <div class="job-top"><div class="job-icon">⚡</div></div>
         <div class="job-company">Stadtwerke Wuppertal · Wuppertal</div>
         <div class="job-title">Elektroniker/in</div>
         <div class="job-footer"><span class="job-chip salary">860 € / Monat</span><span class="job-chip">Aug 2025</span><span class="job-chip">3,5 Jahre</span></div>
       </div>
     </div>
-    <div class="jobs-cta"><button class="btn-outline-dark">Alle Stellen anzeigen →</button></div>
+    <div class="jobs-cta"><button class="btn-outline-dark" onclick="window.location.href='stellen.html'">Alle Stellen anzeigen →</button></div>
   </div>
 </section>
 
@@ -236,17 +212,22 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,0.06);paddin
 <section class="cta-section">
   <div class="max-w">
     <h2>Du bist Ausbildungsbetrieb?</h2>
-    <p>Liste deine Stellen und erreiche motivierte Bewerber aus deiner Region – kostenlos zum Start.</p>
+    <p>Liste deine Stellen und erreiche motivierte Bewerber aus deiner Region.</p>
     <div class="cta-btns">
-      <button class="btn-ice">Jetzt Stelle eintragen</button>
-      <button class="btn-white-outline">Mehr erfahren</button>
+      <button class="btn-ice" onclick="window.location.href='betriebe.html'">Jetzt Stelle eintragen</button>
+      <button class="btn-white-outline" onclick="window.location.href='betriebe.html'">Mehr erfahren</button>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="footer-logo">Ausbildungs<span>Check</span></div>
-  <div class="footer-links"><a href="#">Impressum</a><a href="#">Datenschutz</a><a href="#">Kontakt</a></div>
+  <div class="footer-links">
+    <a href="stellen.html">Stellen</a>
+    <a href="betriebe.html">Für Betriebe</a>
+    <a href="#">Impressum</a>
+    <a href="#">Datenschutz</a>
+  </div>
   <div class="footer-copy">© 2025 AusbildungsCheck</div>
 </footer>
 
