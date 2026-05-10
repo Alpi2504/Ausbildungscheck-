@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Für Betriebe – AusbildungsCheck</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--dark:#021D3D;--navy:#042C53;--ice:#4FAADF;--ice-light:#EBF5FC;--gray:#F7F9FC;--gray2:#EEF2F7;--text:#0A1929;--text2:#5A7490}
+body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--text)}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:60px;background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(4,44,83,0.07)}
+.logo{font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;color:var(--dark);text-decoration:none}
+.logo span{color:var(--ice)}
+.nav-links{display:flex;align-items:center;gap:1.75rem}
+.nav-links a{font-size:13px;color:var(--text2);text-decoration:none;font-weight:500}
+.nav-links a:hover{color:var(--dark)}
+.nav-links a.active{color:var(--ice);font-weight:700}
+.nav-cta{background:var(--navy);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
+
+.hero{background:var(--navy);padding:100px 2rem 5rem;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 100% 50%,rgba(79,170,223,0.1),transparent 60%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(79,170,223,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(79,170,223,0.04) 1px,transparent 1px);background-size:50px 50px}
+.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;position:relative}
+.hero-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ice);opacity:.8;margin-bottom:.75rem}
+.hero h1{font-family:'Outfit',sans-serif;font-size:clamp(28px,4vw,46px);font-weight:800;letter-spacing:-1.5px;color:#fff;line-height:1.1;margin-bottom:1rem}
+.hero h1 span{color:var(--ice)}
+.hero p{font-size:15px;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:2rem;max-width:420px}
+.hero-btns{display:flex;gap:.75rem;flex-wrap:wrap}
+.btn-ice{background:var(--ice);color:#fff !important;border:none;padding:13px 28px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;-webkit-text-fill-color:#fff !important}
+.btn-white-outline{background:transparent;color:#fff !important;border:2px solid rgba(255,255,255,0.4);padding:13px 28px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;-webkit-text-fill-color:#fff !important}
+.hero-card{background:rgba(255,255,255,0.05);border:1px solid rgba(122,191,239,0.15);border-radius:20px;padding:1.75rem;backdrop-filter:blur(10px)}
+.hero-card-title{font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px;margin-bottom:1.25rem}
+.metric-row{display:flex;gap:1rem;margin-bottom:1.25rem}
+.metric{flex:1;background:rgba(255,255,255,0.05);border-radius:12px;padding:1rem;text-align:center}
+.metric-num{font-family:'Outfit',sans-serif;font-size:26px;font-weight:800;color:var(--ice)}
+.metric-label{font-size:11px;color:rgba(255,255,255,0.45);margin-top:3px}
+.applicant-list{display:flex;flex-direction:column;gap:.6rem}
+.applicant{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border-radius:10px;padding:.6rem .85rem}
+.applicant-avatar{width:30px;height:30px;border-radius:50%;background:var(--ice);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--dark);font-family:'Outfit',sans-serif;flex-shrink:0}
+.applicant-name{font-size:13px;font-weight:600;color:#fff}
+.applicant-role{font-size:11px;color:rgba(255,255,255,0.4)}
+.applicant-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;background:rgba(79,170,223,0.15);color:var(--ice);margin-left:auto}
+
+.vorteile{background:var(--gray);padding:4rem 2rem}
+.max-w{max-width:1100px;margin:0 auto}
+.center{text-align:center}
+.section-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ice);margin-bottom:.5rem}
+.section-title{font-family:'Outfit',sans-serif;font-size:clamp(22px,3vw,34px);font-weight:800;letter-spacing:-0.5px;color:var(--dark);margin-bottom:.4rem}
+.section-sub{font-size:14px;color:var(--text2);margin-bottom:2.5rem}
+.vorteile-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.25rem}
+.vorteil-card{background:#fff;border:1.5px solid var(--gray2);border-radius:16px;padding:1.5rem}
+.vorteil-icon{font-size:28px;margin-bottom:.75rem}
+.vorteil-title{font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;color:var(--dark);margin-bottom:.4rem}
+.vorteil-desc{font-size:13px;color:var(--text2);line-height:1.6}
+
+.pakete{background:#fff;padding:4rem 2rem}
+.pakete-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;max-width:860px;margin:0 auto}
+.paket-card{border:1.5px solid var(--gray2);border-radius:20px;padding:2rem;position:relative}
+.paket-card.highlight{border-color:var(--ice);background:linear-gradient(160deg,#fff,var(--ice-light))}
+.paket-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--ice);color:#fff;font-size:11px;font-weight:700;padding:3px 16px;border-radius:20px;white-space:nowrap;font-family:'Outfit',sans-serif}
+.paket-icon{font-size:32px;margin-bottom:.75rem}
+.paket-name{font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:.4rem}
+.paket-title{font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;color:var(--dark);letter-spacing:-0.5px;margin-bottom:1.25rem}
+.paket-divider{height:1px;background:var(--gray2);margin:1.25rem 0}
+.preis-block{margin-bottom:.75rem}
+.preis-row{display:flex;align-items:baseline;gap:.4rem;margin-bottom:.2rem}
+.preis-amount{font-family:'Outfit',sans-serif;font-size:32px;font-weight:800;color:var(--dark);letter-spacing:-1px}
+.preis-unit{font-size:13px;color:var(--text2)}
+.preis-note{font-size:11px;color:var(--text2)}
+.preis-plus{font-size:13px;color:var(--text2);margin:.5rem 0;font-weight:500}
+.paket-features{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.75rem}
+.paket-features li{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--text);line-height:1.4}
+.paket-features li::before{content:'✓';color:var(--ice);font-weight:800;font-size:13px;flex-shrink:0;margin-top:1px}
+.paket-btn{width:100%;padding:13px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none}
+.paket-btn.primary{background:var(--navy);color:#fff !important}
+.paket-btn.outline{background:transparent;color:var(--navy) !important;border:1.5px solid rgba(4,44,83,0.2)}
+
+.kontakt{background:var(--gray);padding:4rem 2rem}
+.kontakt-inner{max-width:680px;margin:0 auto;background:#fff;border-radius:20px;border:1.5px solid var(--gray2);padding:2.5rem}
+.form-group{margin-bottom:1rem}
+.form-label{font-size:13px;font-weight:600;color:var(--dark);margin-bottom:.4rem;display:block}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-input{width:100%;border:1.5px solid var(--gray2);border-radius:9px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .2s}
+.form-input:focus{border-color:var(--ice)}
+.paket-select{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem}
+.paket-option{border:1.5px solid var(--gray2);border-radius:10px;padding:.85rem 1rem;cursor:pointer;transition:all .2s;text-align:center}
+.paket-option:hover{border-color:var(--ice)}
+.paket-option.selected{border-color:var(--ice);background:var(--ice-light)}
+.paket-option-title{font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;color:var(--dark);margin-bottom:3px}
+.paket-option-price{font-size:11px;color:var(--text2)}
+.submit-btn{width:100%;background:#4FAADF !important;color:#fff !important;border:none;padding:15px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:.5rem;-webkit-text-fill-color:#fff !important;box-shadow:0 4px 16px rgba(79,170,223,0.35)}
+
+footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
+.footer-logo{font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;color:#fff}
+.footer-logo span{color:var(--ice)}
+.footer-links{display:flex;gap:1.25rem}
+.footer-links a{font-size:12px;color:rgba(255,255,255,0.45);text-decoration:none}
+.footer-copy{font-size:11px;color:rgba(255,255,255,0.3)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html">Ausbildungs<span>Check</span></a>
+  <div class="nav-links">
+    <a href="index.html">Start</a>
+    <a href="stellen.html">Stellen</a>
+    <a href="betriebe.html" class="active">Für Betriebe</a>
+    <button class="nav-cta" onclick="document.querySelector('.kontakt').scrollIntoView({behavior:'smooth'})">Jetzt starten</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-label">Für Ausbildungsbetriebe</div>
+      <h1>Finde deinen nächsten <span>Top-Azubi</span></h1>
+      <p>Liste deine Ausbildungsstellen bei AusbildungsCheck und erreiche motivierte Bewerber direkt in deiner Region – unkompliziert und transparent.</p>
+      <div class="hero-btns">
+        <button class="btn-ice" onclick="document.querySelector('.kontakt').scrollIntoView({behavior:'smooth'})">Jetzt anfragen</button>
+        <button class="btn-white-outline" onclick="document.querySelector('.pakete').scrollIntoView({behavior:'smooth'})">Pakete ansehen</button>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-card-title">Dein Dashboard</div>
+      <div class="metric-row">
+        <div class="metric"><div class="metric-num">24</div><div class="metric-label">Bewerbungen</div></div>
+        <div class="metric"><div class="metric-num">312</div><div class="metric-label">Profilaufrufe</div></div>
+        <div class="metric"><div class="metric-num">3</div><div class="metric-label">Aktive Stellen</div></div>
+      </div>
+      <div class="applicant-list">
+        <div class="applicant"><div class="applicant-avatar">LM</div><div style="flex:1"><div class="applicant-name">Lena Müller</div><div class="applicant-role">Kfz-Mechatroniker</div></div><span class="applicant-badge">NEU</span></div>
+        <div class="applicant"><div class="applicant-avatar">JS</div><div style="flex:1"><div class="applicant-name">Jonas Schmidt</div><div class="applicant-role">Fachinformatiker</div></div><span class="applicant-badge">NEU</span></div>
+        <div class="applicant"><div class="applicant-avatar">SK</div><div style="flex:1"><div class="applicant-name">Sara Kaya</div><div class="applicant-role">Kauffrau Einzelhandel</div></div><span class="applicant-badge" style="background:rgba(16,185,129,0.15);color:#059669">GESEHEN</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="vorteile">
+  <div class="max-w">
+    <div class="center" style="margin-bottom:2.5rem">
+      <div class="section-label">Warum AusbildungsCheck</div>
+      <div class="section-title">Mehr als nur eine Stellenanzeige</div>
+      <div class="section-sub">Wir bringen echte Reichweite durch Social Media – dein Betrieb wird gesehen.</div>
+    </div>
+    <div class="vorteile-grid">
+      <div class="vorteil-card"><div class="vorteil-icon">📱</div><div class="vorteil-title">Social Media Reichweite</div><div class="vorteil-desc">Deine Stelle wird über unsere Kanäle an tausende junge Bewerber ausgespielt.</div></div>
+      <div class="vorteil-card"><div class="vorteil-icon">🎯</div><div class="vorteil-title">Direkte Bewerbungen</div><div class="vorteil-desc">Bewerber laden ihren Lebenslauf direkt hoch – du erhältst vollständige Bewerbungen per E-Mail.</div></div>
+      <div class="vorteil-card"><div class="vorteil-icon">🎥</div><div class="vorteil-title">Exklusives Betriebs-Video</div><div class="vorteil-desc">Wir kommen zu dir, drehen ein authentisches Video und veröffentlichen es auf allen Kanälen.</div></div>
+      <div class="vorteil-card"><div class="vorteil-icon">⚡</div><div class="vorteil-title">In 5 Minuten live</div><div class="vorteil-desc">Stelle eintragen, Infos ausfüllen, fertig. Deine Anzeige ist sofort für alle Bewerber sichtbar.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="pakete">
+  <div class="max-w">
+    <div class="center" style="margin-bottom:2.5rem">
+      <div class="section-label">Unsere Pakete</div>
+      <div class="section-title">Wähle was zu dir passt</div>
+      <div class="section-sub">Zwei klare Optionen – ohne versteckte Kosten. Alle Preise zzgl. MwSt.</div>
+    </div>
+    <div class="pakete-grid">
+      <div class="paket-card highlight">
+        <div class="paket-badge">⭐ Mehr Sichtbarkeit</div>
+        <div class="paket-icon">🎥</div>
+        <div class="paket-name">Paket 1</div>
+        <div class="paket-title">Video + Listing</div>
+        <div class="preis-block">
+          <div class="preis-row"><span class="preis-amount">1.500€</span><span class="preis-unit">einmalig</span></div>
+          <div class="preis-note">Videoproduktion zzgl. MwSt.</div>
+          <div class="preis-plus">+ 99€ / Monat für das Listing zzgl. MwSt.</div>
+        </div>
+        <div class="paket-divider"></div>
+        <ul class="paket-features">
+          <li>Exklusives Betriebs-Video – wir kommen zu dir</li>
+          <li>Veröffentlichung auf allen Social Media Kanälen</li>
+          <li>Video dauerhaft auf deiner Stellenanzeige</li>
+          <li>Listing deiner Ausbildungsstelle(n)</li>
+          <li>Direkte Bewerbungen per E-Mail</li>
+          <li>Hervorgehobene Anzeige mit Video-Badge</li>
+        </ul>
+        <button class="paket-btn primary" onclick="selectPaket(1)">Paket anfragen</button>
+      </div>
+      <div class="paket-card">
+        <div class="paket-icon">📋</div>
+        <div class="paket-name">Paket 2</div>
+        <div class="paket-title">Nur Listing</div>
+        <div class="preis-block">
+          <div class="preis-row"><span class="preis-amount">99€</span><span class="preis-unit">/ Monat</span></div>
+          <div class="preis-note">pro Ausbildungsberuf, zzgl. MwSt.</div>
+        </div>
+        <div class="paket-divider"></div>
+        <ul class="paket-features">
+          <li>Listing deiner Ausbildungsstelle(n)</li>
+          <li>Direkte Bewerbungen per E-Mail</li>
+          <li>Sichtbar für alle Besucher der Plattform</li>
+          <li>Monatlich kündbar</li>
+        </ul>
+        <button class="paket-btn outline" onclick="selectPaket(2)">Paket anfragen</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="kontakt">
+  <div class="max-w">
+    <div class="center" style="margin-bottom:2rem">
+      <div class="section-label">Kontakt</div>
+      <div class="section-title">Jetzt anfragen</div>
+      <div class="section-sub">Füll das Formular aus – wir melden uns innerhalb von 24 Stunden.</div>
+    </div>
+    <div class="kontakt-inner">
+      <div class="form-group">
+        <label class="form-label">Welches Paket interessiert dich? *</label>
+        <div class="paket-select">
+          <div class="paket-option selected" id="opt1" onclick="selectOption(1)">
+            <div class="paket-option-title">🎥 Video + Listing</div>
+            <div class="paket-option-price">1.500€ + 99€/Monat</div>
+          </div>
+          <div class="paket-option" id="opt2" onclick="selectOption(2)">
+            <div class="paket-option-title">📋 Nur Listing</div>
+            <div class="paket-option-price">99€/Monat</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Firmenname *</label><input class="form-input" type="text" placeholder="Musterfirma GmbH"></div>
+        <div class="form-group"><label class="form-label">Ansprechpartner *</label><input class="form-input" type="text" placeholder="Max Mustermann"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">E-Mail *</label><input class="form-input" type="email" placeholder="max@firma.de"></div>
+        <div class="form-group"><label class="form-label">Telefon</label><input class="form-input" type="tel" placeholder="+49 123 456789"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Ausbildungsberuf *</label><input class="form-input" type="text" placeholder="z.B. Kfz-Mechatroniker/in"></div>
+      <div class="form-group"><label class="form-label">Standort *</label><input class="form-input" type="text" placeholder="z.B. Wuppertal"></div>
+      <div class="form-group"><label class="form-label">Nachricht (optional)</label><textarea class="form-input" rows="3" placeholder="Weitere Infos..."></textarea></div>
+      <button class="submit-btn">Anfrage absenden 🚀</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Ausbildungs<span>Check</span></div>
+  <div class="footer-links"><a href="index.html">Start</a><a href="#">Impressum</a><a href="#">Datenschutz</a></div>
+  <div class="footer-copy">© 2025 AusbildungsCheck</div>
+</footer>
+
+<script>
+function selectOption(n){
+  document.getElementById('opt1').classList.toggle('selected',n===1);
+  document.getElementById('opt2').classList.toggle('selected',n===2);
+}
+function selectPaket(n){
+  document.querySelector('.kontakt').scrollIntoView({behavior:'smooth'});
+  setTimeout(()=>selectOption(n),500);
+}
+</script>
+</body>
+</html>
