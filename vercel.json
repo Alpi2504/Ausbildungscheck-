@@ -1,7 +1,8 @@
 {
-  "cleanUrls": true,
-  "rewrites": [
-    { "source": "/stellen", "destination": "/stellen.html" },
-    { "source": "/betriebe", "destination": "/betriebe.html" }
+  "routes": [
+    { "src": "/stellen", "dest": "/stellen.html" },
+    { "src": "/betriebe", "dest": "/betriebe.html" },
+    { "src": "/stellen.html", "dest": "/stellen.html" },
+    { "src": "/betriebe.html", "dest": "/betriebe.html" }
   ]
 }
