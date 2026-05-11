@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin – AusbildungsCheck</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--dark:#021D3D;--navy:#042C53;--ice:#4FAADF;--ice-light:#EBF5FC;--gray:#F7F9FC;--gray2:#EEF2F7;--text:#0A1929;--text2:#5A7490;--green:#10B981;--red:#EF4444;--yellow:#F59E0B}
+body{font-family:'DM Sans',sans-serif;background:var(--gray);color:var(--text)}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--navy)}
+.login-box{background:#fff;border-radius:20px;padding:2.5rem;width:100%;max-width:400px;text-align:center}
+.login-logo{font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;color:var(--dark);margin-bottom:.5rem}
+.login-logo span{color:var(--ice)}
+.login-sub{font-size:14px;color:var(--text2);margin-bottom:2rem}
+.login-input{width:100%;border:1.5px solid var(--gray2);border-radius:9px;padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);outline:none;margin-bottom:1rem}
+.login-input:focus{border-color:var(--ice)}
+.login-btn{width:100%;background:var(--navy);color:#fff;border:none;padding:13px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer}
+.login-error{color:var(--red);font-size:13px;margin-top:.75rem;display:none}
+
+/* LAYOUT */
+.admin-wrap{display:none;min-height:100vh}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:var(--dark);padding:1.5rem;display:flex;flex-direction:column}
+.sidebar-logo{font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;color:#fff;margin-bottom:2rem}
+.sidebar-logo span{color:var(--ice)}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;cursor:pointer;margin-bottom:4px;color:rgba(255,255,255,0.6);font-size:14px;font-weight:500;transition:all .2s}
+.nav-item:hover,.nav-item.active{background:rgba(255,255,255,0.08);color:#fff}
+.nav-item .icon{font-size:18px;width:24px;text-align:center}
+.sidebar-bottom{margin-top:auto}
+.logout-btn{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;cursor:pointer;color:rgba(255,255,255,0.4);font-size:14px;width:100%;background:none;border:none;font-family:'DM Sans',sans-serif}
+.logout-btn:hover{color:#fff;background:rgba(255,255,255,0.08)}
+
+.main{margin-left:240px;padding:2rem}
+.page{display:none}
+.page.active{display:block}
+.page-title{font-family:'Outfit',sans-serif;font-size:26px;font-weight:800;color:var(--dark);letter-spacing:-0.5px;margin-bottom:1.75rem}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
+.stat-card{background:#fff;border-radius:14px;padding:1.25rem;border:1.5px solid var(--gray2)}
+.stat-value{font-family:'Outfit',sans-serif;font-size:32px;font-weight:800;color:var(--dark);letter-spacing:-1px}
+.stat-label{font-size:13px;color:var(--text2);margin-top:4px}
+.stat-icon{font-size:24px;margin-bottom:.5rem}
+
+/* TABLES */
+.card{background:#fff;border-radius:14px;border:1.5px solid var(--gray2);overflow:hidden;margin-bottom:1.5rem}
+.card-header{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid var(--gray2)}
+.card-title{font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;color:var(--dark)}
+.add-btn{background:var(--navy);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:10px 1.5rem;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);background:var(--gray);border-bottom:1px solid var(--gray2)}
+td{padding:12px 1.5rem;font-size:14px;color:var(--text);border-bottom:1px solid var(--gray2)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--gray)}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.badge-neu{background:#DBEAFE;color:#1D4ED8}
+.badge-aktiv{background:#D1FAE5;color:#065F46}
+.badge-inaktiv{background:#FEE2E2;color:#991B1B}
+.action-btn{background:none;border:none;cursor:pointer;font-size:16px;padding:4px 6px;border-radius:6px}
+.action-btn:hover{background:var(--gray2)}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(2,13,29,0.5);z-index:100;align-items:center;justify-content:center;padding:1rem}
+.modal-bg.open{display:flex}
+.modal-box{background:#fff;border-radius:16px;padding:2rem;width:100%;max-width:540px;max-height:90vh;overflow-y:auto}
+.modal-title{font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;color:var(--dark);margin-bottom:1.5rem}
+.form-group{margin-bottom:1rem}
+.form-label{font-size:13px;font-weight:600;color:var(--dark);margin-bottom:.35rem;display:block}
+.form-input{width:100%;border:1.5px solid var(--gray2);border-radius:9px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none}
+.form-input:focus{border-color:var(--ice)}
+.form-select{width:100%;border:1.5px solid var(--gray2);border-radius:9px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;background:#fff}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.modal-btns{display:flex;gap:.75rem;margin-top:1.5rem;justify-content:flex-end}
+.btn-save{background:var(--navy);color:#fff;border:none;padding:10px 24px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
+.btn-cancel{background:transparent;color:var(--text2);border:1.5px solid var(--gray2);padding:10px 24px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;cursor:pointer}
+.btn-delete{background:#FEE2E2;color:var(--red);border:none;padding:10px 24px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
+
+/* BEWERBUNG DETAIL */
+.bewerbung-card{background:#fff;border-radius:14px;border:1.5px solid var(--gray2);padding:1.5rem;margin-bottom:1rem}
+.bewerbung-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.bewerbung-name{font-family:'Outfit',sans-serif;font-size:17px;font-weight:700;color:var(--dark)}
+.bewerbung-stelle{font-size:13px;color:var(--text2);margin-top:2px}
+.bewerbung-info{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1rem}
+.info-item label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);display:block;margin-bottom:3px}
+.info-item span{font-size:14px;color:var(--text)}
+.bewerbung-antworten{background:var(--gray);border-radius:10px;padding:1rem;margin-bottom:1rem}
+.antwort-item{margin-bottom:.75rem}
+.antwort-item:last-child{margin-bottom:0}
+.antwort-frage{font-size:12px;font-weight:700;color:var(--text2);margin-bottom:3px}
+.antwort-text{font-size:14px;color:var(--text)}
+.status-btns{display:flex;gap:.5rem}
+.status-btn{padding:6px 14px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;border:none}
+.btn-weiterleiten{background:var(--ice-light);color:var(--ice)}
+.btn-archivieren{background:var(--gray2);color:var(--text2)}
+
+/* PREISE */
+.preis-card{background:#fff;border-radius:14px;border:1.5px solid var(--gray2);padding:1.5rem;margin-bottom:1rem}
+.preis-name{font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;color:var(--dark);margin-bottom:1rem}
+.preis-fields{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+
+.empty-state{text-align:center;padding:3rem;color:var(--text2);font-size:14px}
+.empty-icon{font-size:40px;margin-bottom:.75rem}
+
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--dark);color:#fff;padding:.75rem 1.25rem;border-radius:10px;font-size:14px;font-weight:500;z-index:999;display:none;font-family:'Outfit',sans-serif}
+.toast.show{display:block}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">Ausbildungs<span>Check</span></div>
+    <div class="login-sub">Admin Dashboard</div>
+    <input class="login-input" type="password" id="pw-input" placeholder="Passwort eingeben..." onkeydown="if(event.key==='Enter')checkLogin()">
+    <button class="login-btn" onclick="checkLogin()">Einloggen</button>
+    <div class="login-error" id="login-error">Falsches Passwort!</div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div class="admin-wrap" id="admin-screen">
+  <div class="sidebar">
+    <div class="sidebar-logo">Ausbildungs<span>Check</span></div>
+    <div class="nav-item active" onclick="showPage('dashboard')"><span class="icon">📊</span> Dashboard</div>
+    <div class="nav-item" onclick="showPage('betriebe')"><span class="icon">🏢</span> Betriebe</div>
+    <div class="nav-item" onclick="showPage('stellen')"><span class="icon">📋</span> Stellen</div>
+    <div class="nav-item" onclick="showPage('bewerbungen')"><span class="icon">📨</span> Bewerbungen</div>
+    <div class="nav-item" onclick="showPage('preise')"><span class="icon">💰</span> Preise</div>
+    <div class="sidebar-bottom">
+      <button class="logout-btn" onclick="logout()"><span>🚪</span> Ausloggen</button>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-title">Dashboard</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon">🏢</div><div class="stat-value" id="stat-betriebe">0</div><div class="stat-label">Partnerbetriebe</div></div>
+        <div class="stat-card"><div class="stat-icon">📋</div><div class="stat-value" id="stat-stellen">0</div><div class="stat-label">Aktive Stellen</div></div>
+        <div class="stat-card"><div class="stat-icon">📨</div><div class="stat-value" id="stat-bewerbungen">0</div><div class="stat-label">Bewerbungen gesamt</div></div>
+        <div class="stat-card"><div class="stat-icon">🆕</div><div class="stat-value" id="stat-neu">0</div><div class="stat-label">Neue Bewerbungen</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Letzte Bewerbungen</div></div>
+        <table><thead><tr><th>Name</th><th>Stelle</th><th>Betrieb</th><th>Datum</th><th>Status</th></tr></thead>
+        <tbody id="recent-bewerbungen"><tr><td colspan="5" class="empty-state">Lädt...</td></tr></tbody></table>
+      </div>
+    </div>
+
+    <!-- BETRIEBE -->
+    <div class="page" id="page-betriebe">
+      <div class="page-title">Betriebe</div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Alle Partnerbetriebe</div>
+          <button class="add-btn" onclick="openBetriebModal()">+ Betrieb hinzufügen</button>
+        </div>
+        <table><thead><tr><th>Firmenname</th><th>E-Mail</th><th>Telefon</th><th>Stellen</th><th>Aktionen</th></tr></thead>
+        <tbody id="betriebe-table"><tr><td colspan="5" class="empty-state">Lädt...</td></tr></tbody></table>
+      </div>
+    </div>
+
+    <!-- STELLEN -->
+    <div class="page" id="page-stellen">
+      <div class="page-title">Stellen</div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Alle Ausbildungsstellen</div>
+          <button class="add-btn" onclick="openStelleModal()">+ Stelle hinzufügen</button>
+        </div>
+        <table><thead><tr><th>Beruf</th><th>Betrieb</th><th>Standort</th><th>Gehalt</th><th>Status</th><th>Aktionen</th></tr></thead>
+        <tbody id="stellen-table"><tr><td colspan="6" class="empty-state">Lädt...</td></tr></tbody></table>
+      </div>
+    </div>
+
+    <!-- BEWERBUNGEN -->
+    <div class="page" id="page-bewerbungen">
+      <div class="page-title">Bewerbungen</div>
+      <div id="bewerbungen-list"><div class="empty-state"><div class="empty-icon">📨</div>Lädt...</div></div>
+    </div>
+
+    <!-- PREISE -->
+    <div class="page" id="page-preise">
+      <div class="page-title">Preise</div>
+      <div id="preise-list"><div class="empty-state">Lädt...</div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BETRIEB MODAL -->
+<div class="modal-bg" id="betrieb-modal">
+  <div class="modal-box">
+    <div class="modal-title" id="betrieb-modal-title">Betrieb hinzufügen</div>
+    <input type="hidden" id="betrieb-id">
+    <div class="form-group"><label class="form-label">Firmenname *</label><input class="form-input" id="betrieb-name" placeholder="Musterfirma GmbH"></div>
+    <div class="form-group"><label class="form-label">E-Mail *</label><input class="form-input" id="betrieb-email" type="email" placeholder="info@firma.de"></div>
+    <div class="form-group"><label class="form-label">Telefon</label><input class="form-input" id="betrieb-telefon" placeholder="+49 123 456789"></div>
+    <div class="form-group"><label class="form-label">Adresse</label><input class="form-input" id="betrieb-adresse" placeholder="Musterstraße 1, 12345 Stadt"></div>
+    <div class="modal-btns">
+      <button class="btn-delete" id="betrieb-delete-btn" onclick="deleteBetrieb()" style="display:none">Löschen</button>
+      <button class="btn-cancel" onclick="closeModal('betrieb-modal')">Abbrechen</button>
+      <button class="btn-save" onclick="saveBetrieb()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<!-- STELLE MODAL -->
+<div class="modal-bg" id="stelle-modal">
+  <div class="modal-box">
+    <div class="modal-title" id="stelle-modal-title">Stelle hinzufügen</div>
+    <input type="hidden" id="stelle-id">
+    <div class="form-group"><label class="form-label">Betrieb *</label>
+      <select class="form-select" id="stelle-betrieb"><option value="">Bitte auswählen...</option></select>
+    </div>
+    <div class="form-group"><label class="form-label">Ausbildungsberuf *</label><input class="form-input" id="stelle-beruf" placeholder="z.B. Kfz-Mechatroniker/in"></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Gehalt (€/Monat)</label><input class="form-input" id="stelle-gehalt" placeholder="820"></div>
+      <div class="form-group"><label class="form-label">Standort</label><input class="form-input" id="stelle-standort" placeholder="Wuppertal"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Ausbildungsbeginn</label><input class="form-input" id="stelle-beginn" placeholder="Sep 2025"></div>
+      <div class="form-group"><label class="form-label">Dauer</label><input class="form-input" id="stelle-dauer" placeholder="3 Jahre"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Beschreibung</label><textarea class="form-input" id="stelle-beschreibung" rows="3" placeholder="Kurze Beschreibung der Stelle..."></textarea></div>
+    <div class="form-group"><label class="form-label">Frage 1 für Bewerber</label><input class="form-input" id="stelle-frage1" placeholder="z.B. Warum interessiert dich dieser Beruf?"></div>
+    <div class="form-group"><label class="form-label">Frage 2 für Bewerber</label><input class="form-input" id="stelle-frage2" placeholder="z.B. Hast du bereits Erfahrungen in diesem Bereich?"></div>
+    <div class="form-group"><label class="form-label">Status</label>
+      <select class="form-select" id="stelle-aktiv">
+        <option value="true">Aktiv</option>
+        <option value="false">Inaktiv</option>
+      </select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-delete" id="stelle-delete-btn" onclick="deleteStelle()" style="display:none">Löschen</button>
+      <button class="btn-cancel" onclick="closeModal('stelle-modal')">Abbrechen</button>
+      <button class="btn-save" onclick="saveStelle()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://trccxzjdddhbqjgyzlkv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_t793ba-jFm0vxzL6iHMmgQ_dKB5Kvnv';
+const ADMIN_PASSWORD = 'ausbildungscheck2025';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// LOGIN
+function checkLogin(){
+  var pw=document.getElementById('pw-input').value;
+  if(pw===ADMIN_PASSWORD){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('admin-screen').style.display='flex';
+    loadAll();
+  } else {
+    document.getElementById('login-error').style.display='block';
+  }
+}
+function logout(){
+  document.getElementById('admin-screen').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('pw-input').value='';
+}
+
+// NAVIGATION
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if(name==='bewerbungen') loadBewerbungen();
+  if(name==='preise') loadPreise();
+}
+
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// LOAD ALL
+async function loadAll(){
+  await Promise.all([loadDashboard(),loadBetriebe(),loadStellen()]);
+}
+
+// DASHBOARD
+async function loadDashboard(){
+  var [b,s,bew,neu]=await Promise.all([
+    sb.from('betriebe').select('id',{count:'exact'}),
+    sb.from('stellen').select('id',{count:'exact'}).eq('aktiv',true),
+    sb.from('bewerbungen').select('id',{count:'exact'}),
+    sb.from('bewerbungen').select('id',{count:'exact'}).eq('status','neu')
+  ]);
+  document.getElementById('stat-betriebe').textContent=b.count||0;
+  document.getElementById('stat-stellen').textContent=s.count||0;
+  document.getElementById('stat-bewerbungen').textContent=bew.count||0;
+  document.getElementById('stat-neu').textContent=neu.count||0;
+
+  var {data}=await sb.from('bewerbungen').select('*,stellen(beruf,betriebe(name))').order('created_at',{ascending:false}).limit(5);
+  var tb=document.getElementById('recent-bewerbungen');
+  if(!data||!data.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:2rem;color:#5A7490">Noch keine Bewerbungen</td></tr>';return;}
+  tb.innerHTML=data.map(b=>`<tr>
+    <td>${b.vorname||''} ${b.nachname||''}</td>
+    <td>${b.stellen?.beruf||'-'}</td>
+    <td>${b.stellen?.betriebe?.name||'-'}</td>
+    <td>${new Date(b.created_at).toLocaleDateString('de-DE')}</td>
+    <td><span class="badge badge-${b.status==='neu'?'neu':'aktiv'}">${b.status}</span></td>
+  </tr>`).join('');
+}
+
+// BETRIEBE
+var betriebeData=[];
+async function loadBetriebe(){
+  var {data}=await sb.from('betriebe').select('*,stellen(id)').order('created_at',{ascending:false});
+  betriebeData=data||[];
+  var tb=document.getElementById('betriebe-table');
+  if(!data||!data.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:2rem;color:#5A7490">Noch keine Betriebe</td></tr>';return;}
+  tb.innerHTML=data.map(b=>`<tr>
+    <td><strong>${b.name}</strong></td>
+    <td>${b.email}</td>
+    <td>${b.telefon||'-'}</td>
+    <td>${b.stellen?.length||0} Stellen</td>
+    <td>
+      <button class="action-btn" onclick="openBetriebModal('${b.id}')">✏️</button>
+    </td>
+  </tr>`).join('');
+
+  // Update betrieb select in stelle modal
+  var sel=document.getElementById('stelle-betrieb');
+  sel.innerHTML='<option value="">Bitte auswählen...</option>';
+  data.forEach(b=>sel.innerHTML+=`<option value="${b.id}">${b.name}</option>`);
+}
+
+function openBetriebModal(id){
+  document.getElementById('betrieb-id').value='';
+  document.getElementById('betrieb-name').value='';
+  document.getElementById('betrieb-email').value='';
+  document.getElementById('betrieb-telefon').value='';
+  document.getElementById('betrieb-adresse').value='';
+  document.getElementById('betrieb-delete-btn').style.display='none';
+  document.getElementById('betrieb-modal-title').textContent='Betrieb hinzufügen';
+  if(id){
+    var b=betriebeData.find(x=>x.id===id);
+    if(b){
+      document.getElementById('betrieb-id').value=b.id;
+      document.getElementById('betrieb-name').value=b.name||'';
+      document.getElementById('betrieb-email').value=b.email||'';
+      document.getElementById('betrieb-telefon').value=b.telefon||'';
+      document.getElementById('betrieb-adresse').value=b.adresse||'';
+      document.getElementById('betrieb-delete-btn').style.display='block';
+      document.getElementById('betrieb-modal-title').textContent='Betrieb bearbeiten';
+    }
+  }
+  document.getElementById('betrieb-modal').classList.add('open');
+}
+
+async function saveBetrieb(){
+  var id=document.getElementById('betrieb-id').value;
+  var data={
+    name:document.getElementById('betrieb-name').value,
+    email:document.getElementById('betrieb-email').value,
+    telefon:document.getElementById('betrieb-telefon').value,
+    adresse:document.getElementById('betrieb-adresse').value
+  };
+  if(!data.name||!data.email){alert('Bitte Name und E-Mail ausfüllen!');return;}
+  if(id){
+    await sb.from('betriebe').update(data).eq('id',id);
+  } else {
+    await sb.from('betriebe').insert(data);
+  }
+  closeModal('betrieb-modal');
+  await loadBetriebe();
+  loadDashboard();
+  showToast(id?'✅ Betrieb aktualisiert!':'✅ Betrieb hinzugefügt!');
+}
+
+async function deleteBetrieb(){
+  if(!confirm('Betrieb wirklich löschen?')) return;
+  var id=document.getElementById('betrieb-id').value;
+  await sb.from('betriebe').delete().eq('id',id);
+  closeModal('betrieb-modal');
+  await loadBetriebe();
+  loadDashboard();
+  showToast('🗑️ Betrieb gelöscht');
+}
+
+// STELLEN
+var stellenData=[];
+async function loadStellen(){
+  var {data}=await sb.from('stellen').select('*,betriebe(name)').order('created_at',{ascending:false});
+  stellenData=data||[];
+  var tb=document.getElementById('stellen-table');
+  if(!data||!data.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:2rem;color:#5A7490">Noch keine Stellen</td></tr>';return;}
+  tb.innerHTML=data.map(s=>`<tr>
+    <td><strong>${s.beruf}</strong></td>
+    <td>${s.betriebe?.name||'-'}</td>
+    <td>${s.standort||'-'}</td>
+    <td>${s.gehalt?s.gehalt+' €':'-'}</td>
+    <td><span class="badge badge-${s.aktiv?'aktiv':'inaktiv'}">${s.aktiv?'Aktiv':'Inaktiv'}</span></td>
+    <td><button class="action-btn" onclick="openStelleModal('${s.id}')">✏️</button></td>
+  </tr>`).join('');
+}
+
+function openStelleModal(id){
+  document.getElementById('stelle-id').value='';
+  document.getElementById('stelle-beruf').value='';
+  document.getElementById('stelle-gehalt').value='';
+  document.getElementById('stelle-standort').value='';
+  document.getElementById('stelle-beginn').value='';
+  document.getElementById('stelle-dauer').value='';
+  document.getElementById('stelle-beschreibung').value='';
+  document.getElementById('stelle-frage1').value='';
+  document.getElementById('stelle-frage2').value='';
+  document.getElementById('stelle-aktiv').value='true';
+  document.getElementById('stelle-betrieb').value='';
+  document.getElementById('stelle-delete-btn').style.display='none';
+  document.getElementById('stelle-modal-title').textContent='Stelle hinzufügen';
+  if(id){
+    var s=stellenData.find(x=>x.id===id);
+    if(s){
+      document.getElementById('stelle-id').value=s.id;
+      document.getElementById('stelle-beruf').value=s.beruf||'';
+      document.getElementById('stelle-gehalt').value=s.gehalt||'';
+      document.getElementById('stelle-standort').value=s.standort||'';
+      document.getElementById('stelle-beginn').value=s.beginn||'';
+      document.getElementById('stelle-dauer').value=s.dauer||'';
+      document.getElementById('stelle-beschreibung').value=s.beschreibung||'';
+      document.getElementById('stelle-frage1').value=s.frage1||'';
+      document.getElementById('stelle-frage2').value=s.frage2||'';
+      document.getElementById('stelle-aktiv').value=s.aktiv?'true':'false';
+      document.getElementById('stelle-betrieb').value=s.betrieb_id||'';
+      document.getElementById('stelle-delete-btn').style.display='block';
+      document.getElementById('stelle-modal-title').textContent='Stelle bearbeiten';
+    }
+  }
+  document.getElementById('stelle-modal').classList.add('open');
+}
+
+async function saveStelle(){
+  var id=document.getElementById('stelle-id').value;
+  var data={
+    betrieb_id:document.getElementById('stelle-betrieb').value,
+    beruf:document.getElementById('stelle-beruf').value,
+    gehalt:document.getElementById('stelle-gehalt').value,
+    standort:document.getElementById('stelle-standort').value,
+    beginn:document.getElementById('stelle-beginn').value,
+    dauer:document.getElementById('stelle-dauer').value,
+    beschreibung:document.getElementById('stelle-beschreibung').value,
+    frage1:document.getElementById('stelle-frage1').value,
+    frage2:document.getElementById('stelle-frage2').value,
+    aktiv:document.getElementById('stelle-aktiv').value==='true'
+  };
+  if(!data.beruf||!data.betrieb_id){alert('Bitte Betrieb und Beruf ausfüllen!');return;}
+  if(id){
+    await sb.from('stellen').update(data).eq('id',id);
+  } else {
+    await sb.from('stellen').insert(data);
+  }
+  closeModal('stelle-modal');
+  await loadStellen();
+  loadDashboard();
+  showToast(id?'✅ Stelle aktualisiert!':'✅ Stelle hinzugefügt!');
+}
+
+async function deleteStelle(){
+  if(!confirm('Stelle wirklich löschen?')) return;
+  var id=document.getElementById('stelle-id').value;
+  await sb.from('stellen').delete().eq('id',id);
+  closeModal('stelle-modal');
+  await loadStellen();
+  loadDashboard();
+  showToast('🗑️ Stelle gelöscht');
+}
+
+// BEWERBUNGEN
+async function loadBewerbungen(){
+  var {data}=await sb.from('bewerbungen').select('*,stellen(beruf,betrieb_id,betriebe(name,email))').order('created_at',{ascending:false});
+  var list=document.getElementById('bewerbungen-list');
+  if(!data||!data.length){list.innerHTML='<div class="empty-state"><div class="empty-icon">📨</div>Noch keine Bewerbungen</div>';return;}
+  list.innerHTML=data.map(b=>`
+    <div class="bewerbung-card">
+      <div class="bewerbung-header">
+        <div>
+          <div class="bewerbung-name">${b.vorname||''} ${b.nachname||''}</div>
+          <div class="bewerbung-stelle">${b.stellen?.beruf||'-'} · ${b.stellen?.betriebe?.name||'-'}</div>
+        </div>
+        <span class="badge badge-${b.status==='neu'?'neu':'aktiv'}">${b.status}</span>
+      </div>
+      <div class="bewerbung-info">
+        <div class="info-item"><label>E-Mail</label><span>${b.email||'-'}</span></div>
+        <div class="info-item"><label>Telefon</label><span>${b.telefon||'-'}</span></div>
+        <div class="info-item"><label>Wohnort</label><span>${b.wohnort||'-'}</span></div>
+        <div class="info-item"><label>Schulabschluss</label><span>${b.schulabschluss||'-'}</span></div>
+        <div class="info-item"><label>Noch Schüler</label><span>${b.noch_schueler?'Ja':'Nein'}</span></div>
+        <div class="info-item"><label>Datum</label><span>${new Date(b.created_at).toLocaleDateString('de-DE')}</span></div>
+      </div>
+      ${b.antwort1||b.antwort2?`<div class="bewerbung-antworten">
+        ${b.antwort1?`<div class="antwort-item"><div class="antwort-frage">${b.stellen?.frage1||'Frage 1'}</div><div class="antwort-text">${b.antwort1}</div></div>`:''}
+        ${b.antwort2?`<div class="antwort-item"><div class="antwort-frage">${b.stellen?.frage2||'Frage 2'}</div><div class="antwort-text">${b.antwort2}</div></div>`:''}
+      </div>`:''}
+      <div class="status-btns">
+        <button class="status-btn btn-weiterleiten" onclick="weiterleitenBewerbung('${b.id}','${b.stellen?.betriebe?.email||''}','${b.vorname||''} ${b.nachname||''}','${b.email||''}','${b.stellen?.beruf||''}')">📤 An Betrieb weiterleiten</button>
+        <button class="status-btn btn-archivieren" onclick="archivierenBewerbung('${b.id}')">Archivieren</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function weiterleitenBewerbung(id, betriebEmail, name, bewerberEmail, stelle){
+  if(!betriebEmail){alert('Keine Betrieb-E-Mail hinterlegt!');return;}
+  var mailto='mailto:'+betriebEmail+'?subject=Neue Bewerbung: '+encodeURIComponent(stelle)+'&body='+encodeURIComponent('Hallo,\n\nes liegt eine neue Bewerbung für die Stelle "'+stelle+'" vor.\n\nBewerber: '+name+'\nE-Mail: '+bewerberEmail+'\n\nBitte nehmen Sie Kontakt auf.\n\nMit freundlichen Grüßen\nAusbildungsCheck');
+  window.open(mailto);
+  await sb.from('bewerbungen').update({status:'weitergeleitet'}).eq('id',id);
+  loadBewerbungen();
+  loadDashboard();
+  showToast('✅ Bewerbung weitergeleitet!');
+}
+
+async function archivierenBewerbung(id){
+  await sb.from('bewerbungen').update({status:'archiviert'}).eq('id',id);
+  loadBewerbungen();
+  loadDashboard();
+  showToast('📁 Bewerbung archiviert');
+}
+
+// PREISE
+async function loadPreise(){
+  var {data}=await sb.from('preise').select('*').order('id');
+  var list=document.getElementById('preise-list');
+  if(!data||!data.length){list.innerHTML='<div class="empty-state">Keine Preise gefunden</div>';return;}
+  list.innerHTML=data.map(p=>`
+    <div class="preis-card">
+      <div class="preis-name">${p.paket_name}</div>
+      <div class="preis-fields">
+        <div class="form-group">
+          <label class="form-label">Einmaliger Preis (€)</label>
+          <input class="form-input" id="preis-einmalig-${p.id}" value="${p.preis_einmalig||''}" placeholder="z.B. 1500">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Monatlicher Preis (€)</label>
+          <input class="form-input" id="preis-monatlich-${p.id}" value="${p.preis_monatlich||''}" placeholder="z.B. 99">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Beschreibung</label>
+        <input class="form-input" id="preis-beschreibung-${p.id}" value="${p.beschreibung||''}" placeholder="Kurze Beschreibung...">
+      </div>
+      <button class="btn-save" onclick="savePreis('${p.id}')">Speichern</button>
+    </div>
+  `).join('');
+}
+
+async function savePreis(id){
+  var data={
+    preis_einmalig:parseFloat(document.getElementById('preis-einmalig-'+id).value)||null,
+    preis_monatlich:parseFloat(document.getElementById('preis-monatlich-'+id).value)||null,
+    beschreibung:document.getElementById('preis-beschreibung-'+id).value
+  };
+  await sb.from('preise').update(data).eq('id',id);
+  showToast('✅ Preis gespeichert!');
+}
+
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open')}));
+</script>
+</body>
+</html>
