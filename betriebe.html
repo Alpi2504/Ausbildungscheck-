@@ -240,6 +240,10 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
         <div class="form-group"><label class="form-label">Ausbildungsberuf *</label><input class="form-input" type="text" name="Ausbildungsberuf" placeholder="z.B. Kfz-Mechatroniker/in" required></div>
         <div class="form-group"><label class="form-label">Standort *</label><input class="form-input" type="text" name="Standort" placeholder="z.B. Wuppertal" required></div>
         <div class="form-group"><label class="form-label">Nachricht (optional)</label><textarea class="form-input" name="Nachricht" rows="3" placeholder="Weitere Infos..."></textarea></div>
+        <div style="display:flex;align-items:flex-start;gap:10px;margin-top:.75rem;padding:1rem;background:var(--gray);border-radius:9px;border:1.5px solid var(--gray2)">
+          <input type="checkbox" id="datenschutz-betriebe" style="accent-color:var(--ice);width:16px;height:16px;cursor:pointer;flex-shrink:0;margin-top:2px">
+          <label for="datenschutz-betriebe" style="font-size:13px;color:var(--text2);line-height:1.5;cursor:pointer">Ich habe die <a href="datenschutz.html" target="_blank" style="color:var(--ice);font-weight:600">Datenschutzerklärung</a> gelesen und bin damit einverstanden, dass meine Daten zur Bearbeitung meiner Anfrage verarbeitet werden. *</label>
+        </div>
         <div id="betriebe-success" style="display:none;background:#E6F9F0;border:1.5px solid #34D399;border-radius:10px;padding:1rem;text-align:center;color:#065F46;font-weight:600;margin-bottom:1rem;font-family:'Outfit',sans-serif">🎉 Anfrage erfolgreich gesendet! Wir melden uns innerhalb von 24 Stunden.</div>
         <button type="button" class="submit-btn" onclick="submitBetriebe()">Anfrage absenden 🚀</button>
       </form>
@@ -264,6 +268,8 @@ function selectPaket(n){
   setTimeout(()=>selectOption(n),500);
 }
 function submitBetriebe(){
+  var datenschutz=document.getElementById('datenschutz-betriebe').checked;
+  if(!datenschutz){alert('Bitte bestätige die Datenschutzerklärung!');return;}
   var form=document.getElementById('betriebe-form');
   var data=new FormData(form);
   fetch('https://formspree.io/f/xdabywro',{
