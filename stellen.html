@@ -320,10 +320,11 @@ function closeModal(){document.getElementById('modal').classList.remove('open')}
 document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal()});
 function submitBewerbung(){
   var form=document.getElementById('bewerbung-form');
-  var name=form.querySelector('[name=Name]').value;
-  var email=form.querySelector('[name=Email]').value;
+  var name=document.querySelector('#bewerbung-form [name=Name]');
+  var email=document.querySelector('#bewerbung-form [name=Email]');
   var datenschutz=document.getElementById('datenschutz-check').checked;
-  if(!name||!email){alert('Bitte Name und E-Mail ausfüllen!');return;}
+  if(!name||!name.value){alert('Bitte Name ausfüllen!');return;}
+  if(!email||!email.value){alert('Bitte E-Mail ausfüllen!');return;}
   if(!datenschutz){alert('Bitte bestätige die Datenschutzerklärung um fortzufahren!');return;}
   var data=new FormData(form);
   fetch('https://formspree.io/f/xnjwlboz',{
@@ -333,7 +334,6 @@ function submitBewerbung(){
       document.getElementById('success-msg').style.display='block';
       form.reset();
       document.getElementById('abschluss-label').textContent='Schulabschluss *';
-      toggleSchueler();
       setTimeout(function(){closeModal();},3000);
     } else {
       alert('Fehler beim Senden. Bitte versuche es nochmal.');
