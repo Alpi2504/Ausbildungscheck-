@@ -228,8 +228,14 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
       </div>
       <div class="form-group"><label class="form-label">Wohnort *</label><input class="form-input" type="text" name="Wohnort" placeholder="z.B. Wuppertal" required></div>
       <div class="form-group">
-        <label class="form-label">Schulabschluss *</label>
-        <select class="form-select" name="Schulabschluss" required>
+        <!-- Schüler Checkbox -->
+        <div style="display:flex;align-items:center;gap:10px;background:var(--ice-light);border:1.5px solid rgba(79,170,223,0.2);border-radius:9px;padding:10px 14px;margin-bottom:.75rem;cursor:pointer" onclick="toggleSchueler()">
+          <input type="checkbox" id="schueler-check" name="NochSchueler" style="accent-color:var(--ice);width:16px;height:16px;cursor:pointer" onchange="toggleSchueler()">
+          <label for="schueler-check" style="font-size:13px;font-weight:600;color:var(--navy);cursor:pointer">Ich bin noch Schüler/in</label>
+        </div>
+
+        <label class="form-label" id="abschluss-label">Schulabschluss *</label>
+        <select class="form-select" name="Schulabschluss" id="abschluss-select" required>
           <option value="">Bitte auswählen...</option>
           <option>Hauptschulabschluss</option>
           <option>Qualifizierter Hauptschulabschluss</option>
@@ -238,7 +244,6 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
           <option>Fachhochschulreife (Fachabitur)</option>
           <option>Allgemeine Hochschulreife (Abitur)</option>
           <option>Förderschulabschluss</option>
-          <option>Noch kein Abschluss (Schüler/in)</option>
           <option>Kein Schulabschluss</option>
         </select>
       </div>
@@ -249,7 +254,13 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
         <div class="form-group" style="margin-bottom:0"><label class="form-label" id="frage2-label"></label><textarea class="form-input" name="Frage2" rows="2" placeholder="Deine Antwort..."></textarea></div>
       </div>
 
-      <button type="button" class="submit-btn" onclick="submitBewerbung()">Jetzt bewerben 🚀</button>
+      <!-- Datenschutz Checkbox -->
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-top:.75rem;padding:1rem;background:var(--gray);border-radius:9px;border:1.5px solid var(--gray2)">
+        <input type="checkbox" id="datenschutz-check" style="accent-color:var(--ice);width:16px;height:16px;cursor:pointer;flex-shrink:0;margin-top:2px" required>
+        <label for="datenschutz-check" style="font-size:13px;color:var(--text2);line-height:1.5;cursor:pointer">Ich habe die <a href="datenschutz.html" target="_blank" style="color:var(--ice);font-weight:600">Datenschutzerklärung</a> gelesen und bin damit einverstanden, dass meine Daten zur Bearbeitung meiner Bewerbung verarbeitet und an den jeweiligen Ausbildungsbetrieb weitergeleitet werden. *</label>
+      </div>
+
+      <button type="button" class="submit-btn" onclick="submitBewerbung()" style="margin-top:1rem">Jetzt bewerben 🚀</button>
     </form>
   </div>
 </div>
@@ -261,6 +272,37 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
 </footer>
 
 <script>
+function toggleSchueler(){
+  var checked=document.getElementById('schueler-check').checked;
+  var label=document.getElementById('abschluss-label');
+  var select=document.getElementById('abschluss-select');
+  label.textContent=checked ? 'Voraussichtlicher Schulabschluss *' : 'Schulabschluss *';
+  // Reset and update options
+  select.innerHTML='<option value="">Bitte auswählen...</option>';
+  var options=checked ? [
+    'Voraussichtlich Hauptschulabschluss',
+    'Voraussichtlich Qualifizierter Hauptschulabschluss',
+    'Voraussichtlich Mittlere Reife / Realschulabschluss',
+    'Voraussichtlich Erweiterter Realschulabschluss',
+    'Voraussichtlich Fachhochschulreife (Fachabitur)',
+    'Voraussichtlich Allgemeine Hochschulreife (Abitur)',
+    'Voraussichtlich Förderschulabschluss'
+  ] : [
+    'Hauptschulabschluss',
+    'Qualifizierter Hauptschulabschluss',
+    'Mittlere Reife / Realschulabschluss',
+    'Erweiterter Realschulabschluss',
+    'Fachhochschulreife (Fachabitur)',
+    'Allgemeine Hochschulreife (Abitur)',
+    'Förderschulabschluss',
+    'Kein Schulabschluss'
+  ];
+  options.forEach(function(o){
+    var opt=document.createElement('option');
+    opt.value=o;opt.textContent=o;
+    select.appendChild(opt);
+  });
+}
 function openModal(title,company,ort,gehalt,start,dauer,desc,frage1,frage2){
   document.getElementById('modal-title').textContent=title;
   document.getElementById('modal-company').textContent=company+' · '+ort;
@@ -278,6 +320,11 @@ function closeModal(){document.getElementById('modal').classList.remove('open')}
 document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal()});
 function submitBewerbung(){
   var form=document.getElementById('bewerbung-form');
+  var name=form.querySelector('[name=Name]').value;
+  var email=form.querySelector('[name=Email]').value;
+  var datenschutz=document.getElementById('datenschutz-check').checked;
+  if(!name||!email){alert('Bitte Name und E-Mail ausfüllen!');return;}
+  if(!datenschutz){alert('Bitte bestätige die Datenschutzerklärung um fortzufahren!');return;}
   var data=new FormData(form);
   fetch('https://formspree.io/f/xnjwlboz',{
     method:'POST',body:data,headers:{'Accept':'application/json'}
@@ -285,6 +332,8 @@ function submitBewerbung(){
     if(r.ok){
       document.getElementById('success-msg').style.display='block';
       form.reset();
+      document.getElementById('abschluss-label').textContent='Schulabschluss *';
+      toggleSchueler();
       setTimeout(function(){closeModal();},3000);
     } else {
       alert('Fehler beim Senden. Bitte versuche es nochmal.');
