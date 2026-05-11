@@ -214,31 +214,35 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
       <div class="section-sub">Füll das Formular aus – wir melden uns innerhalb von 24 Stunden.</div>
     </div>
     <div class="kontakt-inner">
-      <div class="form-group">
-        <label class="form-label">Welches Paket interessiert dich? *</label>
-        <div class="paket-select">
-          <div class="paket-option selected" id="opt1" onclick="selectOption(1)">
-            <div class="paket-option-title">🎥 Video + Listing</div>
-            <div class="paket-option-price">1.500€ + 99€/Monat</div>
+      <form id="betriebe-form" action="https://formspree.io/f/xdabywro" method="POST">
+        <div class="form-group">
+          <label class="form-label">Welches Paket interessiert dich? *</label>
+          <div class="paket-select">
+            <div class="paket-option selected" id="opt1" onclick="selectOption(1)">
+              <div class="paket-option-title">🎥 Video + Listing</div>
+              <div class="paket-option-price">1.500€ + 99€/Monat</div>
+            </div>
+            <div class="paket-option" id="opt2" onclick="selectOption(2)">
+              <div class="paket-option-title">📋 Nur Listing</div>
+              <div class="paket-option-price">99€/Monat</div>
+            </div>
           </div>
-          <div class="paket-option" id="opt2" onclick="selectOption(2)">
-            <div class="paket-option-title">📋 Nur Listing</div>
-            <div class="paket-option-price">99€/Monat</div>
-          </div>
+          <input type="hidden" name="Paket" id="paket-hidden" value="Video + Listing">
         </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Firmenname *</label><input class="form-input" type="text" placeholder="Musterfirma GmbH"></div>
-        <div class="form-group"><label class="form-label">Ansprechpartner *</label><input class="form-input" type="text" placeholder="Max Mustermann"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">E-Mail *</label><input class="form-input" type="email" placeholder="max@firma.de"></div>
-        <div class="form-group"><label class="form-label">Telefon</label><input class="form-input" type="tel" placeholder="+49 123 456789"></div>
-      </div>
-      <div class="form-group"><label class="form-label">Ausbildungsberuf *</label><input class="form-input" type="text" placeholder="z.B. Kfz-Mechatroniker/in"></div>
-      <div class="form-group"><label class="form-label">Standort *</label><input class="form-input" type="text" placeholder="z.B. Wuppertal"></div>
-      <div class="form-group"><label class="form-label">Nachricht (optional)</label><textarea class="form-input" rows="3" placeholder="Weitere Infos..."></textarea></div>
-      <button class="submit-btn">Anfrage absenden 🚀</button>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Firmenname *</label><input class="form-input" type="text" name="Firmenname" placeholder="Musterfirma GmbH" required></div>
+          <div class="form-group"><label class="form-label">Ansprechpartner *</label><input class="form-input" type="text" name="Ansprechpartner" placeholder="Max Mustermann" required></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">E-Mail *</label><input class="form-input" type="email" name="Email" placeholder="max@firma.de" required></div>
+          <div class="form-group"><label class="form-label">Telefon</label><input class="form-input" type="tel" name="Telefon" placeholder="+49 123 456789"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Ausbildungsberuf *</label><input class="form-input" type="text" name="Ausbildungsberuf" placeholder="z.B. Kfz-Mechatroniker/in" required></div>
+        <div class="form-group"><label class="form-label">Standort *</label><input class="form-input" type="text" name="Standort" placeholder="z.B. Wuppertal" required></div>
+        <div class="form-group"><label class="form-label">Nachricht (optional)</label><textarea class="form-input" name="Nachricht" rows="3" placeholder="Weitere Infos..."></textarea></div>
+        <div id="betriebe-success" style="display:none;background:#E6F9F0;border:1.5px solid #34D399;border-radius:10px;padding:1rem;text-align:center;color:#065F46;font-weight:600;margin-bottom:1rem;font-family:'Outfit',sans-serif">🎉 Anfrage erfolgreich gesendet! Wir melden uns innerhalb von 24 Stunden.</div>
+        <button type="button" class="submit-btn" onclick="submitBetriebe()">Anfrage absenden 🚀</button>
+      </form>
     </div>
   </div>
 </section>
@@ -253,10 +257,26 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
 function selectOption(n){
   document.getElementById('opt1').classList.toggle('selected',n===1);
   document.getElementById('opt2').classList.toggle('selected',n===2);
+  document.getElementById('paket-hidden').value=n===1?'Video + Listing (1.500€ + 99€/Monat)':'Nur Listing (99€/Monat)';
 }
 function selectPaket(n){
   document.querySelector('.kontakt').scrollIntoView({behavior:'smooth'});
   setTimeout(()=>selectOption(n),500);
+}
+function submitBetriebe(){
+  var form=document.getElementById('betriebe-form');
+  var data=new FormData(form);
+  fetch('https://formspree.io/f/xdabywro',{
+    method:'POST',body:data,headers:{'Accept':'application/json'}
+  }).then(function(r){
+    if(r.ok){
+      document.getElementById('betriebe-success').style.display='block';
+      form.reset();
+      selectOption(1);
+    } else {
+      alert('Fehler beim Senden. Bitte versuche es nochmal.');
+    }
+  }).catch(function(){alert('Verbindungsfehler. Bitte versuche es nochmal.');});
 }
 </script>
 </body>
