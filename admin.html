@@ -396,12 +396,14 @@ async function deleteBetrieb(){
 // STELLEN
 var stellenData=[];
 async function loadStellen(){
-  var {data}=await sb.from('stellen').select('*,betriebe(name)').order('created_at',{ascending:false});
+  var {data, error}=await sb.from('stellen').select('*, betriebe(name)').order('created_at',{ascending:false});
+  console.log('Stellen data:', data, 'Error:', error);
   stellenData=data||[];
   var tb=document.getElementById('stellen-table');
+  if(error){tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:2rem;color:red">Fehler: '+error.message+'</td></tr>';return;}
   if(!data||!data.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:2rem;color:#5A7490">Noch keine Stellen</td></tr>';return;}
   tb.innerHTML=data.map(s=>`<tr>
-    <td><strong>${s.beruf}</strong></td>
+    <td><strong>${s.beruf||'-'}</strong></td>
     <td>${s.betriebe?.name||'-'}</td>
     <td>${s.standort||'-'}</td>
     <td>${s.gehalt?s.gehalt+' €':'-'}</td>
