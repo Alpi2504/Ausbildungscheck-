@@ -14,10 +14,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .logo span{color:var(--ice)}
 .nav-links{display:flex;align-items:center;gap:1.75rem}
 .nav-links a{font-size:13px;color:var(--text2);text-decoration:none;font-weight:500}
-.nav-links a:hover{color:var(--dark)}
 .nav-links a.active{color:var(--ice);font-weight:700}
 .nav-cta{background:var(--navy);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
-
 .page-header{background:var(--navy);padding:90px 2rem 2.5rem;text-align:center}
 .page-header h1{font-family:'Outfit',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;letter-spacing:-1px;color:#fff;margin-bottom:.5rem}
 .page-header p{font-size:15px;color:rgba(255,255,255,0.6);margin-bottom:1.75rem}
@@ -25,25 +23,20 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .header-search input{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:6px 0}
 .header-search input::placeholder{color:rgba(10,25,41,0.35)}
 .header-search button{background:var(--navy);color:#fff;border:none;padding:10px 20px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
-
 .page-body{max-width:1100px;margin:0 auto;padding:2rem;display:grid;grid-template-columns:260px 1fr;gap:1.5rem;align-items:start}
-
 .filter-sidebar{background:#fff;border-radius:16px;border:1.5px solid var(--gray2);padding:1.5rem;position:sticky;top:80px}
 .filter-title{font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;color:var(--dark);margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center}
 .filter-reset{font-size:12px;color:var(--ice);cursor:pointer;font-weight:500}
 .filter-group{margin-bottom:1.25rem}
 .filter-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);margin-bottom:.6rem}
 .filter-options{display:flex;flex-direction:column;gap:.4rem}
-.filter-option{display:flex;align-items:center;gap:8px;cursor:pointer;padding:5px 8px;border-radius:7px;transition:background .15s}
-.filter-option:hover{background:var(--gray)}
+.filter-option{display:flex;align-items:center;gap:8px;cursor:pointer;padding:5px 8px;border-radius:7px}
 .filter-option input[type=checkbox]{accent-color:var(--ice);width:15px;height:15px;cursor:pointer}
 .filter-option label{font-size:13px;color:var(--text);cursor:pointer}
 .filter-option .count{margin-left:auto;font-size:11px;color:var(--text2);background:var(--gray);padding:1px 7px;border-radius:10px}
 .filter-divider{height:1px;background:var(--gray2);margin:1rem 0}
-
 .location-input-wrap{position:relative;margin-bottom:.75rem}
-.location-input{width:100%;border:1.5px solid var(--gray2);border-radius:9px;padding:9px 36px 9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color .2s}
-.location-input:focus{border-color:var(--ice)}
+.location-input{width:100%;border:1.5px solid var(--gray2);border-radius:9px;padding:9px 36px 9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none}
 .location-icon{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none}
 .radius-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem}
 .radius-label span{font-size:12px;color:var(--text2)}
@@ -51,11 +44,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .radius-slider{width:100%;accent-color:var(--ice);cursor:pointer}
 .radius-ticks{display:flex;justify-content:space-between;margin-top:4px}
 .radius-ticks span{font-size:10px;color:var(--text2)}
-
 .jobs-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
 .jobs-count{font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;color:var(--dark)}
 .jobs-count span{color:var(--ice)}
-.jobs-sort{font-size:13px;color:var(--text2);background:#fff;border:1.5px solid var(--gray2);padding:6px 12px;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.jobs-sort{font-size:13px;color:var(--text2);background:#fff;border:1.5px solid var(--gray2);padding:6px 12px;border-radius:8px;cursor:pointer}
 .jobs-list{display:flex;flex-direction:column;gap:12px}
 .job-card{background:#fff;border:1.5px solid var(--gray2);border-radius:14px;padding:1.25rem 1.5rem;cursor:pointer;transition:all .2s;display:grid;grid-template-columns:auto 1fr auto;gap:1rem;align-items:center}
 .job-card:hover{border-color:var(--ice);box-shadow:0 6px 20px rgba(79,170,223,0.1);transform:translateY(-1px)}
@@ -74,17 +66,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .apply-btn{background:var(--navy);color:#fff;border:none;padding:9px 18px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
 .apply-btn:hover{background:var(--ice)}
 .job-date{font-size:11px;color:var(--text2)}
-.pagination{display:flex;justify-content:center;gap:6px;margin-top:2rem}
-.page-btn{width:36px;height:36px;border-radius:8px;border:1.5px solid var(--gray2);background:#fff;color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif}
-.page-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
-
 footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-top:3rem}
 .footer-logo{font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;color:#fff}
 .footer-logo span{color:var(--ice)}
 .footer-links{display:flex;gap:1.25rem}
 .footer-links a{font-size:12px;color:rgba(255,255,255,0.45);text-decoration:none}
 .footer-copy{font-size:11px;color:rgba(255,255,255,0.3)}
-
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(2,13,29,0.6);z-index:200;align-items:center;justify-content:center;padding:1rem}
 .modal-overlay.open{display:flex}
 .modal{background:#fff;border-radius:20px;max-width:580px;width:100%;max-height:90vh;overflow-y:auto;padding:2rem}
@@ -103,12 +90,9 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
 .form-label{font-size:13px;font-weight:600;color:var(--dark);margin-bottom:.4rem;display:block}
 .form-input{width:100%;border:1.5px solid var(--gray2);border-radius:9px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .2s}
 .form-input:focus{border-color:var(--ice)}
-.upload-area{border:2px dashed var(--gray2);border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;transition:all .2s}
-.upload-area:hover{border-color:var(--ice);background:var(--ice-light)}
-.upload-icon{font-size:28px;margin-bottom:.5rem}
-.upload-text{font-size:14px;font-weight:600;color:var(--dark);margin-bottom:.25rem}
-.upload-sub{font-size:12px;color:var(--text2)}
-.submit-btn{width:100%;background:#4FAADF !important;color:#fff !important;border:none;padding:14px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:.5rem;-webkit-text-fill-color:#fff !important;box-shadow:0 4px 16px rgba(79,170,223,0.35)}
+.file-input{width:100%;border:2px dashed var(--gray2);border-radius:12px;padding:1rem;font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;background:#fff}
+.submit-btn{width:100%;background:#4FAADF;color:#fff;border:none;padding:14px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:.5rem;box-shadow:0 4px 16px rgba(79,170,223,0.35)}
+.success-msg{display:none;background:#E6F9F0;border:1.5px solid #34D399;border-radius:10px;padding:1rem;text-align:center;color:#065F46;font-weight:600;margin-bottom:1rem}
 </style>
 </head>
 <body>
@@ -152,10 +136,7 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
         <input class="location-input" type="text" placeholder="Stadt eingeben...">
         <span class="location-icon">📍</span>
       </div>
-      <div class="radius-label">
-        <span>Umkreis</span>
-        <strong id="radiusVal">25 km</strong>
-      </div>
+      <div class="radius-label"><span>Umkreis</span><strong id="radiusVal">25 km</strong></div>
       <input type="range" class="radius-slider" min="5" max="100" value="25" step="5" oninput="document.getElementById('radiusVal').textContent=this.value+' km'">
       <div class="radius-ticks"><span>5 km</span><span>50 km</span><span>100 km</span></div>
     </div>
@@ -167,51 +148,57 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
       <select class="jobs-sort"><option>Neueste zuerst</option><option>Gehalt aufsteigend</option><option>Gehalt absteigend</option></select>
     </div>
     <div class="jobs-list">
-      <div class="job-card featured" onclick="openModal('Kfz-Mechatroniker/in','AutoHaus Müller GmbH','Essen','820','Sep 2025','3,5 Jahre','Wir suchen einen motivierten Auszubildenden zum Kfz-Mechatroniker. Du lernst bei uns alles rund um Diagnose, Reparatur und Wartung moderner Fahrzeuge.')">
+
+      <div class="job-card featured">
         <div class="job-logo">🔧</div>
         <div>
           <div class="job-top-row"><span class="job-title-text">Kfz-Mechatroniker/in</span><span class="job-badge new">NEU</span></div>
           <div class="job-company-row">AutoHaus Müller GmbH · Essen</div>
           <div class="job-tags"><span class="job-tag salary">820 € / Monat</span><span class="job-tag">Sep 2025</span><span class="job-tag">3,5 Jahre</span></div>
         </div>
-        <div class="job-right"><button class="apply-btn" onclick="event.stopPropagation();openModal('Kfz-Mechatroniker/in','AutoHaus Müller GmbH','Essen','820','Sep 2025','3,5 Jahre','Wir suchen einen motivierten Auszubildenden zum Kfz-Mechatroniker.')">Bewerben →</button><span class="job-date">Heute</span></div>
+        <div class="job-right"><button class="apply-btn" onclick="openModal('Kfz-Mechatroniker/in','AutoHaus Müller GmbH','Essen','820','Sep 2025','3,5 Jahre','Wir suchen einen motivierten Auszubildenden zum Kfz-Mechatroniker.')">Bewerben →</button><span class="job-date">Heute</span></div>
       </div>
-      <div class="job-card" onclick="openModal('Fachinformatiker/in','TechWerk GmbH','Dortmund','900','Aug 2025','3 Jahre','Als Fachinformatiker bei TechWerk lernst du die Entwicklung moderner Softwarelösungen.')">
+
+      <div class="job-card">
         <div class="job-logo">💻</div>
         <div>
           <div class="job-top-row"><span class="job-title-text">Fachinformatiker/in</span><span class="job-badge new">NEU</span></div>
           <div class="job-company-row">TechWerk GmbH · Dortmund</div>
           <div class="job-tags"><span class="job-tag salary">900 € / Monat</span><span class="job-tag">Aug 2025</span><span class="job-tag">3 Jahre</span></div>
         </div>
-        <div class="job-right"><button class="apply-btn" onclick="event.stopPropagation();openModal('Fachinformatiker/in','TechWerk GmbH','Dortmund','900','Aug 2025','3 Jahre','Als Fachinformatiker bei TechWerk lernst du moderne Softwareentwicklung.')">Bewerben →</button><span class="job-date">Heute</span></div>
+        <div class="job-right"><button class="apply-btn" onclick="openModal('Fachinformatiker/in','TechWerk GmbH','Dortmund','900','Aug 2025','3 Jahre','Als Fachinformatiker bei TechWerk lernst du moderne Softwareentwicklung.')">Bewerben →</button><span class="job-date">Heute</span></div>
       </div>
-      <div class="job-card" onclick="openModal('Kaufmann/frau Einzelhandel','Kaufland','Bochum','750','Sep 2025','3 Jahre','Im Einzelhandel bei Kaufland lernst du alle Bereiche kennen.')">
+
+      <div class="job-card">
         <div class="job-logo">🏪</div>
         <div>
           <div class="job-top-row"><span class="job-title-text">Kaufmann/frau Einzelhandel</span><span class="job-badge hot">BELIEBT</span></div>
           <div class="job-company-row">Kaufland · Bochum</div>
           <div class="job-tags"><span class="job-tag salary">750 € / Monat</span><span class="job-tag">Sep 2025</span><span class="job-tag">3 Jahre</span></div>
         </div>
-        <div class="job-right"><button class="apply-btn" onclick="event.stopPropagation();openModal('Kaufmann/frau Einzelhandel','Kaufland','Bochum','750','Sep 2025','3 Jahre','Im Einzelhandel bei Kaufland lernst du alle Bereiche kennen.')">Bewerben →</button><span class="job-date">vor 2 Tagen</span></div>
+        <div class="job-right"><button class="apply-btn" onclick="openModal('Kaufmann/frau Einzelhandel','Kaufland','Bochum','750','Sep 2025','3 Jahre','Im Einzelhandel bei Kaufland lernst du alle Bereiche kennen.')">Bewerben →</button><span class="job-date">vor 2 Tagen</span></div>
       </div>
-      <div class="job-card" onclick="openModal('Elektroniker/in','Stadtwerke Wuppertal','Wuppertal','860','Aug 2025','3,5 Jahre','Bei den Stadtwerken Wuppertal lernst du die Installation elektrischer Anlagen.')">
+
+      <div class="job-card">
         <div class="job-logo">⚡</div>
         <div>
           <div class="job-top-row"><span class="job-title-text">Elektroniker/in</span></div>
           <div class="job-company-row">Stadtwerke Wuppertal · Wuppertal</div>
           <div class="job-tags"><span class="job-tag salary">860 € / Monat</span><span class="job-tag">Aug 2025</span><span class="job-tag">3,5 Jahre</span></div>
         </div>
-        <div class="job-right"><button class="apply-btn" onclick="event.stopPropagation();openModal('Elektroniker/in','Stadtwerke Wuppertal','Wuppertal','860','Aug 2025','3,5 Jahre','Bei den Stadtwerken lernst du die Installation elektrischer Anlagen.')">Bewerben →</button><span class="job-date">vor 3 Tagen</span></div>
+        <div class="job-right"><button class="apply-btn" onclick="openModal('Elektroniker/in','Stadtwerke Wuppertal','Wuppertal','860','Aug 2025','3,5 Jahre','Bei den Stadtwerken lernst du die Installation elektrischer Anlagen.')">Bewerben →</button><span class="job-date">vor 3 Tagen</span></div>
       </div>
-      <div class="job-card" onclick="openModal('Koch/Köchin','Restaurant Bergischer Hof','Wuppertal','700','Sep 2025','3 Jahre','Im Restaurant Bergischer Hof lernst du die klassische deutsche und internationale Küche.')">
+
+      <div class="job-card">
         <div class="job-logo">👨‍🍳</div>
         <div>
           <div class="job-top-row"><span class="job-title-text">Koch/Köchin</span></div>
           <div class="job-company-row">Restaurant Bergischer Hof · Wuppertal</div>
           <div class="job-tags"><span class="job-tag salary">700 € / Monat</span><span class="job-tag">Sep 2025</span><span class="job-tag">3 Jahre</span></div>
         </div>
-        <div class="job-right"><button class="apply-btn" onclick="event.stopPropagation();openModal('Koch/Köchin','Restaurant Bergischer Hof','Wuppertal','700','Sep 2025','3 Jahre','Im Restaurant Bergischer Hof lernst du die klassische Küche.')">Bewerben →</button><span class="job-date">vor 4 Tagen</span></div>
+        <div class="job-right"><button class="apply-btn" onclick="openModal('Koch/Köchin','Restaurant Bergischer Hof','Wuppertal','700','Sep 2025','3 Jahre','Im Restaurant Bergischer Hof lernst du die klassische Küche.')">Bewerben →</button><span class="job-date">vor 4 Tagen</span></div>
       </div>
+
     </div>
   </div>
 </div>
@@ -226,19 +213,16 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
     <div class="modal-section"><div class="modal-section-title">Über die Stelle</div><p id="modal-desc"></p></div>
     <div class="modal-divider"></div>
     <div style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;color:var(--dark);margin-bottom:1rem">Jetzt bewerben</div>
+    <div class="success-msg" id="success-msg">✅ Bewerbung erfolgreich gesendet! Wir melden uns bald.</div>
     <form id="bewerbung-form" action="https://formspree.io/f/xnjwlboz" method="POST" enctype="multipart/form-data">
       <input type="hidden" name="Stelle" id="form-stelle">
       <input type="hidden" name="Betrieb" id="form-betrieb">
       <div class="form-group"><label class="form-label">Vollständiger Name *</label><input class="form-input" type="text" name="Name" placeholder="Max Mustermann" required></div>
       <div class="form-group"><label class="form-label">E-Mail Adresse *</label><input class="form-input" type="email" name="Email" placeholder="max@beispiel.de" required></div>
       <div class="form-group"><label class="form-label">Telefonnummer</label><input class="form-input" type="tel" name="Telefon" placeholder="+49 123 456789"></div>
-      <div class="form-group">
-        <label class="form-label">Lebenslauf hochladen *</label>
-        <input type="file" name="Lebenslauf" accept=".pdf,.doc,.docx" style="width:100%;border:2px dashed var(--gray2);border-radius:12px;padding:1rem;font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;background:#fff">
-      </div>
-      <div class="form-group"><label class="form-label">Kurze Nachricht (optional)</label><textarea class="form-input" name="Nachricht" rows="3" placeholder="Warum interessierst du dich für diese Ausbildung?"></textarea></div>
-      <div id="form-success" style="display:none;background:#E6F9F0;border:1.5px solid #34D399;border-radius:10px;padding:1rem;text-align:center;color:#065F46;font-weight:600;margin-bottom:1rem">✅ Bewerbung erfolgreich gesendet!</div>
-      <button type="button" class="submit-btn" onclick="submitForm()">Bewerbung absenden 🚀</button>
+      <div class="form-group"><label class="form-label">Lebenslauf hochladen *</label><input class="file-input" type="file" name="Lebenslauf" accept=".pdf,.doc,.docx"></div>
+      <div class="form-group"><label class="form-label">Nachricht (optional)</label><textarea class="form-input" name="Nachricht" rows="3" placeholder="Warum interessierst du dich für diese Ausbildung?"></textarea></div>
+      <button type="button" class="submit-btn" onclick="submitBewerbung()">Bewerbung absenden 🚀</button>
     </form>
   </div>
 </div>
@@ -257,24 +241,35 @@ function openModal(title,company,ort,gehalt,start,dauer,desc){
   document.getElementById('modal-tags').innerHTML='<span class="modal-tag highlight">'+gehalt+' € / Monat</span><span class="modal-tag">Start: '+start+'</span><span class="modal-tag">'+dauer+'</span><span class="modal-tag">📍 '+ort+'</span>';
   document.getElementById('form-stelle').value=title;
   document.getElementById('form-betrieb').value=company+' · '+ort;
-  document.getElementById('mail-stelle').textContent=title+' bei '+company;
-  document.getElementById('form-success').style.display='none';
+  document.getElementById('success-msg').style.display='none';
   document.getElementById('bewerbung-form').reset();
   document.getElementById('modal').classList.add('open');
 }
-function closeModal(){document.getElementById('modal').classList.remove('open')}
-document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal()});
-function submitForm(){
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+}
+document.getElementById('modal').addEventListener('click',function(e){
+  if(e.target===this)closeModal();
+});
+function submitBewerbung(){
   var form=document.getElementById('bewerbung-form');
+  var name=form.querySelector('[name=Name]').value;
+  var email=form.querySelector('[name=Email]').value;
+  if(!name||!email){alert('Bitte Name und E-Mail ausfüllen!');return;}
   var data=new FormData(form);
-  fetch('https://formspree.io/f/xnjwlboz',{method:'POST',body:data,headers:{'Accept':'application/json'}})
-  .then(function(r){
+  fetch('https://formspree.io/f/xnjwlboz',{
+    method:'POST',
+    body:data,
+    headers:{'Accept':'application/json'}
+  }).then(function(r){
     if(r.ok){
-      document.getElementById('form-success').style.display='block';
+      document.getElementById('success-msg').style.display='block';
       form.reset();
     } else {
       alert('Fehler beim Senden. Bitte versuche es nochmal.');
     }
+  }).catch(function(){
+    alert('Verbindungsfehler. Bitte versuche es nochmal.');
   });
 }
 </script>
