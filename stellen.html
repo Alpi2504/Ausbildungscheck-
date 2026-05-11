@@ -219,11 +219,11 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
       <input type="hidden" name="Betrieb" id="form-betrieb">
 
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Vorname *</label><input class="form-input" type="text" name="Vorname" placeholder="Max" required></div>
+        <div class="form-group"><label class="form-label">Vorname *</label><input id="input-name" class="form-input" type="text" name="Vorname" placeholder="Max" required></div>
         <div class="form-group"><label class="form-label">Nachname *</label><input class="form-input" type="text" name="Nachname" placeholder="Mustermann" required></div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">E-Mail *</label><input class="form-input" type="email" name="Email" placeholder="max@beispiel.de" required></div>
+        <div class="form-group"><label class="form-label">E-Mail *</label><input id="input-email" class="form-input" type="email" name="Email" placeholder="max@beispiel.de" required></div>
         <div class="form-group"><label class="form-label">Telefon *</label><input class="form-input" type="tel" name="Telefon" placeholder="+49 123 456789" required></div>
       </div>
       <div class="form-group"><label class="form-label">Wohnort *</label><input class="form-input" type="text" name="Wohnort" placeholder="z.B. Wuppertal" required></div>
@@ -319,13 +319,13 @@ function openModal(title,company,ort,gehalt,start,dauer,desc,frage1,frage2){
 function closeModal(){document.getElementById('modal').classList.remove('open')}
 document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal()});
 function submitBewerbung(){
-  var form=document.getElementById('bewerbung-form');
-  var name=document.querySelector('#bewerbung-form [name=Name]');
-  var email=document.querySelector('#bewerbung-form [name=Email]');
+  var nameVal=document.getElementById('input-name').value.trim();
+  var emailVal=document.getElementById('input-email').value.trim();
   var datenschutz=document.getElementById('datenschutz-check').checked;
-  if(!name||!name.value){alert('Bitte Name ausfüllen!');return;}
-  if(!email||!email.value){alert('Bitte E-Mail ausfüllen!');return;}
-  if(!datenschutz){alert('Bitte bestätige die Datenschutzerklärung um fortzufahren!');return;}
+  if(!nameVal){alert('Bitte Name ausfüllen!');return;}
+  if(!emailVal){alert('Bitte E-Mail ausfüllen!');return;}
+  if(!datenschutz){alert('Bitte bestätige die Datenschutzerklärung!');return;}
+  var form=document.getElementById('bewerbung-form');
   var data=new FormData(form);
   fetch('https://formspree.io/f/xnjwlboz',{
     method:'POST',body:data,headers:{'Accept':'application/json'}
