@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ausbildungsstellen – AusbildungsCheck</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--dark:#021D3D;--navy:#042C53;--ice:#4FAADF;--ice-light:#EBF5FC;--gray:#F7F9FC;--gray2:#EEF2F7;--text:#0A1929;--text2:#5A7490}
@@ -51,13 +52,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .jobs-list{display:flex;flex-direction:column;gap:12px}
 .job-card{background:#fff;border:1.5px solid var(--gray2);border-radius:14px;padding:1.25rem 1.5rem;cursor:pointer;transition:all .2s;display:grid;grid-template-columns:auto 1fr auto;gap:1rem;align-items:center}
 .job-card:hover{border-color:var(--ice);box-shadow:0 6px 20px rgba(79,170,223,0.1);transform:translateY(-1px)}
-.job-card.featured{border-color:rgba(79,170,223,0.3);background:linear-gradient(135deg,#fff 0%,var(--ice-light) 100%)}
-.job-logo{width:52px;height:52px;border-radius:12px;background:var(--ice-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.job-logo{width:52px;height:52px;border-radius:12px;background:var(--ice-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;font-family:'Outfit',sans-serif;font-weight:800;color:var(--ice);font-size:18px}
 .job-top-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
 .job-title-text{font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;color:var(--dark)}
 .job-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;letter-spacing:.5px}
 .job-badge.new{background:var(--ice-light);color:var(--ice)}
-.job-badge.hot{background:#FEF3C7;color:#D97706}
 .job-company-row{font-size:13px;color:var(--text2);margin-bottom:.6rem}
 .job-tags{display:flex;gap:6px;flex-wrap:wrap}
 .job-tag{font-size:11px;padding:3px 9px;border-radius:6px;background:var(--gray);color:var(--text2)}
@@ -66,14 +65,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .apply-btn{background:var(--navy);color:#fff;border:none;padding:9px 18px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
 .apply-btn:hover{background:var(--ice)}
 .job-date{font-size:11px;color:var(--text2)}
+.empty-state{text-align:center;padding:3rem;color:var(--text2)}
+.empty-icon{font-size:40px;margin-bottom:.75rem}
 footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-top:3rem}
 .footer-logo{font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;color:#fff}
 .footer-logo span{color:var(--ice)}
 .footer-links{display:flex;gap:1.25rem}
 .footer-links a{font-size:12px;color:rgba(255,255,255,0.45);text-decoration:none}
 .footer-copy{font-size:11px;color:rgba(255,255,255,0.3)}
-
-/* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(2,13,29,0.6);z-index:200;align-items:center;justify-content:center;padding:1rem}
 .modal-overlay.open{display:flex}
 .modal{background:#fff;border-radius:20px;max-width:580px;width:100%;max-height:90vh;overflow-y:auto;padding:2rem}
@@ -116,29 +115,23 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
   <h1>Ausbildungsstellen finden</h1>
   <p>Alle aktuellen Stellen unserer Partnerbetriebe – direkt bewerben in wenigen Minuten.</p>
   <div class="header-search">
-    <input type="text" placeholder="z.B. Kfz-Mechatroniker, Köln...">
-    <button>Suchen</button>
+    <input type="text" id="search-input" placeholder="z.B. Kfz-Mechatroniker, Köln..." oninput="filterStellen()">
+    <button onclick="filterStellen()">Suchen</button>
   </div>
 </div>
 
 <div class="page-body">
   <aside class="filter-sidebar">
-    <div class="filter-title">Filter <span class="filter-reset">Zurücksetzen</span></div>
+    <div class="filter-title">Filter <span class="filter-reset" onclick="resetFilter()">Zurücksetzen</span></div>
     <div class="filter-group">
       <div class="filter-label">Berufsfeld</div>
-      <div class="filter-options">
-        <div class="filter-option"><input type="checkbox" id="f1" checked><label for="f1">Technik & Handwerk</label><span class="count">4</span></div>
-        <div class="filter-option"><input type="checkbox" id="f2"><label for="f2">IT & Digital</label><span class="count">2</span></div>
-        <div class="filter-option"><input type="checkbox" id="f3"><label for="f3">Kaufmännisch</label><span class="count">3</span></div>
-        <div class="filter-option"><input type="checkbox" id="f4"><label for="f4">Gesundheit & Soziales</label><span class="count">1</span></div>
-        <div class="filter-option"><input type="checkbox" id="f5"><label for="f5">Gastronomie</label><span class="count">2</span></div>
-      </div>
+      <div class="filter-options" id="berufsfeld-filter"></div>
     </div>
     <div class="filter-divider"></div>
     <div class="filter-group">
       <div class="filter-label">Region</div>
       <div class="location-input-wrap">
-        <input class="location-input" type="text" placeholder="Stadt eingeben...">
+        <input class="location-input" type="text" id="ort-filter" placeholder="Stadt eingeben..." oninput="filterStellen()">
         <span class="location-icon">📍</span>
       </div>
       <div class="radius-label"><span>Umkreis</span><strong id="radiusVal">25 km</strong></div>
@@ -149,60 +142,19 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
 
   <div>
     <div class="jobs-header">
-      <div class="jobs-count"><span>5</span> Stellen gefunden</div>
-      <select class="jobs-sort"><option>Neueste zuerst</option><option>Gehalt aufsteigend</option><option>Gehalt absteigend</option></select>
+      <div class="jobs-count"><span id="stellen-count">0</span> Stellen gefunden</div>
+      <select class="jobs-sort" onchange="sortStellen(this.value)">
+        <option value="neu">Neueste zuerst</option>
+        <option value="gehalt-asc">Gehalt aufsteigend</option>
+        <option value="gehalt-desc">Gehalt absteigend</option>
+      </select>
     </div>
-    <div class="jobs-list">
-      <div class="job-card featured">
-        <div class="job-logo">🔧</div>
-        <div>
-          <div class="job-top-row"><span class="job-title-text">Kfz-Mechatroniker/in</span><span class="job-badge new">NEU</span></div>
-          <div class="job-company-row">AutoHaus Müller GmbH · Essen</div>
-          <div class="job-tags"><span class="job-tag salary">820 € / Monat</span><span class="job-tag">Sep 2025</span><span class="job-tag">3,5 Jahre</span></div>
-        </div>
-        <div class="job-right"><button class="apply-btn" onclick="openModal('Kfz-Mechatroniker/in','AutoHaus Müller GmbH','Essen','820','Sep 2025','3,5 Jahre','Wir suchen einen motivierten Auszubildenden. Du lernst bei uns alles rund um Diagnose, Reparatur und Wartung moderner Fahrzeuge.','Warum interessiert dich der Beruf Kfz-Mechatroniker?','Hast du bereits Erfahrungen mit Autos oder Technik?')">Bewerben →</button><span class="job-date">Heute</span></div>
-      </div>
-      <div class="job-card">
-        <div class="job-logo">💻</div>
-        <div>
-          <div class="job-top-row"><span class="job-title-text">Fachinformatiker/in</span><span class="job-badge new">NEU</span></div>
-          <div class="job-company-row">TechWerk GmbH · Dortmund</div>
-          <div class="job-tags"><span class="job-tag salary">900 € / Monat</span><span class="job-tag">Aug 2025</span><span class="job-tag">3 Jahre</span></div>
-        </div>
-        <div class="job-right"><button class="apply-btn" onclick="openModal('Fachinformatiker/in','TechWerk GmbH','Dortmund','900','Aug 2025','3 Jahre','Als Fachinformatiker bei TechWerk lernst du die Entwicklung moderner Softwarelösungen.','Warum interessierst du dich für IT und Programmierung?','Hast du bereits Erfahrungen mit Computern oder Code?')">Bewerben →</button><span class="job-date">Heute</span></div>
-      </div>
-      <div class="job-card">
-        <div class="job-logo">🏪</div>
-        <div>
-          <div class="job-top-row"><span class="job-title-text">Kaufmann/frau Einzelhandel</span><span class="job-badge hot">BELIEBT</span></div>
-          <div class="job-company-row">Kaufland · Bochum</div>
-          <div class="job-tags"><span class="job-tag salary">750 € / Monat</span><span class="job-tag">Sep 2025</span><span class="job-tag">3 Jahre</span></div>
-        </div>
-        <div class="job-right"><button class="apply-btn" onclick="openModal('Kaufmann/frau Einzelhandel','Kaufland','Bochum','750','Sep 2025','3 Jahre','Im Einzelhandel bei Kaufland lernst du alle Bereiche kennen.','Warum interessiert dich eine Ausbildung im Einzelhandel?','Hast du Erfahrungen im Umgang mit Kunden?')">Bewerben →</button><span class="job-date">vor 2 Tagen</span></div>
-      </div>
-      <div class="job-card">
-        <div class="job-logo">⚡</div>
-        <div>
-          <div class="job-top-row"><span class="job-title-text">Elektroniker/in</span></div>
-          <div class="job-company-row">Stadtwerke Wuppertal · Wuppertal</div>
-          <div class="job-tags"><span class="job-tag salary">860 € / Monat</span><span class="job-tag">Aug 2025</span><span class="job-tag">3,5 Jahre</span></div>
-        </div>
-        <div class="job-right"><button class="apply-btn" onclick="openModal('Elektroniker/in','Stadtwerke Wuppertal','Wuppertal','860','Aug 2025','3,5 Jahre','Bei den Stadtwerken lernst du die Installation und Wartung elektrischer Anlagen.','Warum interessiert dich der Beruf Elektroniker?','Hast du Interesse an Elektrotechnik oder Physik?')">Bewerben →</button><span class="job-date">vor 3 Tagen</span></div>
-      </div>
-      <div class="job-card">
-        <div class="job-logo">👨‍🍳</div>
-        <div>
-          <div class="job-top-row"><span class="job-title-text">Koch/Köchin</span></div>
-          <div class="job-company-row">Restaurant Bergischer Hof · Wuppertal</div>
-          <div class="job-tags"><span class="job-tag salary">700 € / Monat</span><span class="job-tag">Sep 2025</span><span class="job-tag">3 Jahre</span></div>
-        </div>
-        <div class="job-right"><button class="apply-btn" onclick="openModal('Koch/Köchin','Restaurant Bergischer Hof','Wuppertal','700','Sep 2025','3 Jahre','Im Restaurant Bergischer Hof lernst du die klassische deutsche und internationale Küche.','Warum möchtest du Koch/Köchin werden?','Kochst du gerne zuhause oder hast du bereits Erfahrungen in der Küche?')">Bewerben →</button><span class="job-date">vor 4 Tagen</span></div>
-      </div>
+    <div class="jobs-list" id="jobs-list">
+      <div class="empty-state"><div class="empty-icon">⏳</div>Stellen werden geladen...</div>
     </div>
   </div>
 </div>
 
-<!-- MODAL -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
     <div class="modal-header">
@@ -217,7 +169,7 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
     <form id="bewerbung-form" action="https://formspree.io/f/xnjwlboz" method="POST">
       <input type="hidden" name="Stelle" id="form-stelle">
       <input type="hidden" name="Betrieb" id="form-betrieb">
-
+      <input type="hidden" name="Stellen_ID" id="form-stellen-id">
       <div class="form-row">
         <div class="form-group"><label class="form-label">Vorname *</label><input id="input-name" class="form-input" type="text" name="Vorname" placeholder="Max" required></div>
         <div class="form-group"><label class="form-label">Nachname *</label><input class="form-input" type="text" name="Nachname" placeholder="Mustermann" required></div>
@@ -228,12 +180,10 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
       </div>
       <div class="form-group"><label class="form-label">Wohnort *</label><input class="form-input" type="text" name="Wohnort" placeholder="z.B. Wuppertal" required></div>
       <div class="form-group">
-        <!-- Schüler Checkbox -->
         <div style="display:flex;align-items:center;gap:10px;background:var(--ice-light);border:1.5px solid rgba(79,170,223,0.2);border-radius:9px;padding:10px 14px;margin-bottom:.75rem;cursor:pointer" onclick="toggleSchueler()">
           <input type="checkbox" id="schueler-check" name="NochSchueler" style="accent-color:var(--ice);width:16px;height:16px;cursor:pointer" onchange="toggleSchueler()">
           <label for="schueler-check" style="font-size:13px;font-weight:600;color:var(--navy);cursor:pointer">Ich bin noch Schüler/in</label>
         </div>
-
         <label class="form-label" id="abschluss-label">Schulabschluss *</label>
         <select class="form-select" name="Schulabschluss" id="abschluss-select" required>
           <option value="">Bitte auswählen...</option>
@@ -247,19 +197,15 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
           <option>Kein Schulabschluss</option>
         </select>
       </div>
-
-      <div class="questions-divider">
+      <div class="questions-divider" id="fragen-bereich">
         <div class="questions-label">Kurze Fragen zur Stelle</div>
         <div class="form-group"><label class="form-label" id="frage1-label"></label><textarea class="form-input" name="Frage1" rows="2" placeholder="Deine Antwort..."></textarea></div>
         <div class="form-group" style="margin-bottom:0"><label class="form-label" id="frage2-label"></label><textarea class="form-input" name="Frage2" rows="2" placeholder="Deine Antwort..."></textarea></div>
       </div>
-
-      <!-- Datenschutz Checkbox -->
       <div style="display:flex;align-items:flex-start;gap:10px;margin-top:.75rem;padding:1rem;background:var(--gray);border-radius:9px;border:1.5px solid var(--gray2)">
-        <input type="checkbox" id="datenschutz-check" style="accent-color:var(--ice);width:16px;height:16px;cursor:pointer;flex-shrink:0;margin-top:2px" required>
-        <label for="datenschutz-check" style="font-size:13px;color:var(--text2);line-height:1.5;cursor:pointer">Ich habe die <a href="datenschutz.html" target="_blank" style="color:var(--ice);font-weight:600">Datenschutzerklärung</a> gelesen und bin damit einverstanden, dass meine Daten zur Bearbeitung meiner Bewerbung verarbeitet und an den jeweiligen Ausbildungsbetrieb weitergeleitet werden. *</label>
+        <input type="checkbox" id="datenschutz-check" style="accent-color:var(--ice);width:16px;height:16px;cursor:pointer;flex-shrink:0;margin-top:2px">
+        <label for="datenschutz-check" style="font-size:13px;color:var(--text2);line-height:1.5;cursor:pointer">Ich habe die <a href="datenschutz.html" target="_blank" style="color:var(--ice);font-weight:600">Datenschutzerklärung</a> gelesen und bin einverstanden. *</label>
       </div>
-
       <button type="button" class="submit-btn" onclick="submitBewerbung()" style="margin-top:1rem">Jetzt bewerben 🚀</button>
     </form>
   </div>
@@ -272,57 +218,147 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
 </footer>
 
 <script>
+const SUPABASE_URL='https://trccxzjdddhbqjgyzlkv.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyY2N4empkZGRoYnFqZ3l6bGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDgyMjIsImV4cCI6MjA5NDA4NDIyMn0.xS5-9Tq1-i9_K9lYDuayomybBazHmnvY29K24LvRxaQ';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+var alleStellen=[];
+
+async function ladeStellen(){
+  var {data,error}=await sb.from('stellen').select('*, betrieb:betrieb_id(name,email)').eq('aktiv',true).order('created_at',{ascending:false});
+  if(error||!data){
+    document.getElementById('jobs-list').innerHTML='<div class="empty-state"><div class="empty-icon">😔</div>Keine Stellen gefunden</div>';
+    return;
+  }
+  alleStellen=data;
+  zeigeStellen(data);
+  bausFilterOptionen(data);
+}
+
+function bausFilterOptionen(data){
+  var berufsfelder=[...new Set(data.map(s=>s.beruf).filter(Boolean))];
+  var filterEl=document.getElementById('berufsfeld-filter');
+  filterEl.innerHTML=berufsfelder.map(b=>`
+    <div class="filter-option">
+      <input type="checkbox" id="bf-${b}" onchange="filterStellen()">
+      <label for="bf-${b}">${b}</label>
+    </div>
+  `).join('');
+}
+
+function zeigeStellen(data){
+  document.getElementById('stellen-count').textContent=data.length;
+  var list=document.getElementById('jobs-list');
+  if(!data.length){
+    list.innerHTML='<div class="empty-state"><div class="empty-icon">😔</div>Keine Stellen gefunden</div>';
+    return;
+  }
+  list.innerHTML=data.map((s,i)=>`
+    <div class="job-card ${i===0?'featured':''}">
+      <div class="job-logo">${s.beruf?s.beruf.charAt(0):'?'}</div>
+      <div>
+        <div class="job-top-row">
+          <span class="job-title-text">${s.beruf||'Unbekannt'}</span>
+          ${i===0?'<span class="job-badge new">NEU</span>':''}
+        </div>
+        <div class="job-company-row">${s.betrieb?.name||'Unbekannter Betrieb'} · ${s.standort||''}</div>
+        <div class="job-tags">
+          ${s.gehalt?`<span class="job-tag salary">${s.gehalt} € / Monat</span>`:''}
+          ${s.beginn?`<span class="job-tag">${s.beginn}</span>`:''}
+          ${s.dauer?`<span class="job-tag">${s.dauer}</span>`:''}
+        </div>
+      </div>
+      <div class="job-right">
+        <button class="apply-btn" onclick="openModal('${s.id}')">Bewerben →</button>
+        <span class="job-date">${new Date(s.created_at).toLocaleDateString('de-DE')}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterStellen(){
+  var search=document.getElementById('search-input').value.toLowerCase();
+  var ort=document.getElementById('ort-filter').value.toLowerCase();
+  var checkboxes=document.querySelectorAll('#berufsfeld-filter input:checked');
+  var selectedBerufe=[...checkboxes].map(cb=>cb.id.replace('bf-',''));
+
+  var gefiltert=alleStellen.filter(s=>{
+    var matchSearch=!search||(s.beruf||'').toLowerCase().includes(search)||(s.standort||'').toLowerCase().includes(search)||(s.betrieb?.name||'').toLowerCase().includes(search);
+    var matchOrt=!ort||(s.standort||'').toLowerCase().includes(ort);
+    var matchBeruf=!selectedBerufe.length||selectedBerufe.includes(s.beruf);
+    return matchSearch&&matchOrt&&matchBeruf;
+  });
+  zeigeStellen(gefiltert);
+}
+
+function resetFilter(){
+  document.getElementById('search-input').value='';
+  document.getElementById('ort-filter').value='';
+  document.querySelectorAll('#berufsfeld-filter input').forEach(cb=>cb.checked=false);
+  zeigeStellen(alleStellen);
+}
+
+function sortStellen(val){
+  var sorted=[...alleStellen];
+  if(val==='gehalt-asc') sorted.sort((a,b)=>(parseFloat(a.gehalt)||0)-(parseFloat(b.gehalt)||0));
+  if(val==='gehalt-desc') sorted.sort((a,b)=>(parseFloat(b.gehalt)||0)-(parseFloat(a.gehalt)||0));
+  zeigeStellen(sorted);
+}
+
+function openModal(stelleId){
+  var s=alleStellen.find(x=>x.id===stelleId);
+  if(!s) return;
+  document.getElementById('modal-title').textContent=s.beruf||'';
+  document.getElementById('modal-company').textContent=(s.betrieb?.name||'')+' · '+(s.standort||'');
+  document.getElementById('modal-desc').textContent=s.beschreibung||'';
+  document.getElementById('modal-tags').innerHTML=
+    (s.gehalt?`<span class="modal-tag highlight">${s.gehalt} € / Monat</span>`:'')+
+    (s.beginn?`<span class="modal-tag">Start: ${s.beginn}</span>`:'')+
+    (s.dauer?`<span class="modal-tag">${s.dauer}</span>`:'')+
+    (s.standort?`<span class="modal-tag">📍 ${s.standort}</span>`:'');
+  document.getElementById('form-stelle').value=s.beruf||'';
+  document.getElementById('form-betrieb').value=(s.betrieb?.name||'')+' · '+(s.standort||'');
+  document.getElementById('form-stellen-id').value=s.id;
+  document.getElementById('frage1-label').textContent=s.frage1||'Warum interessiert dich diese Ausbildung?';
+  document.getElementById('frage2-label').textContent=s.frage2||'Was sind deine Stärken?';
+  var fragenBereich=document.getElementById('fragen-bereich');
+  fragenBereich.style.display=(s.frage1||s.frage2)?'block':'none';
+  document.getElementById('success-msg').style.display='none';
+  document.getElementById('bewerbung-form').reset();
+  document.getElementById('abschluss-label').textContent='Schulabschluss *';
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal()});
+
 function toggleSchueler(){
   var checked=document.getElementById('schueler-check').checked;
   var label=document.getElementById('abschluss-label');
   var select=document.getElementById('abschluss-select');
-  label.textContent=checked ? 'Voraussichtlicher Schulabschluss *' : 'Schulabschluss *';
-  // Reset and update options
+  label.textContent=checked?'Voraussichtlicher Schulabschluss *':'Schulabschluss *';
   select.innerHTML='<option value="">Bitte auswählen...</option>';
-  var options=checked ? [
+  var options=checked?[
     'Voraussichtlich Hauptschulabschluss',
     'Voraussichtlich Qualifizierter Hauptschulabschluss',
     'Voraussichtlich Mittlere Reife / Realschulabschluss',
     'Voraussichtlich Erweiterter Realschulabschluss',
     'Voraussichtlich Fachhochschulreife (Fachabitur)',
-    'Voraussichtlich Allgemeine Hochschulreife (Abitur)',
-    'Voraussichtlich Förderschulabschluss'
-  ] : [
-    'Hauptschulabschluss',
-    'Qualifizierter Hauptschulabschluss',
-    'Mittlere Reife / Realschulabschluss',
-    'Erweiterter Realschulabschluss',
-    'Fachhochschulreife (Fachabitur)',
-    'Allgemeine Hochschulreife (Abitur)',
-    'Förderschulabschluss',
-    'Kein Schulabschluss'
+    'Voraussichtlich Allgemeine Hochschulreife (Abitur)'
+  ]:[
+    'Hauptschulabschluss','Qualifizierter Hauptschulabschluss',
+    'Mittlere Reife / Realschulabschluss','Erweiterter Realschulabschluss',
+    'Fachhochschulreife (Facabitur)','Allgemeine Hochschulreife (Abitur)',
+    'Förderschulabschluss','Kein Schulabschluss'
   ];
-  options.forEach(function(o){
-    var opt=document.createElement('option');
-    opt.value=o;opt.textContent=o;
-    select.appendChild(opt);
-  });
+  options.forEach(function(o){var opt=document.createElement('option');opt.value=o;opt.textContent=o;select.appendChild(opt);});
 }
-function openModal(title,company,ort,gehalt,start,dauer,desc,frage1,frage2){
-  document.getElementById('modal-title').textContent=title;
-  document.getElementById('modal-company').textContent=company+' · '+ort;
-  document.getElementById('modal-desc').textContent=desc;
-  document.getElementById('modal-tags').innerHTML='<span class="modal-tag highlight">'+gehalt+' € / Monat</span><span class="modal-tag">Start: '+start+'</span><span class="modal-tag">'+dauer+'</span><span class="modal-tag">📍 '+ort+'</span>';
-  document.getElementById('form-stelle').value=title;
-  document.getElementById('form-betrieb').value=company+' · '+ort;
-  document.getElementById('frage1-label').textContent=frage1;
-  document.getElementById('frage2-label').textContent=frage2;
-  document.getElementById('success-msg').style.display='none';
-  document.getElementById('bewerbung-form').reset();
-  document.getElementById('modal').classList.add('open');
-}
-function closeModal(){document.getElementById('modal').classList.remove('open')}
-document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal()});
+
 function submitBewerbung(){
   var nameVal=document.getElementById('input-name').value.trim();
   var emailVal=document.getElementById('input-email').value.trim();
   var datenschutz=document.getElementById('datenschutz-check').checked;
-  if(!nameVal){alert('Bitte Name ausfüllen!');return;}
+  if(!nameVal){alert('Bitte Vorname ausfüllen!');return;}
   if(!emailVal){alert('Bitte E-Mail ausfüllen!');return;}
   if(!datenschutz){alert('Bitte bestätige die Datenschutzerklärung!');return;}
   var form=document.getElementById('bewerbung-form');
@@ -340,6 +376,8 @@ function submitBewerbung(){
     }
   }).catch(function(){alert('Verbindungsfehler. Bitte versuche es nochmal.');});
 }
+
+ladeStellen();
 </script>
 </body>
 </html>
