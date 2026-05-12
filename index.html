@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AusbildungsCheck – Deine Ausbildung. Deine Zukunft.</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--dark:#021D3D;--navy:#042C53;--ice:#4FAADF;--ice-light:#EBF5FC;--gray:#F7F9FC;--gray2:#EEF2F7;--text:#0A1929;--text2:#5A7490}
@@ -112,10 +113,10 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,0.06);paddin
   <p>Echte Einblicke in Ausbildungsberufe, faire Gehaltsinfos und direkte Bewerbung – alles auf einer Plattform.</p>
   <div class="search-wrap">
     <div class="search-box">
-      <input type="text" placeholder="z.B. Kfz-Mechatroniker, Köln...">
-      <button class="search-btn" onclick="window.location.href='stellen.html'">Suchen</button>
+      <input type="text" id="hero-search" placeholder="z.B. Kfz-Mechatroniker, Köln...">
+      <button class="search-btn" onclick="goSearch()">Suchen</button>
     </div>
-    <div class="search-tags">
+    <div class="search-tags" id="search-tags">
       <span class="search-tag" onclick="window.location.href='stellen.html'">Fachinformatiker</span>
       <span class="search-tag" onclick="window.location.href='stellen.html'">Kfz-Mechatroniker</span>
       <span class="search-tag" onclick="window.location.href='stellen.html'">Kaufmann</span>
@@ -124,8 +125,8 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,0.06);paddin
     </div>
   </div>
   <div class="stats">
-    <div><div class="stat-icon">📍</div><div class="stat-label">Neue Stellen</div><div class="stat-sub">jede Woche mehr</div></div>
-    <div><div class="stat-icon">🏢</div><div class="stat-label">Ausgewählte Betriebe</div><div class="stat-sub">geprüfte Partner</div></div>
+    <div><div class="stat-icon">📍</div><div class="stat-label" id="stat-stellen">Neue Stellen</div><div class="stat-sub">jede Woche mehr</div></div>
+    <div><div class="stat-icon">🏢</div><div class="stat-label" id="stat-betriebe">Ausgewählte Betriebe</div><div class="stat-sub">geprüfte Partner</div></div>
     <div><div class="stat-icon">🎥</div><div class="stat-label">Berufsvideos</div><div class="stat-sub">wöchentlich neu</div></div>
   </div>
 </section>
@@ -137,31 +138,8 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,0.06);paddin
       <div class="section-title">Aktuelle Stellen bei Partnerbetrieben</div>
       <div class="section-sub">Direkt bewerben – Lebenslauf hochladen, fertig.</div>
     </div>
-    <div class="jobs-grid">
-      <div class="job-card" onclick="window.location.href='stellen.html'">
-        <div class="job-top"><div class="job-icon">🔧</div><span class="job-new">NEU</span></div>
-        <div class="job-company">AutoHaus Müller GmbH · Essen</div>
-        <div class="job-title">Kfz-Mechatroniker/in</div>
-        <div class="job-footer"><span class="job-chip salary">820 € / Monat</span><span class="job-chip">Sep 2025</span><span class="job-chip">3,5 Jahre</span></div>
-      </div>
-      <div class="job-card" onclick="window.location.href='stellen.html'">
-        <div class="job-top"><div class="job-icon">💻</div><span class="job-new">NEU</span></div>
-        <div class="job-company">TechWerk GmbH · Dortmund</div>
-        <div class="job-title">Fachinformatiker/in</div>
-        <div class="job-footer"><span class="job-chip salary">900 € / Monat</span><span class="job-chip">Aug 2025</span><span class="job-chip">3 Jahre</span></div>
-      </div>
-      <div class="job-card" onclick="window.location.href='stellen.html'">
-        <div class="job-top"><div class="job-icon">🏪</div></div>
-        <div class="job-company">Kaufland · Bochum</div>
-        <div class="job-title">Kaufmann/frau Einzelhandel</div>
-        <div class="job-footer"><span class="job-chip salary">750 € / Monat</span><span class="job-chip">Sep 2025</span><span class="job-chip">3 Jahre</span></div>
-      </div>
-      <div class="job-card" onclick="window.location.href='stellen.html'">
-        <div class="job-top"><div class="job-icon">⚡</div></div>
-        <div class="job-company">Stadtwerke Wuppertal · Wuppertal</div>
-        <div class="job-title">Elektroniker/in</div>
-        <div class="job-footer"><span class="job-chip salary">860 € / Monat</span><span class="job-chip">Aug 2025</span><span class="job-chip">3,5 Jahre</span></div>
-      </div>
+    <div class="jobs-grid" id="jobs-grid">
+      <div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text2)">⏳ Stellen werden geladen...</div>
     </div>
     <div class="jobs-cta"><button class="btn-outline-dark" onclick="window.location.href='stellen.html'">Alle Stellen anzeigen →</button></div>
   </div>
@@ -231,5 +209,66 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,0.06);paddin
   <div class="footer-copy">© 2025 AusbildungsCheck</div>
 </footer>
 
+<script>
+const SUPABASE_URL='https://trccxzjdddhbqjgyzlkv.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyY2N4empkZGRoYnFqZ3l6bGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDgyMjIsImV4cCI6MjA5NDA4NDIyMn0.xS5-9Tq1-i9_K9lYDuayomybBazHmnvY29K24LvRxaQ';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+async function ladeStartseite(){
+  var [{data:stellen},{data:betriebe},{data:berufsfelder}]=await Promise.all([
+    sb.from('stellen').select('*, betrieb:betrieb_id(name), berufsfeld:berufsfeld_id(name,emoji)').eq('aktiv',true).order('created_at',{ascending:false}).limit(4),
+    sb.from('betriebe').select('id',{count:'exact'}),
+    sb.from('berufsfelder').select('name,emoji').order('name').limit(5)
+  ]);
+
+  // Stats updaten
+  if(stellen) document.getElementById('stat-stellen').textContent=stellen.length+' Aktuelle Stellen';
+  if(betriebe) document.getElementById('stat-betriebe').textContent=(betriebe.length||0)+' Partnerbetriebe';
+
+  // Berufsfelder als Suchtags
+  if(berufsfelder&&berufsfelder.length){
+    document.getElementById('search-tags').innerHTML=berufsfelder.map(b=>
+      `<span class="search-tag" onclick="goSearchTerm('${b.name}')">${b.emoji||''} ${b.name}</span>`
+    ).join('');
+  }
+
+  // Stellen anzeigen
+  var grid=document.getElementById('jobs-grid');
+  if(!stellen||!stellen.length){
+    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text2)">Bald sind hier die ersten Stellen zu finden! 🚀</div>';
+    return;
+  }
+  grid.innerHTML=stellen.map((s,i)=>`
+    <div class="job-card" onclick="window.location.href='stellen.html'">
+      <div class="job-top">
+        <div class="job-icon">${s.berufsfeld?.emoji||'📋'}</div>
+        ${i===0?'<span class="job-new">NEU</span>':''}
+      </div>
+      <div class="job-company">${s.betrieb?.name||'Partnerbetrieb'} · ${s.standort||''}</div>
+      <div class="job-title">${s.beruf||'Ausbildungsstelle'}</div>
+      <div class="job-footer">
+        ${s.gehalt?`<span class="job-chip salary">${s.gehalt} € / Monat</span>`:''}
+        ${s.beginn?`<span class="job-chip">${s.beginn}</span>`:''}
+        ${s.dauer?`<span class="job-chip">${s.dauer}</span>`:''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function goSearch(){
+  var q=document.getElementById('hero-search').value.trim();
+  window.location.href='stellen.html'+(q?'?q='+encodeURIComponent(q):'');
+}
+
+function goSearchTerm(term){
+  window.location.href='stellen.html?q='+encodeURIComponent(term);
+}
+
+document.getElementById('hero-search').addEventListener('keydown',function(e){
+  if(e.key==='Enter') goSearch();
+});
+
+ladeStartseite();
+</script>
 </body>
 </html>
