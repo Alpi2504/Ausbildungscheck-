@@ -237,8 +237,17 @@ async function ladeStellen(){
   }
   alleStellen=stellen;
   alleBerufsfelder=berufsfelder||[];
-  zeigeStellen(stellen);
   bauFilterOptionen();
+
+  // URL Parameter lesen und Filter anwenden
+  var params=new URLSearchParams(window.location.search);
+  var q=params.get('q');
+  if(q){
+    document.getElementById('search-input').value=q;
+    filterStellen();
+  } else {
+    zeigeStellen(stellen);
+  }
 }
 
 function bauFilterOptionen(){
@@ -385,15 +394,6 @@ function submitBewerbung(){
 }
 
 ladeStellen();
-
-// URL Parameter lesen
-window.addEventListener('load', function(){
-  var params=new URLSearchParams(window.location.search);
-  var q=params.get('q');
-  if(q){
-    document.getElementById('search-input').value=q;
-  }
-});
 </script>
 </body>
 </html>
