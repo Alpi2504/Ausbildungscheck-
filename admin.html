@@ -305,13 +305,13 @@ async function loadDashboard(){
   document.getElementById('stat-bewerbungen').textContent=bew.count||0;
   document.getElementById('stat-neu').textContent=neu.count||0;
 
-  var {data}=await sb.from('bewerbungen').select('*,stellen(beruf,betriebe(name))').order('created_at',{ascending:false}).limit(5);
+  var {data}=await sb.from('bewerbungen').select('*, stellen:stellen_id(beruf, betrieb:betrieb_id(name))').order('created_at',{ascending:false}).limit(5);
   var tb=document.getElementById('recent-bewerbungen');
   if(!data||!data.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:2rem;color:#5A7490">Noch keine Bewerbungen</td></tr>';return;}
   tb.innerHTML=data.map(b=>`<tr>
     <td>${b.vorname||''} ${b.nachname||''}</td>
     <td>${b.stellen?.beruf||'-'}</td>
-    <td>${b.stellen?.betriebe?.name||'-'}</td>
+    <td>${b.stellen?.betrieb?.name||'-'}</td>
     <td>${new Date(b.created_at).toLocaleDateString('de-DE')}</td>
     <td><span class="badge badge-${b.status==='neu'?'neu':'aktiv'}">${b.status}</span></td>
   </tr>`).join('');
@@ -396,7 +396,7 @@ async function deleteBetrieb(){
 // STELLEN
 var stellenData=[];
 async function loadStellen(){
-  var {data, error}=await sb.from('stellen').select('*, betriebe(name)').order('created_at',{ascending:false});
+  var {data, error}=await sb.from('stellen').select('*, betrieb:betrieb_id(name)').order('created_at',{ascending:false});
   console.log('Stellen data:', data, 'Error:', error);
   stellenData=data||[];
   var tb=document.getElementById('stellen-table');
@@ -404,7 +404,7 @@ async function loadStellen(){
   if(!data||!data.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:2rem;color:#5A7490">Noch keine Stellen</td></tr>';return;}
   tb.innerHTML=data.map(s=>`<tr>
     <td><strong>${s.beruf||'-'}</strong></td>
-    <td>${s.betriebe?.name||'-'}</td>
+    <td>${s.betrieb?.name||'-'}</td>
     <td>${s.standort||'-'}</td>
     <td>${s.gehalt?s.gehalt+' €':'-'}</td>
     <td><span class="badge badge-${s.aktiv?'aktiv':'inaktiv'}">${s.aktiv?'Aktiv':'Inaktiv'}</span></td>
@@ -485,7 +485,7 @@ async function deleteStelle(){
 
 // BEWERBUNGEN
 async function loadBewerbungen(){
-  var {data}=await sb.from('bewerbungen').select('*,stellen(beruf,betrieb_id,betriebe(name,email))').order('created_at',{ascending:false});
+  var {data}=await sb.from('bewerbungen').select('*, stellen:stellen_id(beruf, frage1, frage2, betrieb:betrieb_id(name,email))').order('created_at',{ascending:false});
   var list=document.getElementById('bewerbungen-list');
   if(!data||!data.length){list.innerHTML='<div class="empty-state"><div class="empty-icon">📨</div>Noch keine Bewerbungen</div>';return;}
   list.innerHTML=data.map(b=>`
@@ -493,7 +493,7 @@ async function loadBewerbungen(){
       <div class="bewerbung-header">
         <div>
           <div class="bewerbung-name">${b.vorname||''} ${b.nachname||''}</div>
-          <div class="bewerbung-stelle">${b.stellen?.beruf||'-'} · ${b.stellen?.betriebe?.name||'-'}</div>
+          <div class="bewerbung-stelle">${b.stellen?.beruf||'-'} · ${b.stellen?.betrieb?.name||'-'}</div>
         </div>
         <span class="badge badge-${b.status==='neu'?'neu':'aktiv'}">${b.status}</span>
       </div>
@@ -510,7 +510,7 @@ async function loadBewerbungen(){
         ${b.antwort2?`<div class="antwort-item"><div class="antwort-frage">${b.stellen?.frage2||'Frage 2'}</div><div class="antwort-text">${b.antwort2}</div></div>`:''}
       </div>`:''}
       <div class="status-btns">
-        <button class="status-btn btn-weiterleiten" onclick="weiterleitenBewerbung('${b.id}','${b.stellen?.betriebe?.email||''}','${b.vorname||''} ${b.nachname||''}','${b.email||''}','${b.stellen?.beruf||''}')">📤 An Betrieb weiterleiten</button>
+        <button class="status-btn btn-weiterleiten" onclick="weiterleitenBewerbung('${b.id}','${b.stellen?.betrieb?.email||''}','${b.vorname||''} ${b.nachname||''}','${b.email||''}','${b.stellen?.beruf||''}')">📤 An Betrieb weiterleiten</button>
         <button class="status-btn btn-archivieren" onclick="archivierenBewerbung('${b.id}')">Archivieren</button>
       </div>
     </div>
