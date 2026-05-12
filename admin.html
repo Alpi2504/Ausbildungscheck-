@@ -130,6 +130,7 @@ tr:hover td{background:var(--gray)}
     <div class="nav-item" onclick="showPage('betriebe')"><span class="icon">🏢</span> Betriebe</div>
     <div class="nav-item" onclick="showPage('stellen')"><span class="icon">📋</span> Stellen</div>
     <div class="nav-item" onclick="showPage('bewerbungen')"><span class="icon">📨</span> Bewerbungen</div>
+    <div class="nav-item" onclick="showPage('berufsfelder')"><span class="icon">🗂️</span> Berufsfelder</div>
     <div class="nav-item" onclick="showPage('preise')"><span class="icon">💰</span> Preise</div>
     <div class="sidebar-bottom">
       <button class="logout-btn" onclick="logout()"><span>🚪</span> Ausloggen</button>
@@ -186,6 +187,19 @@ tr:hover td{background:var(--gray)}
       <div id="bewerbungen-list"><div class="empty-state"><div class="empty-icon">📨</div>Lädt...</div></div>
     </div>
 
+    <!-- BERUFSFELDER -->
+    <div class="page" id="page-berufsfelder">
+      <div class="page-title">Berufsfelder</div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Alle Berufsfelder</div>
+          <button class="add-btn" onclick="openBerufsfeldModal()">+ Berufsfeld hinzufügen</button>
+        </div>
+        <table><thead><tr><th>Emoji</th><th>Name</th><th>Stellen</th><th>Aktionen</th></tr></thead>
+        <tbody id="berufsfelder-table"><tr><td colspan="4" class="empty-state">Lädt...</td></tr></tbody></table>
+      </div>
+    </div>
+
     <!-- PREISE -->
     <div class="page" id="page-preise">
       <div class="page-title">Preise</div>
@@ -220,6 +234,9 @@ tr:hover td{background:var(--gray)}
     <div class="form-group"><label class="form-label">Betrieb *</label>
       <select class="form-select" id="stelle-betrieb"><option value="">Bitte auswählen...</option></select>
     </div>
+    <div class="form-group"><label class="form-label">Berufsfeld</label>
+      <select class="form-select" id="stelle-berufsfeld"><option value="">Bitte auswählen...</option></select>
+    </div>
     <div class="form-group"><label class="form-label">Ausbildungsberuf *</label><input class="form-input" id="stelle-beruf" placeholder="z.B. Kfz-Mechatroniker/in"></div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">Gehalt (€/Monat)</label><input class="form-input" id="stelle-gehalt" placeholder="820"></div>
@@ -242,6 +259,21 @@ tr:hover td{background:var(--gray)}
       <button class="btn-delete" id="stelle-delete-btn" onclick="deleteStelle()" style="display:none">Löschen</button>
       <button class="btn-cancel" onclick="closeModal('stelle-modal')">Abbrechen</button>
       <button class="btn-save" onclick="saveStelle()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<!-- BERUFSFELD MODAL -->
+<div class="modal-bg" id="berufsfeld-modal">
+  <div class="modal-box">
+    <div class="modal-title" id="berufsfeld-modal-title">Berufsfeld hinzufügen</div>
+    <input type="hidden" id="berufsfeld-id">
+    <div class="form-group"><label class="form-label">Emoji</label><input class="form-input" id="berufsfeld-emoji" placeholder="z.B. 🔧"></div>
+    <div class="form-group"><label class="form-label">Name *</label><input class="form-input" id="berufsfeld-name" placeholder="z.B. Technik & Handwerk"></div>
+    <div class="modal-btns">
+      <button class="btn-delete" id="berufsfeld-delete-btn" onclick="deleteBerufsfeld()" style="display:none">Löschen</button>
+      <button class="btn-cancel" onclick="closeModal('berufsfeld-modal')">Abbrechen</button>
+      <button class="btn-save" onclick="saveBerufsfeld()">Speichern</button>
     </div>
   </div>
 </div>
@@ -279,6 +311,7 @@ function showPage(name){
   event.currentTarget.classList.add('active');
   if(name==='bewerbungen') loadBewerbungen();
   if(name==='preise') loadPreise();
+  if(name==='berufsfelder') loadBerufsfelder();
 }
 
 function showToast(msg){
@@ -289,7 +322,7 @@ function showToast(msg){
 
 // LOAD ALL
 async function loadAll(){
-  await Promise.all([loadDashboard(),loadBetriebe(),loadStellen()]);
+  await Promise.all([loadDashboard(),loadBetriebe(),loadStellen(),loadBerufsfelder()]);
 }
 
 // DASHBOARD
@@ -424,6 +457,7 @@ function openStelleModal(id){
   document.getElementById('stelle-frage2').value='';
   document.getElementById('stelle-aktiv').value='true';
   document.getElementById('stelle-betrieb').value='';
+  document.getElementById('stelle-berufsfeld').value='';
   document.getElementById('stelle-delete-btn').style.display='none';
   document.getElementById('stelle-modal-title').textContent='Stelle hinzufügen';
   if(id){
@@ -440,6 +474,7 @@ function openStelleModal(id){
       document.getElementById('stelle-frage2').value=s.frage2||'';
       document.getElementById('stelle-aktiv').value=s.aktiv?'true':'false';
       document.getElementById('stelle-betrieb').value=s.betrieb_id||'';
+      document.getElementById('stelle-berufsfeld').value=s.berufsfeld_id||'';
       document.getElementById('stelle-delete-btn').style.display='block';
       document.getElementById('stelle-modal-title').textContent='Stelle bearbeiten';
     }
@@ -451,6 +486,7 @@ async function saveStelle(){
   var id=document.getElementById('stelle-id').value;
   var data={
     betrieb_id:document.getElementById('stelle-betrieb').value,
+    berufsfeld_id:document.getElementById('stelle-berufsfeld').value||null,
     beruf:document.getElementById('stelle-beruf').value,
     gehalt:document.getElementById('stelle-gehalt').value,
     standort:document.getElementById('stelle-standort').value,
@@ -569,6 +605,65 @@ async function savePreis(id){
   };
   await sb.from('preise').update(data).eq('id',id);
   showToast('✅ Preis gespeichert!');
+}
+
+// BERUFSFELDER
+var berufsfeldData=[];
+async function loadBerufsfelder(){
+  var {data}=await sb.from('berufsfelder').select('*, stellen(id)').order('name');
+  berufsfeldData=data||[];
+  var tb=document.getElementById('berufsfelder-table');
+  if(!data||!data.length){tb.innerHTML='<tr><td colspan="4" style="text-align:center;padding:2rem;color:#5A7490">Noch keine Berufsfelder</td></tr>';return;}
+  tb.innerHTML=data.map(b=>`<tr>
+    <td style="font-size:22px">${b.emoji||'📁'}</td>
+    <td><strong>${b.name}</strong></td>
+    <td>${b.stellen?.length||0} Stellen</td>
+    <td><button class="action-btn" onclick="openBerufsfeldModal('${b.id}')">✏️</button></td>
+  </tr>`).join('');
+
+  // Update berufsfeld select in stelle modal
+  var sel=document.getElementById('stelle-berufsfeld');
+  sel.innerHTML='<option value="">Bitte auswählen...</option>';
+  data.forEach(b=>sel.innerHTML+=`<option value="${b.id}">${b.emoji||''} ${b.name}</option>`);
+}
+
+function openBerufsfeldModal(id){
+  document.getElementById('berufsfeld-id').value='';
+  document.getElementById('berufsfeld-name').value='';
+  document.getElementById('berufsfeld-emoji').value='';
+  document.getElementById('berufsfeld-delete-btn').style.display='none';
+  document.getElementById('berufsfeld-modal-title').textContent='Berufsfeld hinzufügen';
+  if(id){
+    var b=berufsfeldData.find(x=>x.id===id);
+    if(b){
+      document.getElementById('berufsfeld-id').value=b.id;
+      document.getElementById('berufsfeld-name').value=b.name||'';
+      document.getElementById('berufsfeld-emoji').value=b.emoji||'';
+      document.getElementById('berufsfeld-delete-btn').style.display='block';
+      document.getElementById('berufsfeld-modal-title').textContent='Berufsfeld bearbeiten';
+    }
+  }
+  document.getElementById('berufsfeld-modal').classList.add('open');
+}
+
+async function saveBerufsfeld(){
+  var id=document.getElementById('berufsfeld-id').value;
+  var data={name:document.getElementById('berufsfeld-name').value,emoji:document.getElementById('berufsfeld-emoji').value};
+  if(!data.name){alert('Bitte Name ausfüllen!');return;}
+  if(id){await sb.from('berufsfelder').update(data).eq('id',id);}
+  else{await sb.from('berufsfelder').insert(data);}
+  closeModal('berufsfeld-modal');
+  await loadBerufsfelder();
+  showToast(id?'✅ Berufsfeld aktualisiert!':'✅ Berufsfeld hinzugefügt!');
+}
+
+async function deleteBerufsfeld(){
+  if(!confirm('Berufsfeld wirklich löschen?')) return;
+  var id=document.getElementById('berufsfeld-id').value;
+  await sb.from('berufsfelder').delete().eq('id',id);
+  closeModal('berufsfeld-modal');
+  await loadBerufsfelder();
+  showToast('🗑️ Berufsfeld gelöscht');
 }
 
 function closeModal(id){document.getElementById(id).classList.remove('open')}
