@@ -377,20 +377,58 @@ function submitBewerbung(){
   if(!nameVal){alert('Bitte Vorname ausfüllen!');return;}
   if(!emailVal){alert('Bitte E-Mail ausfüllen!');return;}
   if(!datenschutz){alert('Bitte bestätige die Datenschutzerklärung!');return;}
+
   var form=document.getElementById('bewerbung-form');
-  var data=new FormData(form);
-  fetch('https://formspree.io/f/xnjwlboz',{
-    method:'POST',body:data,headers:{'Accept':'application/json'}
-  }).then(function(r){
-    if(r.ok){
+  var stelleId=document.getElementById('form-stellen-id').value;
+  var stelle=alleStellen.find(s=>s.id===stelleId);
+
+  var bewerbungData={
+    stellen_id: stelleId,
+    vorname: nameVal,
+    nachname: form.querySelector('[name=Nachname]').value.trim(),
+    email: emailVal,
+    telefon: form.querySelector('[name=Telefon]').value.trim(),
+    wohnort: form.querySelector('[name=Wohnort]').value.trim(),
+    schulabschluss: document.getElementById('abschluss-select').value,
+    noch_schueler: document.getElementById('schueler-check').checked,
+    antwort1: form.querySelector('[name=Frage1]').value.trim(),
+    antwort2: form.querySelector('[name=Frage2]').value.trim(),
+    status: 'neu'
+  };
+
+  var emailData={
+    ...bewerbungData,
+    stelle: stelle?.beruf||'',
+    betrieb: stelle?.betrieb?.name||'',
+    betrieb_email: stelle?.betrieb?.email||'',
+    frage1: stelle?.frage1||'',
+    frage2: stelle?.frage2||''
+  };
+
+  // In Supabase speichern
+  sb.from('bewerbungen').insert(bewerbungData).then(function({error}){
+    if(error){console.error(error);alert('Fehler beim Speichern. Bitte nochmal versuchen.');return;}
+
+    // E-Mail über Edge Function verschicken
+    fetch('https://trccxzjdddhbqjgyzlkv.supabase.co/functions/v1/bewerbung-weiterleiten',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyY2N4empkZGRoYnFqZ3l6bGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDgyMjIsImV4cCI6MjA5NDA4NDIyMn0.xS5-9Tq1-i9_K9lYDuayomybBazHmnvY29K24LvRxaQ'
+      },
+      body:JSON.stringify({bewerbung:emailData})
+    }).then(function(){
       document.getElementById('success-msg').style.display='block';
       form.reset();
       document.getElementById('abschluss-label').textContent='Schulabschluss *';
       setTimeout(function(){closeModal();},3000);
-    } else {
-      alert('Fehler beim Senden. Bitte versuche es nochmal.');
-    }
-  }).catch(function(){alert('Verbindungsfehler. Bitte versuche es nochmal.');});
+    }).catch(function(){
+      // E-Mail Fehler aber Bewerbung wurde gespeichert
+      document.getElementById('success-msg').style.display='block';
+      form.reset();
+      setTimeout(function(){closeModal();},3000);
+    });
+  });
 }
 
 ladeStellen();
