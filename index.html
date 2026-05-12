@@ -112,15 +112,10 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,0.06);paddin
   <p>Echte Einblicke in Ausbildungsberufe, faire Gehaltsinfos und direkte Bewerbung – alles auf einer Plattform.</p>
   <div class="search-wrap">
     <div class="search-box">
-      <input type="text" id="hero-search" placeholder="z.B. Kfz-Mechatroniker, Köln...">
+      <input type="text" id="hero-search" placeholder="z.B. Kfz-Mechatroniker, Köln..." onkeydown="if(event.key==='Enter')goSearch()">
       <button class="search-btn" onclick="goSearch()">Suchen</button>
     </div>
     <div class="search-tags" id="search-tags">
-      <span class="search-tag" onclick="window.location.href='stellen.html'">Fachinformatiker</span>
-      <span class="search-tag" onclick="window.location.href='stellen.html'">Kfz-Mechatroniker</span>
-      <span class="search-tag" onclick="window.location.href='stellen.html'">Kaufmann</span>
-      <span class="search-tag" onclick="window.location.href='stellen.html'">Elektriker</span>
-      <span class="search-tag" onclick="window.location.href='stellen.html'">Koch</span>
     </div>
   </div>
   <div class="stats">
