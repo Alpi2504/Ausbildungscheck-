@@ -223,25 +223,31 @@ const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSI
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 var alleStellen=[];
+var alleBerufsfelder=[];
 
 async function ladeStellen(){
-  var {data,error}=await sb.from('stellen').select('*, betrieb:betrieb_id(name,email)').eq('aktiv',true).order('created_at',{ascending:false});
-  if(error||!data){
+  var [{data:stellen},{data:berufsfelder}]=await Promise.all([
+    sb.from('stellen').select('*, betrieb:betrieb_id(name,email), berufsfeld:berufsfeld_id(name,emoji)').eq('aktiv',true).order('created_at',{ascending:false}),
+    sb.from('berufsfelder').select('*').order('name')
+  ]);
+
+  if(!stellen){
     document.getElementById('jobs-list').innerHTML='<div class="empty-state"><div class="empty-icon">😔</div>Keine Stellen gefunden</div>';
     return;
   }
-  alleStellen=data;
-  zeigeStellen(data);
-  bausFilterOptionen(data);
+  alleStellen=stellen;
+  alleBerufsfelder=berufsfelder||[];
+  zeigeStellen(stellen);
+  bauFilterOptionen();
 }
 
-function bausFilterOptionen(data){
-  var berufsfelder=[...new Set(data.map(s=>s.beruf).filter(Boolean))];
+function bauFilterOptionen(){
   var filterEl=document.getElementById('berufsfeld-filter');
-  filterEl.innerHTML=berufsfelder.map(b=>`
+  if(!alleBerufsfelder.length){filterEl.innerHTML='';return;}
+  filterEl.innerHTML=alleBerufsfelder.map(b=>`
     <div class="filter-option">
-      <input type="checkbox" id="bf-${b}" onchange="filterStellen()">
-      <label for="bf-${b}">${b}</label>
+      <input type="checkbox" id="bf-${b.id}" onchange="filterStellen()">
+      <label for="bf-${b.id}">${b.emoji||''} ${b.name}</label>
     </div>
   `).join('');
 }
@@ -255,7 +261,7 @@ function zeigeStellen(data){
   }
   list.innerHTML=data.map((s,i)=>`
     <div class="job-card ${i===0?'featured':''}">
-      <div class="job-logo">${s.beruf?s.beruf.charAt(0):'?'}</div>
+      <div class="job-logo">${s.berufsfeld?.emoji||s.beruf?.charAt(0)||'?'}</div>
       <div>
         <div class="job-top-row">
           <span class="job-title-text">${s.beruf||'Unbekannt'}</span>
@@ -266,6 +272,7 @@ function zeigeStellen(data){
           ${s.gehalt?`<span class="job-tag salary">${s.gehalt} € / Monat</span>`:''}
           ${s.beginn?`<span class="job-tag">${s.beginn}</span>`:''}
           ${s.dauer?`<span class="job-tag">${s.dauer}</span>`:''}
+          ${s.berufsfeld?`<span class="job-tag">${s.berufsfeld.emoji||''} ${s.berufsfeld.name}</span>`:''}
         </div>
       </div>
       <div class="job-right">
@@ -280,12 +287,12 @@ function filterStellen(){
   var search=document.getElementById('search-input').value.toLowerCase();
   var ort=document.getElementById('ort-filter').value.toLowerCase();
   var checkboxes=document.querySelectorAll('#berufsfeld-filter input:checked');
-  var selectedBerufe=[...checkboxes].map(cb=>cb.id.replace('bf-',''));
+  var selectedIds=[...checkboxes].map(cb=>cb.id.replace('bf-',''));
 
   var gefiltert=alleStellen.filter(s=>{
     var matchSearch=!search||(s.beruf||'').toLowerCase().includes(search)||(s.standort||'').toLowerCase().includes(search)||(s.betrieb?.name||'').toLowerCase().includes(search);
     var matchOrt=!ort||(s.standort||'').toLowerCase().includes(ort);
-    var matchBeruf=!selectedBerufe.length||selectedBerufe.includes(s.beruf);
+    var matchBeruf=!selectedIds.length||selectedIds.includes(s.berufsfeld_id);
     return matchSearch&&matchOrt&&matchBeruf;
   });
   zeigeStellen(gefiltert);
