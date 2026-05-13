@@ -90,6 +90,7 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
       <div class="error-msg" id="login-error"></div>
       <div class="form-group"><label class="form-label">E-Mail *</label><input class="form-input" type="email" id="login-email" placeholder="max@beispiel.de"></div>
       <div class="form-group"><label class="form-label">Passwort *</label><input class="form-input" type="password" id="login-pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <div style="text-align:right;margin-top:-.5rem;margin-bottom:.75rem"><a href="passwort.html" style="font-size:12px;color:var(--ice);text-decoration:none;font-weight:500">Passwort vergessen?</a></div>
       <button class="submit-btn" onclick="doLogin()">Einloggen</button>
       <div style="text-align:center;margin-top:1rem"><span style="font-size:13px;color:var(--text2)">Noch kein Konto? </span><span style="font-size:13px;color:var(--ice);cursor:pointer;font-weight:600" onclick="switchTab('register')">Jetzt registrieren</span></div>
     </div>
