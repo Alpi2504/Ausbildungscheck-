@@ -18,6 +18,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .nav-links a:hover{color:var(--dark)}
 .nav-links a.active{color:var(--ice);font-weight:700}
 .nav-cta{background:var(--navy);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
+.nav-login{background:transparent;color:var(--navy);border:1.5px solid rgba(4,44,83,0.2);padding:7px 16px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:5px}
 .hero{padding:100px 2rem 3rem;text-align:center;background:#fff;position:relative;overflow:hidden}
 .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(79,170,223,0.08) 0%,transparent 70%);pointer-events:none}
 .hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--ice-light);border:1px solid rgba(79,170,223,0.25);color:var(--ice);font-size:12px;font-weight:600;padding:5px 14px;border-radius:20px;margin-bottom:1.25rem;position:relative}
@@ -101,6 +102,7 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,0.06);paddin
     <a href="index.html" class="active">Start</a>
     <a href="stellen.html">Stellen</a>
     <a href="betriebe.html">Für Betriebe</a>
+    <a href="konto.html" class="nav-login" id="nav-konto">👤 Anmelden</a>
     <button class="nav-cta" onclick="window.location.href='betriebe.html'">Stelle ausschreiben</button>
   </div>
 </nav>
@@ -205,7 +207,14 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,0.06);paddin
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
-const SUPABASE_URL='https://trccxzjdddhbqjgyzlkv.supabase.co';
+const _sb=supabase.createClient('https://trccxzjdddhbqjgyzlkv.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyY2N4empkZGRoYnFqZ3l6bGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDgyMjIsImV4cCI6MjA5NDA4NDIyMn0.xS5-9Tq1-i9_K9lYDuayomybBazHmnvY29K24LvRxaQ',{auth:{persistSession:true,storageKey:'ausbildungscheck-auth'}});
+_sb.auth.getSession().then(({data:{session}})=>{
+  if(session){
+    var btn=document.getElementById('nav-konto');
+    if(btn){btn.textContent='👤 Mein Konto';btn.style.color='var(--ice)';}
+  }
+});
+</script>
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyY2N4empkZGRoYnFqZ3l6bGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDgyMjIsImV4cCI6MjA5NDA4NDIyMn0.xS5-9Tq1-i9_K9lYDuayomybBazHmnvY29K24LvRxaQ';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
