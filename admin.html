@@ -195,7 +195,7 @@ tr:hover td{background:var(--gray)}
         <div class="card-header">
           <div class="card-title">Alle registrierten Bewerber</div>
         </div>
-        <table><thead><tr><th>Name</th><th>Wohnort</th><th>Schulabschluss</th><th>Telefon</th><th>Registriert</th></tr></thead>
+        <table><thead><tr><th>Name</th><th>Adresse</th><th>Telefon</th><th>Schulabschluss</th><th>Registriert</th></tr></thead>
         <tbody id="bewerber-table"><tr><td colspan="5" class="empty-state">Lädt...</td></tr></tbody></table>
       </div>
     </div>
@@ -625,12 +625,12 @@ async function savePreis(id){
 async function loadBewerber(){
   var {data}=await sb.from('profile').select('*').order('created_at',{ascending:false});
   var tb=document.getElementById('bewerber-table');
-  if(!data||!data.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:2rem;color:#5A7490">Noch keine registrierten Bewerber</td></tr>';return;}
+  if(!data||!data.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:2rem;color:#5A7490">Noch keine registrierten Bewerber</td></tr>';return;}
   tb.innerHTML=data.map(b=>`<tr>
     <td><strong>${b.vorname||''} ${b.nachname||''}</strong></td>
-    <td>${b.ort||'-'}, ${b.plz||''}</td>
-    <td>${b.schulabschluss||'-'}${b.noch_schueler&&b.abschluss_jahr?' (voraussichtlich '+b.abschluss_jahr+')':''}</td>
+    <td>${b.strasse||'-'}, ${b.plz||''} ${b.ort||''}</td>
     <td>${b.telefon||'-'}</td>
+    <td>${b.schulabschluss||'-'}${b.noch_schueler&&b.abschluss_jahr?' (voraussichtlich '+b.abschluss_jahr+')':''}</td>
     <td>${new Date(b.created_at).toLocaleDateString('de-DE')}</td>
   </tr>`).join('');
 }
