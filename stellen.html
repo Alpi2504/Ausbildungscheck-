@@ -16,8 +16,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .nav-links{display:flex;align-items:center;gap:1.75rem}
 .nav-links a{font-size:13px;color:var(--text2);text-decoration:none;font-weight:500}
 .nav-links a.active{color:var(--ice);font-weight:700}
-.nav-cta{background:var(--navy);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
 .nav-login{background:transparent;color:var(--navy);border:1.5px solid rgba(4,44,83,0.2);padding:7px 16px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:5px}
+.nav-cta{background:var(--navy);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
 .page-header{background:var(--navy);padding:90px 2rem 2.5rem;text-align:center}
 .page-header h1{font-family:'Outfit',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;letter-spacing:-1px;color:#fff;margin-bottom:.5rem}
 .page-header p{font-size:15px;color:rgba(255,255,255,0.6);margin-bottom:1.75rem}
@@ -35,7 +35,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .filter-option{display:flex;align-items:center;gap:8px;cursor:pointer;padding:5px 8px;border-radius:7px}
 .filter-option input[type=checkbox]{accent-color:var(--ice);width:15px;height:15px;cursor:pointer}
 .filter-option label{font-size:13px;color:var(--text);cursor:pointer}
-.filter-option .count{margin-left:auto;font-size:11px;color:var(--text2);background:var(--gray);padding:1px 7px;border-radius:10px}
 .filter-divider{height:1px;background:var(--gray2);margin:1rem 0}
 .location-input-wrap{position:relative;margin-bottom:.75rem}
 .location-input{width:100%;border:1.5px solid var(--gray2);border-radius:9px;padding:9px 36px 9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none}
@@ -53,11 +52,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .jobs-list{display:flex;flex-direction:column;gap:12px}
 .job-card{background:#fff;border:1.5px solid var(--gray2);border-radius:14px;padding:1.25rem 1.5rem;cursor:pointer;transition:all .2s;display:grid;grid-template-columns:auto 1fr auto;gap:1rem;align-items:center}
 .job-card:hover{border-color:var(--ice);box-shadow:0 6px 20px rgba(79,170,223,0.1);transform:translateY(-1px)}
-.job-logo{width:52px;height:52px;border-radius:12px;background:var(--ice-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;font-family:'Outfit',sans-serif;font-weight:800;color:var(--ice);font-size:18px}
+.job-card.featured{border-color:rgba(79,170,223,0.3);background:linear-gradient(135deg,#fff 0%,var(--ice-light) 100%)}
+.job-logo{width:52px;height:52px;border-radius:12px;background:var(--ice-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
 .job-top-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
 .job-title-text{font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;color:var(--dark)}
 .job-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;letter-spacing:.5px}
 .job-badge.new{background:var(--ice-light);color:var(--ice)}
+.job-badge.hot{background:#FEF3C7;color:#D97706}
 .job-company-row{font-size:13px;color:var(--text2);margin-bottom:.6rem}
 .job-tags{display:flex;gap:6px;flex-wrap:wrap}
 .job-tag{font-size:11px;padding:3px 9px;border-radius:6px;background:var(--gray);color:var(--text2)}
@@ -67,37 +68,66 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .apply-btn:hover{background:var(--ice)}
 .job-date{font-size:11px;color:var(--text2)}
 .empty-state{text-align:center;padding:3rem;color:var(--text2)}
-.empty-icon{font-size:40px;margin-bottom:.75rem}
 footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-top:3rem}
 .footer-logo{font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;color:#fff}
 .footer-logo span{color:var(--ice)}
 .footer-links{display:flex;gap:1.25rem}
 .footer-links a{font-size:12px;color:rgba(255,255,255,0.45);text-decoration:none}
 .footer-copy{font-size:11px;color:rgba(255,255,255,0.3)}
+
+/* MODALS */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(2,13,29,0.6);z-index:200;align-items:center;justify-content:center;padding:1rem}
 .modal-overlay.open{display:flex}
-.modal{background:#fff;border-radius:20px;max-width:580px;width:100%;max-height:90vh;overflow-y:auto;padding:2rem}
-.modal-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.25rem}
-.modal-company{font-size:12px;color:var(--text2);margin-bottom:4px}
-.modal-title{font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;color:var(--dark)}
-.modal-close{width:32px;height:32px;border-radius:8px;border:1.5px solid var(--gray2);background:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2);flex-shrink:0}
+.modal{background:#fff;border-radius:20px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;padding:2rem}
+.modal-close{position:absolute;top:1rem;right:1rem;width:32px;height:32px;border-radius:8px;border:1.5px solid var(--gray2);background:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2)}
+.modal-header{margin-bottom:1.5rem;position:relative;padding-right:2rem}
+.modal-stelle{font-size:12px;color:var(--text2);margin-bottom:4px}
+.modal-title{font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;color:var(--dark)}
 .modal-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem}
 .modal-tag{font-size:12px;padding:4px 12px;border-radius:6px;background:var(--gray);color:var(--text2)}
 .modal-tag.highlight{background:var(--ice-light);color:var(--ice);font-weight:600}
-.modal-desc{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:1.25rem}
-.modal-divider{height:1px;background:var(--gray2);margin:1.25rem 0}
-.form-section-title{font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;color:var(--dark);margin-bottom:1.25rem}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
-.form-group{margin-bottom:.875rem}
+
+/* FLOW: AUTH AUSWAHL */
+.auth-choice{display:flex;flex-direction:column;gap:.75rem;margin-top:1rem}
+.choice-btn{display:flex;align-items:center;gap:12px;padding:1rem 1.25rem;border-radius:12px;border:1.5px solid var(--gray2);background:#fff;cursor:pointer;transition:all .2s;text-align:left;width:100%}
+.choice-btn:hover{border-color:var(--ice);background:var(--ice-light)}
+.choice-btn.primary{background:var(--navy);border-color:var(--navy)}
+.choice-btn.primary .choice-icon,.choice-btn.primary .choice-title{color:#fff}
+.choice-btn.primary .choice-sub{color:rgba(255,255,255,0.6)}
+.choice-icon{font-size:22px;flex-shrink:0}
+.choice-title{font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;color:var(--dark);display:block}
+.choice-sub{font-size:12px;color:var(--text2);display:block;margin-top:2px}
+
+/* FLOW: EINGELOGGT - SCHLANKES FORMULAR */
+.profil-banner{display:flex;align-items:center;gap:10px;background:var(--ice-light);border:1.5px solid rgba(79,170,223,0.25);border-radius:10px;padding:10px 14px;margin-bottom:1.25rem}
+.profil-banner-avatar{width:36px;height:36px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;color:#fff;flex-shrink:0}
+.profil-banner-name{font-size:13px;font-weight:600;color:var(--navy)}
+.profil-banner-sub{font-size:11px;color:var(--text2);margin-top:1px}
+.profil-banner-edit{margin-left:auto;font-size:12px;color:var(--ice);font-weight:600;text-decoration:none;white-space:nowrap}
+
+/* FORMULAR FELDER */
+.form-group{margin-bottom:1rem}
 .form-label{font-size:13px;font-weight:600;color:var(--dark);margin-bottom:.35rem;display:block}
 .form-input{width:100%;border:1.5px solid var(--gray2);border-radius:9px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .2s;background:#fff}
 .form-input:focus{border-color:var(--ice)}
 .form-select{width:100%;border:1.5px solid var(--gray2);border-radius:9px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;background:#fff;cursor:pointer}
 .form-select:focus{border-color:var(--ice)}
-.questions-divider{background:var(--gray);border-radius:12px;padding:1rem;margin-bottom:.875rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.toggle-field{display:flex;align-items:center;gap:10px;background:var(--ice-light);border:1.5px solid rgba(79,170,223,0.2);border-radius:9px;padding:10px 14px;cursor:pointer;margin-bottom:.75rem}
+.toggle-field input{accent-color:var(--ice);width:16px;height:16px;cursor:pointer}
+.toggle-field label{font-size:13px;font-weight:600;color:var(--navy);cursor:pointer}
+.datenschutz-field{display:flex;align-items:flex-start;gap:10px;background:var(--gray);border:1.5px solid var(--gray2);border-radius:9px;padding:10px 14px;margin-bottom:1rem}
+.datenschutz-field input{accent-color:var(--ice);width:16px;height:16px;cursor:pointer;flex-shrink:0;margin-top:2px}
+.datenschutz-field label{font-size:13px;color:var(--text2);line-height:1.5;cursor:pointer}
+.datenschutz-field a{color:var(--ice);font-weight:600;text-decoration:none}
+.questions-box{background:var(--gray);border-radius:12px;padding:1rem;margin-bottom:1rem}
 .questions-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ice);margin-bottom:.75rem}
-.submit-btn{width:100%;background:#4FAADF;color:#fff !important;border:none;padding:14px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:.5rem;box-shadow:0 4px 16px rgba(79,170,223,0.35);-webkit-text-fill-color:#fff !important}
-.success-msg{display:none;background:#E6F9F0;border:1.5px solid #34D399;border-radius:10px;padding:1rem;text-align:center;color:#065F46;font-weight:600;margin-bottom:1rem;font-family:'Outfit',sans-serif}
+.submit-btn{width:100%;background:var(--navy);color:#fff !important;border:none;padding:13px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;-webkit-text-fill-color:#fff !important}
+.submit-btn:hover{background:var(--ice)}
+.success-msg{display:none;background:#D1FAE5;border:1.5px solid #6EE7B7;border-radius:10px;padding:1rem;text-align:center;color:#065F46;font-weight:600;margin-bottom:1rem;font-family:'Outfit',sans-serif}
+.divider{display:flex;align-items:center;gap:.75rem;margin:.75rem 0}
+.divider hr{flex:1;border:none;border-top:1px solid var(--gray2)}
+.divider span{font-size:12px;color:var(--text2)}
 </style>
 </head>
 <body>
@@ -152,76 +182,127 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
       </select>
     </div>
     <div class="jobs-list" id="jobs-list">
-      <div class="empty-state"><div class="empty-icon">⏳</div>Stellen werden geladen...</div>
+      <div class="empty-state">⏳ Stellen werden geladen...</div>
     </div>
   </div>
 </div>
 
-<div class="modal-overlay" id="modal">
+<!-- MODAL 1: AUTH AUSWAHL (nicht eingeloggt) -->
+<div class="modal-overlay" id="modal-auth">
   <div class="modal">
     <div class="modal-header">
-      <div><div class="modal-company" id="modal-company"></div><div class="modal-title" id="modal-title"></div></div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+      <button class="modal-close" onclick="closeAllModals()">✕</button>
+      <div class="modal-stelle" id="auth-stelle"></div>
+      <div class="modal-title" id="auth-title"></div>
     </div>
-    <div class="modal-tags" id="modal-tags"></div>
-    <p class="modal-desc" id="modal-desc"></p>
-    <div class="modal-divider"></div>
-    <div class="form-section-title">Jetzt bewerben – in 2 Minuten ✅</div>
-    <div class="success-msg" id="success-msg">🎉 Bewerbung erfolgreich gesendet! Der Betrieb meldet sich bald bei dir.</div>
+    <div class="modal-tags" id="auth-tags"></div>
+    <p style="font-size:14px;color:var(--text2);margin-bottom:1rem">Wie möchtest du dich bewerben?</p>
+    <div class="auth-choice">
+      <button class="choice-btn primary" onclick="goLogin()">
+        <span class="choice-icon">🔑</span>
+        <div><span class="choice-title">Einloggen</span><span class="choice-sub">Bewirb dich mit einem Klick</span></div>
+      </button>
+      <button class="choice-btn" onclick="goRegister()">
+        <span class="choice-icon">✨</span>
+        <div><span class="choice-title">Konto erstellen</span><span class="choice-sub">Einmal registrieren – überall bewerben</span></div>
+      </button>
+      <div class="divider"><hr><span>oder</span><hr></div>
+      <button class="choice-btn" onclick="showGastForm()">
+        <span class="choice-icon">👤</span>
+        <div><span class="choice-title">Als Gast bewerben</span><span class="choice-sub">Einmalige Bewerbung ohne Konto</span></div>
+      </button>
+    </div>
+  </div>
+</div>
 
-    <!-- Eingeloggt Info -->
-    <div id="profil-info" style="display:none;align-items:center;gap:10px;background:var(--ice-light);border:1.5px solid rgba(79,170,223,0.25);border-radius:9px;padding:10px 14px;margin-bottom:1rem">
-      <span style="font-size:18px">✅</span>
-      <span style="font-size:13px;color:var(--navy);font-weight:600">Deine Daten wurden aus deinem Profil geladen!</span>
-      <a href="konto.html" style="margin-left:auto;font-size:12px;color:var(--ice);font-weight:600;text-decoration:none">Bearbeiten</a>
+<!-- MODAL 2: EINGELOGGT - SCHNELLE BEWERBUNG -->
+<div class="modal-overlay" id="modal-eingeloggt">
+  <div class="modal">
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeAllModals()">✕</button>
+      <div class="modal-stelle" id="eingeloggt-stelle"></div>
+      <div class="modal-title" id="eingeloggt-title"></div>
     </div>
+    <div class="modal-tags" id="eingeloggt-tags"></div>
+    <div class="profil-banner">
+      <div class="profil-banner-avatar" id="banner-avatar">?</div>
+      <div>
+        <div class="profil-banner-name" id="banner-name"></div>
+        <div class="profil-banner-sub" id="banner-sub"></div>
+      </div>
+      <a href="konto.html" class="profil-banner-edit">Profil bearbeiten</a>
+    </div>
+    <div class="success-msg" id="success-eingeloggt">🎉 Bewerbung erfolgreich gesendet!</div>
+    <div id="fragen-eingeloggt">
+      <div class="questions-box">
+        <div class="questions-label">Kurze Fragen zur Stelle</div>
+        <div class="form-group"><label class="form-label" id="frage1-eingeloggt"></label><textarea class="form-input" id="antwort1-eingeloggt" rows="2" placeholder="Deine Antwort..."></textarea></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label" id="frage2-eingeloggt"></label><textarea class="form-input" id="antwort2-eingeloggt" rows="2" placeholder="Deine Antwort..."></textarea></div>
+      </div>
+      <button class="submit-btn" onclick="submitEingeloggt()">Jetzt bewerben 🚀</button>
+    </div>
+  </div>
+</div>
 
-    <!-- Nicht eingeloggt Hinweis -->
-    <div id="kein-konto-info" style="background:var(--gray);border:1.5px solid var(--gray2);border-radius:9px;padding:10px 14px;margin-bottom:1rem;font-size:13px;color:var(--text2)">
-      💡 <a href="konto.html" style="color:var(--ice);font-weight:600;text-decoration:none">Konto erstellen</a> um dich beim nächsten Mal mit einem Klick zu bewerben!
+<!-- MODAL 3: GAST FORMULAR -->
+<div class="modal-overlay" id="modal-gast">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeAllModals()">✕</button>
+      <div class="modal-stelle" id="gast-stelle"></div>
+      <div class="modal-title" id="gast-title"></div>
     </div>
-    <form id="bewerbung-form" action="https://formspree.io/f/xnjwlboz" method="POST">
-      <input type="hidden" name="Stelle" id="form-stelle">
-      <input type="hidden" name="Betrieb" id="form-betrieb">
-      <input type="hidden" name="Stellen_ID" id="form-stellen-id">
+    <div class="modal-tags" id="gast-tags"></div>
+    <div style="background:var(--gray);border-radius:9px;padding:10px 14px;margin-bottom:1rem;font-size:13px;color:var(--text2)">
+      💡 <a href="konto.html" style="color:var(--ice);font-weight:600;text-decoration:none">Konto erstellen</a> und beim nächsten Mal mit einem Klick bewerben!
+    </div>
+    <div class="success-msg" id="success-gast">🎉 Bewerbung erfolgreich gesendet!</div>
+    <div id="gast-form-inhalt">
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Vorname *</label><input id="input-name" class="form-input" type="text" name="Vorname" placeholder="Max" required></div>
-        <div class="form-group"><label class="form-label">Nachname *</label><input class="form-input" type="text" name="Nachname" placeholder="Mustermann" required></div>
+        <div class="form-group"><label class="form-label">Vorname *</label><input class="form-input" id="gast-vorname" type="text" placeholder="Max"></div>
+        <div class="form-group"><label class="form-label">Nachname *</label><input class="form-input" id="gast-nachname" type="text" placeholder="Mustermann"></div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">E-Mail *</label><input id="input-email" class="form-input" type="email" name="Email" placeholder="max@beispiel.de" required></div>
-        <div class="form-group"><label class="form-label">Telefon *</label><input class="form-input" type="tel" name="Telefon" placeholder="+49 123 456789" required></div>
+        <div class="form-group"><label class="form-label">E-Mail *</label><input class="form-input" id="gast-email" type="email" placeholder="max@beispiel.de"></div>
+        <div class="form-group"><label class="form-label">Telefon *</label><input class="form-input" id="gast-telefon" type="tel" placeholder="+49 123 456789"></div>
       </div>
-      <div class="form-group"><label class="form-label">Wohnort *</label><input class="form-input" type="text" name="Wohnort" placeholder="z.B. Wuppertal" required></div>
+      <div class="form-group"><label class="form-label">Wohnort *</label><input class="form-input" id="gast-wohnort" type="text" placeholder="Musterstraße 1, 12345 Wuppertal"></div>
+      <div class="toggle-field" onclick="toggleSchuelerGast()">
+        <input type="checkbox" id="gast-schueler" onchange="toggleSchuelerGast()">
+        <label for="gast-schueler">Ich bin noch Schüler/in</label>
+      </div>
       <div class="form-group">
-        <div style="display:flex;align-items:center;gap:10px;background:var(--ice-light);border:1.5px solid rgba(79,170,223,0.2);border-radius:9px;padding:10px 14px;margin-bottom:.75rem;cursor:pointer" onclick="toggleSchueler()">
-          <input type="checkbox" id="schueler-check" name="NochSchueler" style="accent-color:var(--ice);width:16px;height:16px;cursor:pointer" onchange="toggleSchueler()">
-          <label for="schueler-check" style="font-size:13px;font-weight:600;color:var(--navy);cursor:pointer">Ich bin noch Schüler/in</label>
-        </div>
-        <label class="form-label" id="abschluss-label">Schulabschluss *</label>
-        <select class="form-select" name="Schulabschluss" id="abschluss-select" required>
+        <label class="form-label" id="gast-abschluss-label">Schulabschluss *</label>
+        <select class="form-select" id="gast-abschluss">
           <option value="">Bitte auswählen...</option>
           <option>Hauptschulabschluss</option>
           <option>Qualifizierter Hauptschulabschluss</option>
           <option>Mittlere Reife / Realschulabschluss</option>
           <option>Erweiterter Realschulabschluss</option>
-          <option>Fachhochschulreife (Fachabitur)</option>
+          <option>Fachhochschulreife (Facabitur)</option>
           <option>Allgemeine Hochschulreife (Abitur)</option>
           <option>Förderschulabschluss</option>
           <option>Kein Schulabschluss</option>
         </select>
       </div>
-      <div class="questions-divider" id="fragen-bereich">
+      <div id="gast-jahr-gruppe" style="display:none" class="form-group">
+        <label class="form-label">Voraussichtliches Abschlussjahr *</label>
+        <select class="form-select" id="gast-jahr">
+          <option value="">Bitte auswählen...</option>
+          <option>2025</option><option>2026</option><option>2027</option><option>2028</option><option>2029</option><option>2030</option>
+        </select>
+      </div>
+      <div class="questions-box" id="gast-fragen-box">
         <div class="questions-label">Kurze Fragen zur Stelle</div>
-        <div class="form-group"><label class="form-label" id="frage1-label"></label><textarea class="form-input" name="Frage1" rows="2" placeholder="Deine Antwort..."></textarea></div>
-        <div class="form-group" style="margin-bottom:0"><label class="form-label" id="frage2-label"></label><textarea class="form-input" name="Frage2" rows="2" placeholder="Deine Antwort..."></textarea></div>
+        <div class="form-group"><label class="form-label" id="gast-frage1-label"></label><textarea class="form-input" id="gast-antwort1" rows="2" placeholder="Deine Antwort..."></textarea></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label" id="gast-frage2-label"></label><textarea class="form-input" id="gast-antwort2" rows="2" placeholder="Deine Antwort..."></textarea></div>
       </div>
-      <div style="display:flex;align-items:flex-start;gap:10px;margin-top:.75rem;padding:1rem;background:var(--gray);border-radius:9px;border:1.5px solid var(--gray2)">
-        <input type="checkbox" id="datenschutz-check" style="accent-color:var(--ice);width:16px;height:16px;cursor:pointer;flex-shrink:0;margin-top:2px">
-        <label for="datenschutz-check" style="font-size:13px;color:var(--text2);line-height:1.5;cursor:pointer">Ich habe die <a href="datenschutz.html" target="_blank" style="color:var(--ice);font-weight:600">Datenschutzerklärung</a> gelesen und bin einverstanden. *</label>
+      <div class="datenschutz-field">
+        <input type="checkbox" id="gast-datenschutz">
+        <label for="gast-datenschutz">Ich habe die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a> gelesen und bin einverstanden. *</label>
       </div>
-      <button type="button" class="submit-btn" onclick="submitBewerbung()" style="margin-top:1rem">Jetzt bewerben 🚀</button>
-    </form>
+      <button class="submit-btn" onclick="submitGast()">Bewerbung absenden 🚀</button>
+    </div>
   </div>
 </div>
 
@@ -234,69 +315,62 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
 <script>
 const SUPABASE_URL='https://trccxzjdddhbqjgyzlkv.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyY2N4empkZGRoYnFqZ3l6bGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDgyMjIsImV4cCI6MjA5NDA4NDIyMn0.xS5-9Tq1-i9_K9lYDuayomybBazHmnvY29K24LvRxaQ';
-const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-sb.auth.getSession().then(({data:{session}})=>{
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,storageKey:'ausbildungscheck-auth'}});
+
+var alleStellen=[];
+var alleBerufsfelder=[];
+var aktuelleStelle=null;
+var aktuellerUser=null;
+var aktuellesProfil=null;
+
+// Login Status prüfen
+sb.auth.getSession().then(async ({data:{session}})=>{
   if(session){
+    aktuellerUser=session.user;
+    var {data:profil}=await sb.from('profile').select('*').eq('id',session.user.id).single();
+    aktuellesProfil=profil;
     var btn=document.getElementById('nav-konto');
     if(btn){btn.textContent='👤 Mein Konto';btn.style.color='var(--ice)';}
   }
 });
-
-var alleStellen=[];
-var alleBerufsfelder=[];
 
 async function ladeStellen(){
   var [{data:stellen},{data:berufsfelder}]=await Promise.all([
     sb.from('stellen').select('*, betrieb:betrieb_id(name,email), berufsfeld:berufsfeld_id(name,emoji)').eq('aktiv',true).order('created_at',{ascending:false}),
     sb.from('berufsfelder').select('*').order('name')
   ]);
-
-  if(!stellen){
-    document.getElementById('jobs-list').innerHTML='<div class="empty-state"><div class="empty-icon">😔</div>Keine Stellen gefunden</div>';
-    return;
-  }
+  if(!stellen){document.getElementById('jobs-list').innerHTML='<div class="empty-state">😔 Keine Stellen gefunden</div>';return;}
   alleStellen=stellen;
   alleBerufsfelder=berufsfelder||[];
   bauFilterOptionen();
-
-  // URL Parameter lesen und Filter anwenden
   var params=new URLSearchParams(window.location.search);
   var q=params.get('q');
-  if(q){
-    document.getElementById('search-input').value=q;
-    filterStellen();
-  } else {
-    zeigeStellen(stellen);
-  }
+  if(q){document.getElementById('search-input').value=q;filterStellen();}
+  else zeigeStellen(stellen);
 }
 
 function bauFilterOptionen(){
-  var filterEl=document.getElementById('berufsfeld-filter');
-  if(!alleBerufsfelder.length){filterEl.innerHTML='';return;}
-  filterEl.innerHTML=alleBerufsfelder.map(b=>`
+  var el=document.getElementById('berufsfeld-filter');
+  el.innerHTML=alleBerufsfelder.map(b=>`
     <div class="filter-option">
       <input type="checkbox" id="bf-${b.id}" onchange="filterStellen()">
       <label for="bf-${b.id}">${b.emoji||''} ${b.name}</label>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 function zeigeStellen(data){
   document.getElementById('stellen-count').textContent=data.length;
   var list=document.getElementById('jobs-list');
-  if(!data.length){
-    list.innerHTML='<div class="empty-state"><div class="empty-icon">😔</div>Keine Stellen gefunden</div>';
-    return;
-  }
+  if(!data.length){list.innerHTML='<div class="empty-state">😔 Keine Stellen gefunden</div>';return;}
   list.innerHTML=data.map((s,i)=>`
     <div class="job-card ${i===0?'featured':''}">
-      <div class="job-logo">${s.berufsfeld?.emoji||s.beruf?.charAt(0)||'?'}</div>
+      <div class="job-logo">${s.berufsfeld?.emoji||s.beruf?.charAt(0)||'📋'}</div>
       <div>
         <div class="job-top-row">
-          <span class="job-title-text">${s.beruf||'Unbekannt'}</span>
+          <span class="job-title-text">${s.beruf||'Ausbildungsstelle'}</span>
           ${i===0?'<span class="job-badge new">NEU</span>':''}
         </div>
-        <div class="job-company-row">${s.betrieb?.name||'Unbekannter Betrieb'} · ${s.standort||''}</div>
+        <div class="job-company-row">${s.betrieb?.name||'Partnerbetrieb'} · ${s.standort||''}</div>
         <div class="job-tags">
           ${s.gehalt?`<span class="job-tag salary">${s.gehalt} € / Monat</span>`:''}
           ${s.beginn?`<span class="job-tag">${s.beginn}</span>`:''}
@@ -305,24 +379,21 @@ function zeigeStellen(data){
         </div>
       </div>
       <div class="job-right">
-        <button class="apply-btn" onclick="openModal('${s.id}')">Bewerben →</button>
+        <button class="apply-btn" onclick="bewerbenKlick('${s.id}')">Bewerben →</button>
         <span class="job-date">${new Date(s.created_at).toLocaleDateString('de-DE')}</span>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 function filterStellen(){
   var search=document.getElementById('search-input').value.toLowerCase();
   var ort=document.getElementById('ort-filter').value.toLowerCase();
-  var checkboxes=document.querySelectorAll('#berufsfeld-filter input:checked');
-  var selectedIds=[...checkboxes].map(cb=>cb.id.replace('bf-',''));
-
+  var checked=[...document.querySelectorAll('#berufsfeld-filter input:checked')].map(cb=>cb.id.replace('bf-',''));
   var gefiltert=alleStellen.filter(s=>{
-    var matchSearch=!search||(s.beruf||'').toLowerCase().includes(search)||(s.standort||'').toLowerCase().includes(search)||(s.betrieb?.name||'').toLowerCase().includes(search);
-    var matchOrt=!ort||(s.standort||'').toLowerCase().includes(ort);
-    var matchBeruf=!selectedIds.length||selectedIds.includes(s.berufsfeld_id);
-    return matchSearch&&matchOrt&&matchBeruf;
+    var mSearch=!search||(s.beruf||'').toLowerCase().includes(search)||(s.standort||'').toLowerCase().includes(search)||(s.betrieb?.name||'').toLowerCase().includes(search);
+    var mOrt=!ort||(s.standort||'').toLowerCase().includes(ort);
+    var mBeruf=!checked.length||checked.includes(s.berufsfeld_id);
+    return mSearch&&mOrt&&mBeruf;
   });
   zeigeStellen(gefiltert);
 }
@@ -341,147 +412,169 @@ function sortStellen(val){
   zeigeStellen(sorted);
 }
 
-async function openModal(stelleId){
-  var s=alleStellen.find(x=>x.id===stelleId);
-  if(!s) return;
+// BEWERBUNG FLOW
+function bewerbenKlick(stelleId){
+  aktuelleStelle=alleStellen.find(s=>s.id===stelleId);
+  if(!aktuelleStelle) return;
 
-  document.getElementById('modal-title').textContent=s.beruf||'';
-  document.getElementById('modal-company').textContent=(s.betrieb?.name||'')+' · '+(s.standort||'');
-  document.getElementById('modal-desc').textContent=s.beschreibung||'';
-  document.getElementById('modal-tags').innerHTML=
-    (s.gehalt?`<span class="modal-tag highlight">${s.gehalt} € / Monat</span>`:'')+
+  if(aktuellerUser && aktuellesProfil){
+    // Eingeloggt → schlankes Formular
+    zeigeEingeloggtModal();
+  } else {
+    // Nicht eingeloggt → Auswahl
+    zeigeAuthModal();
+  }
+}
+
+function zeigeAuthModal(){
+  var s=aktuelleStelle;
+  document.getElementById('auth-stelle').textContent=(s.betrieb?.name||'')+' · '+(s.standort||'');
+  document.getElementById('auth-title').textContent=s.beruf||'';
+  document.getElementById('auth-tags').innerHTML=tagsHtml(s);
+  localStorage.setItem('bewerbung-stelle-id',s.id);
+  document.getElementById('modal-auth').classList.add('open');
+}
+
+function zeigeEingeloggtModal(){
+  var s=aktuelleStelle;
+  var p=aktuellesProfil;
+  document.getElementById('eingeloggt-stelle').textContent=(s.betrieb?.name||'')+' · '+(s.standort||'');
+  document.getElementById('eingeloggt-title').textContent=s.beruf||'';
+  document.getElementById('eingeloggt-tags').innerHTML=tagsHtml(s);
+  document.getElementById('frage1-eingeloggt').textContent=s.frage1||'Warum interessiert dich diese Ausbildung?';
+  document.getElementById('frage2-eingeloggt').textContent=s.frage2||'Was sind deine Stärken?';
+  document.getElementById('antwort1-eingeloggt').value='';
+  document.getElementById('antwort2-eingeloggt').value='';
+  document.getElementById('success-eingeloggt').style.display='none';
+  document.getElementById('fragen-eingeloggt').style.display='block';
+  var name=(p.vorname||'')+' '+(p.nachname||'');
+  document.getElementById('banner-avatar').textContent=(p.vorname||'?').charAt(0).toUpperCase();
+  document.getElementById('banner-name').textContent=name.trim()||aktuellerUser.email;
+  document.getElementById('banner-sub').textContent=(p.strasse?p.strasse+', ':'')+( p.plz||'')+' '+(p.ort||'');
+  document.getElementById('modal-eingeloggt').classList.add('open');
+}
+
+function showGastForm(){
+  closeAllModals();
+  var s=aktuelleStelle;
+  document.getElementById('gast-stelle').textContent=(s.betrieb?.name||'')+' · '+(s.standort||'');
+  document.getElementById('gast-title').textContent=s.beruf||'';
+  document.getElementById('gast-tags').innerHTML=tagsHtml(s);
+  document.getElementById('gast-frage1-label').textContent=s.frage1||'Warum interessiert dich diese Ausbildung?';
+  document.getElementById('gast-frage2-label').textContent=s.frage2||'Was sind deine Stärken?';
+  document.getElementById('gast-fragen-box').style.display=(s.frage1||s.frage2)?'block':'none';
+  document.getElementById('success-gast').style.display='none';
+  document.getElementById('gast-form-inhalt').style.display='block';
+  document.getElementById('modal-gast').classList.add('open');
+}
+
+function tagsHtml(s){
+  return (s.gehalt?`<span class="modal-tag highlight">${s.gehalt} € / Monat</span>`:'')+
     (s.beginn?`<span class="modal-tag">Start: ${s.beginn}</span>`:'')+
     (s.dauer?`<span class="modal-tag">${s.dauer}</span>`:'')+
     (s.standort?`<span class="modal-tag">📍 ${s.standort}</span>`:'');
-  document.getElementById('form-stelle').value=s.beruf||'';
-  document.getElementById('form-betrieb').value=(s.betrieb?.name||'')+' · '+(s.standort||'');
-  document.getElementById('form-stellen-id').value=s.id;
-  document.getElementById('frage1-label').textContent=s.frage1||'Warum interessiert dich diese Ausbildung?';
-  document.getElementById('frage2-label').textContent=s.frage2||'Was sind deine Stärken?';
-  var fragenBereich=document.getElementById('fragen-bereich');
-  fragenBereich.style.display=(s.frage1||s.frage2)?'block':'none';
-  document.getElementById('success-msg').style.display='none';
-  document.getElementById('bewerbung-form').reset();
-  document.getElementById('abschluss-label').textContent='Schulabschluss *';
-  document.getElementById('schueler-check').checked=false;
-
-  // Eingeloggte Nutzer automatisch ausfüllen
-  var {data:{session}}=await sb.auth.getSession();
-  if(session){
-    document.getElementById('kein-konto-info').style.display='none';
-    var {data:profil}=await sb.from('profile').select('*').eq('id',session.user.id).single();
-    if(profil){
-      document.getElementById('input-name').value=profil.vorname||'';
-      document.querySelector('[name=Nachname]').value=profil.nachname||'';
-      document.getElementById('input-email').value=session.user.email||'';
-      document.querySelector('[name=Telefon]').value=profil.telefon||'';
-      document.querySelector('[name=Wohnort]').value=(profil.strasse?profil.strasse+', ':'')+( profil.plz||'')+' '+(profil.ort||'');
-      if(profil.schulabschluss){
-        document.getElementById('abschluss-select').value=profil.schulabschluss;
-      }
-      if(profil.noch_schueler){
-        document.getElementById('schueler-check').checked=true;
-        toggleSchueler();
-        if(profil.schulabschluss) document.getElementById('abschluss-select').value=profil.schulabschluss;
-      }
-      document.getElementById('datenschutz-check').checked=true;
-      document.getElementById('profil-info').style.display='flex';
-    }
-  } else {
-    document.getElementById('profil-info').style.display='none';
-    document.getElementById('kein-konto-info').style.display='block';
-  }
-
-  document.getElementById('modal').classList.add('open');
 }
 
-function closeModal(){document.getElementById('modal').classList.remove('open')}
-document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal()});
-
-function toggleSchueler(){
-  var checked=document.getElementById('schueler-check').checked;
-  var label=document.getElementById('abschluss-label');
-  var select=document.getElementById('abschluss-select');
-  label.textContent=checked?'Voraussichtlicher Schulabschluss *':'Schulabschluss *';
-  select.innerHTML='<option value="">Bitte auswählen...</option>';
-  var options=checked?[
-    'Voraussichtlich Hauptschulabschluss',
-    'Voraussichtlich Qualifizierter Hauptschulabschluss',
-    'Voraussichtlich Mittlere Reife / Realschulabschluss',
-    'Voraussichtlich Erweiterter Realschulabschluss',
-    'Voraussichtlich Fachhochschulreife (Fachabitur)',
-    'Voraussichtlich Allgemeine Hochschulreife (Abitur)'
-  ]:[
-    'Hauptschulabschluss','Qualifizierter Hauptschulabschluss',
-    'Mittlere Reife / Realschulabschluss','Erweiterter Realschulabschluss',
-    'Fachhochschulreife (Facabitur)','Allgemeine Hochschulreife (Abitur)',
-    'Förderschulabschluss','Kein Schulabschluss'
-  ];
-  options.forEach(function(o){var opt=document.createElement('option');opt.value=o;opt.textContent=o;select.appendChild(opt);});
+function goLogin(){
+  localStorage.setItem('bewerbung-stelle-id', aktuelleStelle.id);
+  window.location.href='konto.html?redirect=stellen';
+}
+function goRegister(){
+  localStorage.setItem('bewerbung-stelle-id', aktuelleStelle.id);
+  window.location.href='konto.html?tab=register&redirect=stellen';
 }
 
-function submitBewerbung(){
-  var nameVal=document.getElementById('input-name').value.trim();
-  var emailVal=document.getElementById('input-email').value.trim();
-  var datenschutz=document.getElementById('datenschutz-check').checked;
-  if(!nameVal){alert('Bitte Vorname ausfüllen!');return;}
-  if(!emailVal){alert('Bitte E-Mail ausfüllen!');return;}
-  if(!datenschutz){alert('Bitte bestätige die Datenschutzerklärung!');return;}
-
-  var form=document.getElementById('bewerbung-form');
-  var stelleId=document.getElementById('form-stellen-id').value;
-  var stelle=alleStellen.find(s=>s.id===stelleId);
-
+// SUBMIT EINGELOGGT
+async function submitEingeloggt(){
   var bewerbungData={
-    stellen_id: stelleId,
-    vorname: nameVal,
-    nachname: form.querySelector('[name=Nachname]').value.trim(),
-    email: emailVal,
-    telefon: form.querySelector('[name=Telefon]').value.trim(),
-    wohnort: form.querySelector('[name=Wohnort]').value.trim(),
-    schulabschluss: document.getElementById('abschluss-select').value,
-    noch_schueler: document.getElementById('schueler-check').checked,
-    antwort1: form.querySelector('[name=Frage1]').value.trim(),
-    antwort2: form.querySelector('[name=Frage2]').value.trim(),
-    status: 'neu'
+    stellen_id:aktuelleStelle.id,
+    vorname:aktuellesProfil.vorname,
+    nachname:aktuellesProfil.nachname,
+    email:aktuellerUser.email,
+    telefon:aktuellesProfil.telefon,
+    wohnort:(aktuellesProfil.strasse?aktuellesProfil.strasse+', ':'')+( aktuellesProfil.plz||'')+' '+(aktuellesProfil.ort||''),
+    schulabschluss:aktuellesProfil.schulabschluss,
+    noch_schueler:aktuellesProfil.noch_schueler,
+    antwort1:document.getElementById('antwort1-eingeloggt').value.trim(),
+    antwort2:document.getElementById('antwort2-eingeloggt').value.trim(),
+    status:'neu'
   };
+  await sendBewerbung(bewerbungData);
+  document.getElementById('success-eingeloggt').style.display='block';
+  document.getElementById('fragen-eingeloggt').style.display='none';
+  setTimeout(closeAllModals,3000);
+}
 
-  var emailData={
-    ...bewerbungData,
-    stelle: stelle?.beruf||'',
-    betrieb: stelle?.betrieb?.name||'',
-    betrieb_email: stelle?.betrieb?.email||'',
-    frage1: stelle?.frage1||'',
-    frage2: stelle?.frage2||''
+// SUBMIT GAST
+async function submitGast(){
+  var datenschutz=document.getElementById('gast-datenschutz').checked;
+  if(!datenschutz){alert('Bitte bestätige die Datenschutzerklärung!');return;}
+  var vorname=document.getElementById('gast-vorname').value.trim();
+  var email=document.getElementById('gast-email').value.trim();
+  if(!vorname||!email){alert('Bitte Vorname und E-Mail ausfüllen!');return;}
+  var bewerbungData={
+    stellen_id:aktuelleStelle.id,
+    vorname,
+    nachname:document.getElementById('gast-nachname').value.trim(),
+    email,
+    telefon:document.getElementById('gast-telefon').value.trim(),
+    wohnort:document.getElementById('gast-wohnort').value.trim(),
+    schulabschluss:document.getElementById('gast-abschluss').value,
+    noch_schueler:document.getElementById('gast-schueler').checked,
+    antwort1:document.getElementById('gast-antwort1').value.trim(),
+    antwort2:document.getElementById('gast-antwort2').value.trim(),
+    status:'neu'
   };
+  await sendBewerbung(bewerbungData);
+  document.getElementById('success-gast').style.display='block';
+  document.getElementById('gast-form-inhalt').style.display='none';
+  setTimeout(closeAllModals,3000);
+}
 
-  // In Supabase speichern
-  sb.from('bewerbungen').insert(bewerbungData).then(function({error}){
-    if(error){console.error(error);alert('Fehler beim Speichern. Bitte nochmal versuchen.');return;}
-
-    // E-Mail über Edge Function verschicken
-    fetch('https://trccxzjdddhbqjgyzlkv.supabase.co/functions/v1/bewerbung-weiterleiten',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyY2N4empkZGRoYnFqZ3l6bGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDgyMjIsImV4cCI6MjA5NDA4NDIyMn0.xS5-9Tq1-i9_K9lYDuayomybBazHmnvY29K24LvRxaQ'
-      },
-      body:JSON.stringify({bewerbung:emailData})
-    }).then(function(){
-      document.getElementById('success-msg').style.display='block';
-      form.reset();
-      document.getElementById('abschluss-label').textContent='Schulabschluss *';
-      setTimeout(function(){closeModal();},3000);
-    }).catch(function(){
-      // E-Mail Fehler aber Bewerbung wurde gespeichert
-      document.getElementById('success-msg').style.display='block';
-      form.reset();
-      setTimeout(function(){closeModal();},3000);
-    });
+async function sendBewerbung(data){
+  await sb.from('bewerbungen').insert(data);
+  fetch('https://trccxzjdddhbqjgyzlkv.supabase.co/functions/v1/bewerbung-weiterleiten',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+SUPABASE_KEY},
+    body:JSON.stringify({bewerbung:{
+      ...data,
+      stelle:aktuelleStelle.beruf||'',
+      betrieb:aktuelleStelle.betrieb?.name||'',
+      betrieb_email:aktuelleStelle.betrieb?.email||'',
+      frage1:aktuelleStelle.frage1||'',
+      frage2:aktuelleStelle.frage2||''
+    }})
   });
 }
 
-ladeStellen();
+function closeAllModals(){
+  document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.remove('open'));
+}
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',function(e){if(e.target===this)closeAllModals()}));
+
+function toggleSchuelerGast(){
+  var checked=document.getElementById('gast-schueler').checked;
+  document.getElementById('gast-jahr-gruppe').style.display=checked?'block':'none';
+  document.getElementById('gast-abschluss-label').textContent=checked?'Voraussichtlicher Schulabschluss *':'Schulabschluss *';
+  var sel=document.getElementById('gast-abschluss');
+  sel.innerHTML='<option value="">Bitte auswählen...</option>';
+  var opts=checked?['Voraussichtlich Hauptschulabschluss','Voraussichtlich Qualifizierter Hauptschulabschluss','Voraussichtlich Mittlere Reife / Realschulabschluss','Voraussichtlich Erweiterter Realschulabschluss','Voraussichtlich Fachhochschulreife','Voraussichtlich Allgemeine Hochschulreife (Abitur)']:['Hauptschulabschluss','Qualifizierter Hauptschulabschluss','Mittlere Reife / Realschulabschluss','Erweiterter Realschulabschluss','Fachhochschulreife (Facabitur)','Allgemeine Hochschulreife (Abitur)','Förderschulabschluss','Kein Schulabschluss'];
+  opts.forEach(o=>{var opt=document.createElement('option');opt.value=o;opt.textContent=o;sel.appendChild(opt);});
+}
+
+// Nach Login zurückleiten
+var params=new URLSearchParams(window.location.search);
+if(params.get('redirect')==='stellen'){
+  var stelleId=localStorage.getItem('bewerbung-stelle-id');
+  if(stelleId){
+    ladeStellen().then(()=>{
+      setTimeout(()=>{
+        aktuelleStelle=alleStellen.find(s=>s.id===stelleId);
+        if(aktuelleStelle&&aktuellerUser&&aktuellesProfil) zeigeEingeloggtModal();
+      },500);
+    });
+  } else ladeStellen();
+} else ladeStellen();
 </script>
 </body>
 </html>
