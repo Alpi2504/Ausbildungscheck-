@@ -208,12 +208,17 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
       <button class="submit-btn" onclick="saveProfil()">Daten speichern</button>
 
       <div class="section-divider"></div>
-      <div class="section-title">Passwort ändern</div>
-      <div class="success-msg" id="pw-success"></div>
-      <div class="error-msg" id="pw-error"></div>
-      <div class="form-group"><label class="form-label">Neues Passwort</label><input class="form-input" type="password" id="new-pw" placeholder="Mindestens 6 Zeichen"></div>
-      <div class="form-group"><label class="form-label">Passwort wiederholen</label><input class="form-input" type="password" id="new-pw2" placeholder="Passwort wiederholen"></div>
-      <button class="submit-btn btn-ice" onclick="changePw()">Passwort ändern</button>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+        <div class="section-title" style="border:none;margin:0;padding:0">Passwort ändern</div>
+        <span style="font-size:13px;color:var(--ice);cursor:pointer;font-weight:600" onclick="togglePwBereich()">Anzeigen</span>
+      </div>
+      <div id="pw-bereich" style="display:none">
+        <div class="success-msg" id="pw-success"></div>
+        <div class="error-msg" id="pw-error"></div>
+        <div class="form-group"><label class="form-label">Neues Passwort</label><input class="form-input" type="password" id="new-pw" placeholder="Mindestens 6 Zeichen"></div>
+        <div class="form-group"><label class="form-label">Passwort wiederholen</label><input class="form-input" type="password" id="new-pw2" placeholder="Passwort wiederholen"></div>
+        <button class="submit-btn btn-ice" onclick="changePw()">Passwort ändern</button>
+      </div>
 
       <button class="logout-btn" onclick="doLogout()">🚪 Ausloggen</button>
     </div>
@@ -344,6 +349,18 @@ async function changePw(){
   document.getElementById('new-pw').value='';
   document.getElementById('new-pw2').value='';
   setTimeout(()=>document.getElementById('pw-success').style.display='none',3000);
+}
+
+function togglePwBereich(){
+  var bereich=document.getElementById('pw-bereich');
+  var btn=event.target;
+  if(bereich.style.display==='none'){
+    bereich.style.display='block';
+    btn.textContent='Ausblenden';
+  } else {
+    bereich.style.display='none';
+    btn.textContent='Anzeigen';
+  }
 }
 
 async function doLogout(){await sb.auth.signOut();}
