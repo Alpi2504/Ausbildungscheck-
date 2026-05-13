@@ -236,8 +236,24 @@ const SUPABASE_URL='https://trccxzjdddhbqjgyzlkv.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyY2N4empkZGRoYnFqZ3l6bGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDgyMjIsImV4cCI6MjA5NDA4NDIyMn0.xS5-9Tq1-i9_K9lYDuayomybBazHmnvY29K24LvRxaQ';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,storageKey:'ausbildungscheck-auth'}});
 
-sb.auth.getSession().then(({data:{session}})=>{if(session)showProfil(session.user);});
-sb.auth.onAuthStateChange((event,session)=>{if(session)showProfil(session.user);else showAuth();});
+sb.auth.getSession().then(({data:{session}})=>{
+  if(session) showProfil(session.user);
+  else {
+    // Tab aus URL lesen
+    var params=new URLSearchParams(window.location.search);
+    if(params.get('tab')==='register') switchTab('register');
+  }
+});
+sb.auth.onAuthStateChange((event,session)=>{
+  if(session){
+    showProfil(session.user);
+    // Nach Login zurückleiten
+    var params=new URLSearchParams(window.location.search);
+    if(params.get('redirect')==='stellen'){
+      setTimeout(()=>window.location.href='stellen.html?redirect=stellen',1000);
+    }
+  } else showAuth();
+});
 
 function switchTab(tab){
   document.getElementById('tab-login').classList.toggle('active',tab==='login');
