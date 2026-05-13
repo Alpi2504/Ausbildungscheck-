@@ -442,8 +442,7 @@ function zeigeEingeloggtModal(){
   document.getElementById('eingeloggt-title').textContent=s.beruf||'';
   document.getElementById('eingeloggt-tags').innerHTML=tagsHtml(s);
   document.getElementById('frage1-eingeloggt').textContent=s.frage1||'Warum interessiert dich diese Ausbildung?';
-  document.getElementById('frage2-eingeloggt').textContent=s.frage2||'Was sind deine Stärken?';
-  document.getElementById('antwort1-eingeloggt').value='';
+  document.getElementById('frage2-eingeloggt').textContent=s.frage2||'Was sind deine Stärken?';  document.getElementById('antwort1-eingeloggt').value='';
   document.getElementById('antwort2-eingeloggt').value='';
   document.getElementById('success-eingeloggt').style.display='none';
   document.getElementById('fragen-eingeloggt').style.display='block';
@@ -462,7 +461,7 @@ function showGastForm(){
   document.getElementById('gast-tags').innerHTML=tagsHtml(s);
   document.getElementById('gast-frage1-label').textContent=s.frage1||'Warum interessiert dich diese Ausbildung?';
   document.getElementById('gast-frage2-label').textContent=s.frage2||'Was sind deine Stärken?';
-  document.getElementById('gast-fragen-box').style.display=(s.frage1||s.frage2)?'block':'none';
+  document.getElementById('gast-fragen-box').style.display='block';
   document.getElementById('success-gast').style.display='none';
   document.getElementById('gast-form-inhalt').style.display='block';
   document.getElementById('modal-gast').classList.add('open');
