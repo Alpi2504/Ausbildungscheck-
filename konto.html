@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Konto – AusbildungsCheck</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--dark:#021D3D;--navy:#042C53;--ice:#4FAADF;--ice-light:#EBF5FC;--gray:#F7F9FC;--gray2:#EEF2F7;--text:#0A1929;--text2:#5A7490}
+body{font-family:'DM Sans',sans-serif;background:var(--gray);color:var(--text);min-height:100vh}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:60px;background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(4,44,83,0.07)}
+.logo{font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;color:var(--dark);text-decoration:none}
+.logo span{color:var(--ice)}
+.nav-links{display:flex;align-items:center;gap:1.75rem}
+.nav-links a{font-size:13px;color:var(--text2);text-decoration:none;font-weight:500}
+.nav-cta{background:var(--navy);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
+
+.main{padding-top:80px;max-width:560px;margin:0 auto;padding-left:1.5rem;padding-right:1.5rem;padding-bottom:3rem}
+
+/* AUTH TABS */
+.auth-tabs{display:flex;background:#fff;border-radius:12px;border:1.5px solid var(--gray2);padding:4px;margin-bottom:1.5rem}
+.auth-tab{flex:1;padding:10px;border-radius:9px;border:none;background:transparent;font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;cursor:pointer;color:var(--text2);transition:all .2s}
+.auth-tab.active{background:var(--navy);color:#fff}
+
+.card{background:#fff;border-radius:16px;border:1.5px solid var(--gray2);padding:2rem}
+.card-title{font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;color:var(--dark);margin-bottom:.5rem;letter-spacing:-0.5px}
+.card-sub{font-size:14px;color:var(--text2);margin-bottom:1.75rem}
+
+.form-group{margin-bottom:1rem}
+.form-label{font-size:13px;font-weight:600;color:var(--dark);margin-bottom:.35rem;display:block}
+.form-input{width:100%;border:1.5px solid var(--gray2);border-radius:9px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .2s;background:#fff}
+.form-input:focus{border-color:var(--ice)}
+.form-select{width:100%;border:1.5px solid var(--gray2);border-radius:9px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;background:#fff;cursor:pointer}
+.form-select:focus{border-color:var(--ice)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.form-hint{font-size:12px;color:var(--text2);margin-top:.35rem}
+
+.schueler-toggle{display:flex;align-items:center;gap:10px;background:var(--ice-light);border:1.5px solid rgba(79,170,223,0.2);border-radius:9px;padding:10px 14px;cursor:pointer;margin-bottom:.75rem}
+.schueler-toggle input{accent-color:var(--ice);width:16px;height:16px;cursor:pointer}
+.schueler-toggle label{font-size:13px;font-weight:600;color:var(--navy);cursor:pointer}
+
+.submit-btn{width:100%;background:var(--navy);color:#fff !important;border:none;padding:13px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:.5rem}
+.submit-btn:hover{background:var(--ice)}
+
+.divider{display:flex;align-items:center;gap:1rem;margin:1.25rem 0}
+.divider hr{flex:1;border:none;border-top:1px solid var(--gray2)}
+.divider span{font-size:12px;color:var(--text2)}
+
+.error-msg{background:#FEE2E2;border:1.5px solid #FCA5A5;border-radius:9px;padding:.75rem 1rem;font-size:13px;color:#991B1B;margin-bottom:1rem;display:none}
+.success-msg{background:#D1FAE5;border:1.5px solid #6EE7B7;border-radius:9px;padding:.75rem 1rem;font-size:13px;color:#065F46;margin-bottom:1rem;display:none}
+
+/* PROFIL */
+.profil-header{display:flex;align-items:center;gap:1rem;margin-bottom:2rem}
+.profil-avatar{width:60px;height:60px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;color:#fff;flex-shrink:0}
+.profil-name{font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;color:var(--dark)}
+.profil-email{font-size:13px;color:var(--text2);margin-top:2px}
+
+.section-title{font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;color:var(--dark);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1.5px solid var(--gray2)}
+
+.logout-btn{width:100%;background:transparent;color:var(--text2);border:1.5px solid var(--gray2);padding:11px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:1rem}
+.logout-btn:hover{background:var(--gray)}
+
+footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-top:3rem}
+.footer-logo{font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;color:#fff}
+.footer-logo span{color:var(--ice)}
+.footer-links{display:flex;gap:1.25rem}
+.footer-links a{font-size:12px;color:rgba(255,255,255,0.45);text-decoration:none}
+.footer-copy{font-size:11px;color:rgba(255,255,255,0.3)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html">Ausbildungs<span>Check</span></a>
+  <div class="nav-links">
+    <a href="index.html">Start</a>
+    <a href="stellen.html">Stellen</a>
+    <a href="betriebe.html">Für Betriebe</a>
+    <button class="nav-cta" onclick="window.location.href='betriebe.html'">Stelle ausschreiben</button>
+  </div>
+</nav>
+
+<div class="main">
+
+  <!-- AUTH BEREICH -->
+  <div id="auth-bereich">
+    <div style="text-align:center;padding:1.5rem 0 1.25rem">
+      <div style="font-family:'Outfit',sans-serif;font-size:26px;font-weight:800;color:var(--dark);letter-spacing:-0.5px;margin-bottom:.35rem">Dein Konto</div>
+      <div style="font-size:14px;color:var(--text2)">Einmal registrieren – überall bewerben</div>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Einloggen</button>
+      <button class="auth-tab" id="tab-register" onclick="switchTab('register')">Registrieren</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="card" id="login-form">
+      <div class="card-title">Willkommen zurück!</div>
+      <div class="card-sub">Logge dich ein um deine Bewerbungen zu verwalten.</div>
+      <div class="error-msg" id="login-error"></div>
+      <div class="form-group"><label class="form-label">E-Mail *</label><input class="form-input" type="email" id="login-email" placeholder="max@beispiel.de"></div>
+      <div class="form-group"><label class="form-label">Passwort *</label><input class="form-input" type="password" id="login-pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <button class="submit-btn" onclick="doLogin()">Einloggen</button>
+      <div style="text-align:center;margin-top:1rem"><span style="font-size:13px;color:var(--text2)">Noch kein Konto? </span><span style="font-size:13px;color:var(--ice);cursor:pointer;font-weight:600" onclick="switchTab('register')">Jetzt registrieren</span></div>
+    </div>
+
+    <!-- REGISTER -->
+    <div class="card" id="register-form" style="display:none">
+      <div class="card-title">Konto erstellen</div>
+      <div class="card-sub">Registriere dich kostenlos und bewirb dich mit einem Klick.</div>
+      <div class="error-msg" id="register-error"></div>
+      <div class="success-msg" id="register-success"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Vorname *</label><input class="form-input" type="text" id="reg-vorname" placeholder="Max"></div>
+        <div class="form-group"><label class="form-label">Nachname *</label><input class="form-input" type="text" id="reg-nachname" placeholder="Mustermann"></div>
+      </div>
+      <div class="form-group"><label class="form-label">E-Mail *</label><input class="form-input" type="email" id="reg-email" placeholder="max@beispiel.de"></div>
+      <div class="form-group"><label class="form-label">Passwort *</label><input class="form-input" type="password" id="reg-pw" placeholder="Mindestens 6 Zeichen">
+      <div class="form-hint">Mindestens 6 Zeichen</div></div>
+      <div class="form-group"><label class="form-label">Telefon *</label><input class="form-input" type="tel" id="reg-telefon" placeholder="+49 123 456789"></div>
+      <div class="form-group"><label class="form-label">Straße & Hausnummer *</label><input class="form-input" type="text" id="reg-strasse" placeholder="Musterstraße 1"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">PLZ *</label><input class="form-input" type="text" id="reg-plz" placeholder="12345"></div>
+        <div class="form-group"><label class="form-label">Ort *</label><input class="form-input" type="text" id="reg-ort" placeholder="Wuppertal"></div>
+      </div>
+
+      <div class="schueler-toggle" onclick="toggleSchuelerReg()">
+        <input type="checkbox" id="reg-schueler" onchange="toggleSchuelerReg()">
+        <label for="reg-schueler">Ich bin noch Schüler/in</label>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" id="reg-abschluss-label">Schulabschluss *</label>
+        <select class="form-select" id="reg-abschluss">
+          <option value="">Bitte auswählen...</option>
+          <option>Hauptschulabschluss</option>
+          <option>Qualifizierter Hauptschulabschluss</option>
+          <option>Mittlere Reife / Realschulabschluss</option>
+          <option>Erweiterter Realschulabschluss</option>
+          <option>Fachhochschulreife (Fachabitur)</option>
+          <option>Allgemeine Hochschulreife (Abitur)</option>
+          <option>Förderschulabschluss</option>
+          <option>Kein Schulabschluss</option>
+        </select>
+      </div>
+
+      <div class="form-group" id="reg-jahr-gruppe" style="display:none">
+        <label class="form-label">Voraussichtliches Abschlussjahr *</label>
+        <select class="form-select" id="reg-jahr">
+          <option value="">Bitte auswählen...</option>
+          <option>2025</option><option>2026</option><option>2027</option>
+          <option>2028</option><option>2029</option><option>2030</option>
+        </select>
+      </div>
+
+      <button class="submit-btn" onclick="doRegister()">Konto erstellen 🚀</button>
+      <div style="text-align:center;margin-top:1rem"><span style="font-size:13px;color:var(--text2)">Bereits registriert? </span><span style="font-size:13px;color:var(--ice);cursor:pointer;font-weight:600" onclick="switchTab('login')">Einloggen</span></div>
+    </div>
+  </div>
+
+  <!-- PROFIL BEREICH -->
+  <div id="profil-bereich" style="display:none">
+    <div class="card" style="margin-bottom:1rem">
+      <div class="profil-header">
+        <div class="profil-avatar" id="profil-avatar">M</div>
+        <div>
+          <div class="profil-name" id="profil-name">Lädt...</div>
+          <div class="profil-email" id="profil-email"></div>
+        </div>
+      </div>
+      <div class="section-title">Meine Daten</div>
+      <div class="success-msg" id="profil-success"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Vorname</label><input class="form-input" type="text" id="profil-vorname"></div>
+        <div class="form-group"><label class="form-label">Nachname</label><input class="form-input" type="text" id="profil-nachname"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Telefon</label><input class="form-input" type="tel" id="profil-telefon"></div>
+      <div class="form-group"><label class="form-label">Straße & Hausnummer</label><input class="form-input" type="text" id="profil-strasse"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">PLZ</label><input class="form-input" type="text" id="profil-plz"></div>
+        <div class="form-group"><label class="form-label">Ort</label><input class="form-input" type="text" id="profil-ort"></div>
+      </div>
+
+      <div class="schueler-toggle" onclick="toggleSchuelerProfil()">
+        <input type="checkbox" id="profil-schueler" onchange="toggleSchuelerProfil()">
+        <label for="profil-schueler">Ich bin noch Schüler/in</label>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" id="profil-abschluss-label">Schulabschluss</label>
+        <select class="form-select" id="profil-abschluss">
+          <option value="">Bitte auswählen...</option>
+          <option>Hauptschulabschluss</option>
+          <option>Qualifizierter Hauptschulabschluss</option>
+          <option>Mittlere Reife / Realschulabschluss</option>
+          <option>Erweiterter Realschulabschluss</option>
+          <option>Fachhochschulreife (Facabitur)</option>
+          <option>Allgemeine Hochschulreife (Abitur)</option>
+          <option>Förderschulabschluss</option>
+          <option>Kein Schulabschluss</option>
+        </select>
+      </div>
+
+      <div class="form-group" id="profil-jahr-gruppe" style="display:none">
+        <label class="form-label">Voraussichtliches Abschlussjahr</label>
+        <select class="form-select" id="profil-jahr">
+          <option value="">Bitte auswählen...</option>
+          <option>2025</option><option>2026</option><option>2027</option>
+          <option>2028</option><option>2029</option><option>2030</option>
+        </select>
+      </div>
+
+      <button class="submit-btn" onclick="saveProfil()">Daten speichern</button>
+      <button class="logout-btn" onclick="doLogout()">🚪 Ausloggen</button>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-logo">Ausbildungs<span>Check</span></div>
+  <div class="footer-links"><a href="index.html">Start</a><a href="datenschutz.html">Datenschutz</a><a href="#">Impressum</a></div>
+  <div class="footer-copy">© 2025 AusbildungsCheck</div>
+</footer>
+
+<script>
+const SUPABASE_URL='https://trccxzjdddhbqjgyzlkv.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyY2N4empkZGRoYnFqZ3l6bGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDgyMjIsImV4cCI6MjA5NDA4NDIyMn0.xS5-9Tq1-i9_K9lYDuayomybBazHmnvY29K24LvRxaQ';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+// Check ob eingeloggt
+sb.auth.getSession().then(({data:{session}})=>{
+  if(session) showProfil(session.user);
+});
+
+sb.auth.onAuthStateChange((event,session)=>{
+  if(session) showProfil(session.user);
+  else showAuth();
+});
+
+function switchTab(tab){
+  document.getElementById('tab-login').classList.toggle('active',tab==='login');
+  document.getElementById('tab-register').classList.toggle('active',tab==='register');
+  document.getElementById('login-form').style.display=tab==='login'?'block':'none';
+  document.getElementById('register-form').style.display=tab==='register'?'block':'none';
+}
+
+function showError(id,msg){
+  var el=document.getElementById(id);
+  el.textContent=msg;el.style.display='block';
+}
+function showSuccess(id,msg){
+  var el=document.getElementById(id);
+  el.textContent=msg;el.style.display='block';
+}
+
+async function doLogin(){
+  var email=document.getElementById('login-email').value.trim();
+  var pw=document.getElementById('login-pw').value;
+  if(!email||!pw){showError('login-error','Bitte alle Felder ausfüllen!');return;}
+  var {error}=await sb.auth.signInWithPassword({email,password:pw});
+  if(error) showError('login-error','Fehler: '+error.message);
+}
+
+async function doRegister(){
+  var vorname=document.getElementById('reg-vorname').value.trim();
+  var nachname=document.getElementById('reg-nachname').value.trim();
+  var email=document.getElementById('reg-email').value.trim();
+  var pw=document.getElementById('reg-pw').value;
+  var telefon=document.getElementById('reg-telefon').value.trim();
+  var strasse=document.getElementById('reg-strasse').value.trim();
+  var plz=document.getElementById('reg-plz').value.trim();
+  var ort=document.getElementById('reg-ort').value.trim();
+  var abschluss=document.getElementById('reg-abschluss').value;
+  var schueler=document.getElementById('reg-schueler').checked;
+  var jahr=document.getElementById('reg-jahr').value;
+
+  if(!vorname||!nachname||!email||!pw||!telefon||!strasse||!plz||!ort){
+    showError('register-error','Bitte alle Pflichtfelder ausfüllen!');return;
+  }
+  if(pw.length<6){showError('register-error','Passwort muss mindestens 6 Zeichen haben!');return;}
+
+  var {data,error}=await sb.auth.signUp({email,password:pw});
+  if(error){showError('register-error','Fehler: '+error.message);return;}
+
+  // Profil anlegen
+  await sb.from('profile').insert({
+    id:data.user.id,vorname,nachname,telefon,strasse,plz,ort,
+    schulabschluss:abschluss,noch_schueler:schueler,abschluss_jahr:jahr
+  });
+
+  showSuccess('register-success','✅ Konto erstellt! Du bist jetzt eingeloggt.');
+}
+
+async function showProfil(user){
+  document.getElementById('auth-bereich').style.display='none';
+  document.getElementById('profil-bereich').style.display='block';
+  document.getElementById('profil-email').textContent=user.email;
+
+  var {data}=await sb.from('profile').select('*').eq('id',user.id).single();
+  if(data){
+    document.getElementById('profil-vorname').value=data.vorname||'';
+    document.getElementById('profil-nachname').value=data.nachname||'';
+    document.getElementById('profil-telefon').value=data.telefon||'';
+    document.getElementById('profil-strasse').value=data.strasse||'';
+    document.getElementById('profil-plz').value=data.plz||'';
+    document.getElementById('profil-ort').value=data.ort||'';
+    document.getElementById('profil-abschluss').value=data.schulabschluss||'';
+    document.getElementById('profil-schueler').checked=data.noch_schueler||false;
+    document.getElementById('profil-jahr').value=data.abschluss_jahr||'';
+    if(data.noch_schueler){
+      document.getElementById('profil-jahr-gruppe').style.display='block';
+      document.getElementById('profil-abschluss-label').textContent='Voraussichtlicher Schulabschluss';
+    }
+    var name=(data.vorname||'')+' '+(data.nachname||'');
+    document.getElementById('profil-name').textContent=name.trim()||user.email;
+    document.getElementById('profil-avatar').textContent=(data.vorname||user.email).charAt(0).toUpperCase();
+  }
+}
+
+function showAuth(){
+  document.getElementById('auth-bereich').style.display='block';
+  document.getElementById('profil-bereich').style.display='none';
+}
+
+async function saveProfil(){
+  var {data:{session}}=await sb.auth.getSession();
+  if(!session) return;
+  var profil={
+    vorname:document.getElementById('profil-vorname').value.trim(),
+    nachname:document.getElementById('profil-nachname').value.trim(),
+    telefon:document.getElementById('profil-telefon').value.trim(),
+    strasse:document.getElementById('profil-strasse').value.trim(),
+    plz:document.getElementById('profil-plz').value.trim(),
+    ort:document.getElementById('profil-ort').value.trim(),
+    schulabschluss:document.getElementById('profil-abschluss').value,
+    noch_schueler:document.getElementById('profil-schueler').checked,
+    abschluss_jahr:document.getElementById('profil-jahr').value
+  };
+  await sb.from('profile').upsert({id:session.user.id,...profil});
+  showSuccess('profil-success','✅ Daten gespeichert!');
+  setTimeout(()=>document.getElementById('profil-success').style.display='none',3000);
+}
+
+async function doLogout(){
+  await sb.auth.signOut();
+  showAuth();
+}
+
+function toggleSchuelerReg(){
+  var checked=document.getElementById('reg-schueler').checked;
+  document.getElementById('reg-jahr-gruppe').style.display=checked?'block':'none';
+  document.getElementById('reg-abschluss-label').textContent=checked?'Voraussichtlicher Schulabschluss *':'Schulabschluss *';
+  var select=document.getElementById('reg-abschluss');
+  select.innerHTML='<option value="">Bitte auswählen...</option>';
+  var opts=checked?['Voraussichtlich Hauptschulabschluss','Voraussichtlich Qualifizierter Hauptschulabschluss','Voraussichtlich Mittlere Reife / Realschulabschluss','Voraussichtlich Erweiterter Realschulabschluss','Voraussichtlich Fachhochschulreife (Facabitur)','Voraussichtlich Allgemeine Hochschulreife (Abitur)']:['Hauptschulabschluss','Qualifizierter Hauptschulabschluss','Mittlere Reife / Realschulabschluss','Erweiterter Realschulabschluss','Fachhochschulreife (Facabitur)','Allgemeine Hochschulreife (Abitur)','Förderschulabschluss','Kein Schulabschluss'];
+  opts.forEach(o=>{var opt=document.createElement('option');opt.value=o;opt.textContent=o;select.appendChild(opt);});
+}
+
+function toggleSchuelerProfil(){
+  var checked=document.getElementById('profil-schueler').checked;
+  document.getElementById('profil-jahr-gruppe').style.display=checked?'block':'none';
+  document.getElementById('profil-abschluss-label').textContent=checked?'Voraussichtlicher Schulabschluss':'Schulabschluss';
+}
+</script>
+</body>
+</html>
