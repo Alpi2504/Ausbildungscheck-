@@ -17,6 +17,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .nav-links a:hover{color:var(--dark)}
 .nav-links a.active{color:var(--ice);font-weight:700}
 .nav-cta{background:var(--navy);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
+.nav-login{background:transparent;color:var(--navy);border:1.5px solid rgba(4,44,83,0.2);padding:7px 16px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:5px}
 
 .hero{background:var(--navy);padding:100px 2rem 5rem;position:relative;overflow:hidden}
 .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 100% 50%,rgba(79,170,223,0.1),transparent 60%)}
@@ -107,6 +108,7 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
     <a href="index.html">Start</a>
     <a href="stellen.html">Stellen</a>
     <a href="betriebe.html" class="active">Für Betriebe</a>
+    <a href="konto.html" class="nav-login" id="nav-konto">👤 Anmelden</a>
     <button class="nav-cta" onclick="document.querySelector('.kontakt').scrollIntoView({behavior:'smooth'})">Jetzt starten</button>
   </div>
 </nav>
