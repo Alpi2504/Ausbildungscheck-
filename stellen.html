@@ -363,27 +363,33 @@ async function openModal(stelleId){
   document.getElementById('success-msg').style.display='none';
   document.getElementById('bewerbung-form').reset();
   document.getElementById('abschluss-label').textContent='Schulabschluss *';
+  document.getElementById('schueler-check').checked=false;
 
   // Eingeloggte Nutzer automatisch ausfüllen
   var {data:{session}}=await sb.auth.getSession();
   if(session){
+    document.getElementById('kein-konto-info').style.display='none';
     var {data:profil}=await sb.from('profile').select('*').eq('id',session.user.id).single();
     if(profil){
       document.getElementById('input-name').value=profil.vorname||'';
       document.querySelector('[name=Nachname]').value=profil.nachname||'';
       document.getElementById('input-email').value=session.user.email||'';
       document.querySelector('[name=Telefon]').value=profil.telefon||'';
-      document.querySelector('[name=Wohnort]').value=(profil.strasse||'')+', '+(profil.plz||'')+' '+(profil.ort||'');
-      if(profil.schulabschluss) document.getElementById('abschluss-select').value=profil.schulabschluss;
+      document.querySelector('[name=Wohnort]').value=(profil.strasse?profil.strasse+', ':'')+( profil.plz||'')+' '+(profil.ort||'');
+      if(profil.schulabschluss){
+        document.getElementById('abschluss-select').value=profil.schulabschluss;
+      }
       if(profil.noch_schueler){
         document.getElementById('schueler-check').checked=true;
         toggleSchueler();
+        if(profil.schulabschluss) document.getElementById('abschluss-select').value=profil.schulabschluss;
       }
-      // Zeige Info dass Daten aus Profil geladen wurden
+      document.getElementById('datenschutz-check').checked=true;
       document.getElementById('profil-info').style.display='flex';
     }
   } else {
     document.getElementById('profil-info').style.display='none';
+    document.getElementById('kein-konto-info').style.display='block';
   }
 
   document.getElementById('modal').classList.add('open');
