@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seite nicht gefunden – AusbildungsCheck</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--dark:#021D3D;--navy:#042C53;--ice:#4FAADF;--ice-light:#EBF5FC;--gray:#F7F9FC;--gray2:#EEF2F7;--text:#0A1929;--text2:#5A7490}
+body{font-family:'DM Sans',sans-serif;background:var(--gray);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:60px;background:#fff;border-bottom:1px solid var(--gray2)}
+.logo{font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;color:var(--dark);text-decoration:none}
+.logo span{color:var(--ice)}
+.main{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem;text-align:center}
+.content{max-width:480px}
+.error-code{font-family:'Outfit',sans-serif;font-size:120px;font-weight:800;color:var(--ice-light);letter-spacing:-8px;line-height:1;margin-bottom:.5rem}
+.error-title{font-family:'Outfit',sans-serif;font-size:28px;font-weight:800;color:var(--dark);margin-bottom:.75rem;letter-spacing:-0.5px}
+.error-sub{font-size:15px;color:var(--text2);line-height:1.6;margin-bottom:2rem}
+.btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:var(--navy);color:#fff !important;border:none;padding:12px 28px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;-webkit-text-fill-color:#fff !important}
+.btn-secondary{background:transparent;color:var(--navy);border:1.5px solid rgba(4,44,83,0.2);padding:12px 28px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none}
+.btn-primary:hover{background:var(--ice)}
+footer{background:var(--dark);padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
+.footer-logo{font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;color:#fff}
+.footer-logo span{color:var(--ice)}
+.footer-links{display:flex;gap:1.25rem}
+.footer-links a{font-size:12px;color:rgba(255,255,255,0.45);text-decoration:none}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="index.html">Ausbildungs<span>Check</span></a>
+</nav>
+
+<div class="main">
+  <div class="content">
+    <div class="error-code">404</div>
+    <div class="error-title">Seite nicht gefunden</div>
+    <p class="error-sub">Die Seite die du suchst existiert leider nicht oder wurde verschoben. Aber deine Traumausbildung wartet noch auf dich!</p>
+    <div class="btns">
+      <a href="index.html" class="btn-primary">🏠 Zur Startseite</a>
+      <a href="stellen.html" class="btn-secondary">📋 Stellen entdecken</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">Ausbildungs<span>Check</span></div>
+  <div class="footer-links">
+    <a href="datenschutz.html">Datenschutz</a>
+    <a href="#">Impressum</a>
+  </div>
+</footer>
+</body>
+</html>
