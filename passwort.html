@@ -33,7 +33,6 @@ nav{display:flex;align-items:center;padding:0 2.5rem;height:60px;background:#fff
 <body>
 <nav><a class="logo" href="index.html">Ausbildungs<span>Check</span></a></nav>
 <div class="main">
-
   <div class="card" id="step-email">
     <div class="card-icon">🔐</div>
     <div class="card-title">Passwort vergessen?</div>
@@ -47,7 +46,6 @@ nav{display:flex;align-items:center;padding:0 2.5rem;height:60px;background:#fff
     <button class="submit-btn" onclick="sendReset()">Reset-Link senden 📧</button>
     <a href="konto.html" class="back-link">← Zurück zum Login</a>
   </div>
-
   <div class="card" id="step-neues-pw" style="display:none">
     <div class="card-icon">🔑</div>
     <div class="card-title">Neues Passwort</div>
@@ -64,72 +62,73 @@ nav{display:flex;align-items:center;padding:0 2.5rem;height:60px;background:#fff
     </div>
     <button class="submit-btn" onclick="setNeuesPw()">Passwort speichern ✅</button>
   </div>
-
 </div>
 <script>
 const sb = supabase.createClient(
   'https://trccxzjdddhbqjgyzlkv.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyY2N4empkZGRoYnFqZ3l6bGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDgyMjIsImV4cCI6MjA5NDA4NDIyMn0.xS5-9Tq1-i9_K9lYDuayomybBazHmnvY29K24LvRxaQ',
-  {auth:{persistSession:true,storageKey:'ausbildungscheck-auth',detectSessionInUrl:true}}
+  {auth:{persistSession:true,storageKey:'ausbildungscheck-auth',detectSessionInUrl:true,flowType:'implicit'}}
 );
 
-// Supabase verarbeitet den Hash automatisch wenn detectSessionInUrl:true
-sb.auth.onAuthStateChange((event, session) => {
-  console.log('Auth event:', event);
-  if(event === 'PASSWORD_RECOVERY') {
-    document.getElementById('step-email').style.display = 'none';
-    document.getElementById('step-neues-pw').style.display = 'block';
-  }
-});
+function zeigePwForm(){
+  document.getElementById('step-email').style.display='none';
+  document.getElementById('step-neues-pw').style.display='block';
+}
 
-// Auch direkt beim Laden prüfen
-sb.auth.getSession().then(({data:{session}}) => {
-  console.log('Session on load:', session);
+// Methode 1: Hash direkt lesen
+var hash = window.location.hash;
+if(hash && hash.includes('type=recovery') && hash.includes('access_token')){
+  zeigePwForm();
+}
+
+// Methode 2: onAuthStateChange als Fallback
+sb.auth.onAuthStateChange((event, session)=>{
+  if(event==='PASSWORD_RECOVERY') zeigePwForm();
 });
 
 async function sendReset(){
-  var email = document.getElementById('reset-email').value.trim();
+  var email=document.getElementById('reset-email').value.trim();
   if(!email){
-    document.getElementById('email-error').textContent = 'Bitte E-Mail eingeben!';
-    document.getElementById('email-error').style.display = 'block';
+    document.getElementById('email-error').textContent='Bitte E-Mail eingeben!';
+    document.getElementById('email-error').style.display='block';
     return;
   }
-  document.getElementById('email-error').style.display = 'none';
-  var {error} = await sb.auth.resetPasswordForEmail(email, {
-    redirectTo: 'https://www.deinausbildungscheck.de/passwort'
+  document.getElementById('email-error').style.display='none';
+  var {error}=await sb.auth.resetPasswordForEmail(email,{
+    redirectTo:'https://www.deinausbildungscheck.de/passwort.html'
   });
   if(error){
-    document.getElementById('email-error').textContent = 'Fehler: ' + error.message;
-    document.getElementById('email-error').style.display = 'block';
+    document.getElementById('email-error').textContent='Fehler: '+error.message;
+    document.getElementById('email-error').style.display='block';
   } else {
-    document.getElementById('email-success').textContent = '✅ Reset-Link gesendet! Bitte prüfe dein Postfach.';
-    document.getElementById('email-success').style.display = 'block';
+    document.getElementById('email-success').textContent='✅ Reset-Link gesendet! Bitte prüfe dein Postfach.';
+    document.getElementById('email-success').style.display='block';
   }
 }
 
 async function setNeuesPw(){
-  var pw = document.getElementById('new-pw').value;
-  var pw2 = document.getElementById('new-pw2').value;
-  document.getElementById('pw-error').style.display = 'none';
-  if(!pw || pw.length < 6){
-    document.getElementById('pw-error').textContent = 'Passwort muss mindestens 6 Zeichen haben!';
-    document.getElementById('pw-error').style.display = 'block';
+  var pw=document.getElementById('new-pw').value;
+  var pw2=document.getElementById('new-pw2').value;
+  if(!pw||pw.length<6){
+    document.getElementById('pw-error').textContent='Passwort muss mindestens 6 Zeichen haben!';
+    document.getElementById('pw-error').style.display='block';
     return;
   }
-  if(pw !== pw2){
-    document.getElementById('pw-error').textContent = 'Passwörter stimmen nicht überein!';
-    document.getElementById('pw-error').style.display = 'block';
+  if(pw!==pw2){
+    document.getElementById('pw-error').textContent='Passwörter stimmen nicht überein!';
+    document.getElementById('pw-error').style.display='block';
     return;
   }
-  var {error} = await sb.auth.updateUser({password: pw});
+  document.getElementById('pw-error').style.display='none';
+  var {error}=await sb.auth.updateUser({password:pw});
   if(error){
-    document.getElementById('pw-error').textContent = 'Fehler: ' + error.message;
-    document.getElementById('pw-error').style.display = 'block';
+    document.getElementById('pw-error').textContent='Fehler: '+error.message;
+    document.getElementById('pw-error').style.display='block';
     return;
   }
-  document.getElementById('pw-success').textContent = '✅ Passwort geändert! Du wirst weitergeleitet...';
-  document.getElementById('pw-success').style.display = 'block';
-  setTimeout(() => window.location.href = 'konto.html', 2000);
+  document.getElementById('pw-success').textContent='✅ Passwort geändert! Du wirst weitergeleitet...';
+  document.getElementById('pw-success').style.display='block';
+  setTimeout(()=>window.location.href='konto.html',2000);
 }
 </script>
 </body>
