@@ -6,7 +6,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Passwort zurücksetzen – AusbildungsCheck</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- Supabase ZUERST laden bevor irgendetwas anderes passiert -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+// SOFORT beim Laden den Token aus dem Hash retten - noch bevor DOM fertig ist
+var _token = null;
+var _refresh = null;
+var _isReset = false;
+
+(function(){
+  var hash = window.location.hash;
+  if(hash && hash.length > 1){
+    var params = new URLSearchParams(hash.substring(1));
+    var type = params.get('type');
+    var token = params.get('access_token');
+    var refresh = params.get('refresh_token');
+    if(type === 'recovery' && token){
+      _token = token;
+      _refresh = refresh || '';
+      _isReset = true;
+      // Hash sofort entfernen damit die Seite nicht neu lädt
+      history.replaceState(null, '', window.location.pathname);
+    }
+  }
+})();
+</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--dark:#021D3D;--navy:#042C53;--ice:#4FAADF;--ice-light:#EBF5FC;--gray:#F7F9FC;--gray2:#EEF2F7;--text:#0A1929;--text2:#5A7490}
@@ -55,8 +79,8 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2.5r
   <!-- NEUES PASSWORT SETZEN -->
   <div class="card" id="step-neues-pw" style="display:none">
     <div class="card-icon">🔑</div>
-    <div class="card-title">Neues Passwort</div>
-    <div class="card-sub">Gib dein neues Passwort ein.</div>
+    <div class="card-title">Neues Passwort setzen</div>
+    <div class="card-sub">Fast geschafft! Gib dein neues Passwort ein.</div>
     <div class="error-msg" id="pw-error"></div>
     <div class="success-msg" id="pw-success"></div>
     <div class="form-group">
@@ -67,7 +91,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2.5r
       <label class="form-label">Passwort wiederholen *</label>
       <input class="form-input" type="password" id="new-pw2" placeholder="Passwort wiederholen">
     </div>
-    <button class="submit-btn" onclick="setNeuesPw()">Passwort speichern</button>
+    <button class="submit-btn" onclick="setNeuesPw()">Passwort speichern ✅</button>
   </div>
 
 </div>
@@ -76,46 +100,35 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2.5r
 const SUPABASE_URL='https://trccxzjdddhbqjgyzlkv.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyY2N4empkZGRoYnFqZ3l6bGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDgyMjIsImV4cCI6MjA5NDA4NDIyMn0.xS5-9Tq1-i9_K9lYDuayomybBazHmnvY29K24LvRxaQ';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
-  auth:{
-    persistSession:true,
-    storageKey:'ausbildungscheck-auth',
-    detectSessionInUrl:true,
-    flowType:'pkce'
-  }
+  auth:{persistSession:true,storageKey:'ausbildungscheck-auth'}
 });
 
-// Hash aus URL lesen – Supabase schickt Token als Hash
-async function checkHash(){
-  var hash=window.location.hash;
-  if(hash&&hash.includes('type=recovery')){
-    var params=new URLSearchParams(hash.substring(1));
-    var accessToken=params.get('access_token');
-    var refreshToken=params.get('refresh_token');
-    if(accessToken){
-      var {error}=await sb.auth.setSession({
-        access_token:accessToken,
-        refresh_token:refreshToken||''
+// Wenn Token vorhanden → Session setzen und Formular zeigen
+async function init(){
+  if(_isReset && _token){
+    try {
+      var {error} = await sb.auth.setSession({
+        access_token: _token,
+        refresh_token: _refresh
       });
       if(!error){
         document.getElementById('step-email').style.display='none';
         document.getElementById('step-neues-pw').style.display='block';
-        // Hash aus URL entfernen
-        history.replaceState(null,'',window.location.pathname);
         return;
       }
-    }
+    } catch(e){}
   }
 
-  // Supabase PKCE Flow – onAuthStateChange
-  sb.auth.onAuthStateChange(async(event,session)=>{
-    if(event==='PASSWORD_RECOVERY'){
+  // Fallback: auf PASSWORD_RECOVERY Event hören
+  sb.auth.onAuthStateChange((event, session)=>{
+    if(event === 'PASSWORD_RECOVERY'){
       document.getElementById('step-email').style.display='none';
       document.getElementById('step-neues-pw').style.display='block';
     }
   });
 }
 
-checkHash();
+init();
 
 async function sendReset(){
   var email=document.getElementById('reset-email').value.trim();
@@ -133,7 +146,7 @@ async function sendReset(){
     document.getElementById('email-error').textContent='Fehler: '+error.message;
     document.getElementById('email-error').style.display='block';
   } else {
-    document.getElementById('email-success').textContent='✅ Reset-Link wurde an '+email+' gesendet! Bitte prüfe dein Postfach (auch Spam).';
+    document.getElementById('email-success').textContent='✅ Reset-Link wurde gesendet an '+email+'. Bitte prüfe dein Postfach!';
     document.getElementById('email-success').style.display='block';
     document.getElementById('reset-email').value='';
   }
@@ -166,7 +179,6 @@ async function setNeuesPw(){
   }
   document.getElementById('pw-success').textContent='✅ Passwort erfolgreich geändert! Du wirst weitergeleitet...';
   document.getElementById('pw-success').style.display='block';
-  await sb.auth.signOut();
   setTimeout(()=>window.location.href='konto.html',2000);
 }
 </script>
