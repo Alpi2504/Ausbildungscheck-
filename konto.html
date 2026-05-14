@@ -49,7 +49,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .profil-avatar{width:60px;height:60px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;color:#fff;flex-shrink:0}
 .profil-name{font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;color:var(--dark)}
 .profil-email{font-size:13px;color:var(--text2);margin-top:2px}
-.logout-btn{width:100%;background:transparent;color:var(--text2);border:1.5px solid var(--gray2);padding:11px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:1rem}
+.bewerbung-item{border:1.5px solid var(--gray2);border-radius:12px;padding:1rem;margin-bottom:.75rem}
+.bewerbung-item:last-child{margin-bottom:0}
+.bewerbung-job{font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;color:var(--dark);margin-bottom:3px}
+.bewerbung-betrieb{font-size:13px;color:var(--text2);margin-bottom:.5rem}
+.bewerbung-footer{display:flex;align-items:center;justify-content:space-between}
+.bewerbung-datum{font-size:12px;color:var(--text2)}
+.status-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+.status-neu{background:#DBEAFE;color:#1D4ED8}
+.status-weitergeleitet{background:#D1FAE5;color:#065F46}
+.status-archiviert{background:var(--gray2);color:var(--text2)}
 .logout-btn:hover{background:var(--gray)}
 footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-top:3rem}
 .footer-logo{font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;color:#fff}
@@ -174,7 +183,16 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
 
   <!-- PROFIL -->
   <div id="profil-bereich" style="display:none">
-    <div class="card">
+
+    <!-- TABS -->
+    <div style="display:flex;background:#fff;border-radius:12px;border:1.5px solid var(--gray2);padding:4px;margin-bottom:1rem">
+      <button class="auth-tab active" id="tab-profil-btn" onclick="switchProfilTab('profil')">👤 Mein Profil</button>
+      <button class="auth-tab" id="tab-bewerbungen-btn" onclick="switchProfilTab('bewerbungen')">📨 Meine Bewerbungen</button>
+    </div>
+
+    <!-- PROFIL TAB -->
+    <div id="profil-tab">
+      <div class="card">
       <div class="profil-header">
         <div class="profil-avatar" id="profil-avatar">M</div>
         <div>
@@ -242,7 +260,19 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
 
       <button class="logout-btn" onclick="doLogout()">🚪 Ausloggen</button>
     </div>
-  </div>
+    </div> <!-- end profil-tab -->
+
+    <!-- BEWERBUNGEN TAB -->
+    <div id="bewerbungen-tab" style="display:none">
+      <div class="card">
+        <div class="section-title">Meine Bewerbungen</div>
+        <div id="meine-bewerbungen-liste">
+          <div style="text-align:center;padding:2rem;color:var(--text2)">⏳ Lädt...</div>
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- end profil-bereich -->
 </div>
 
 <footer>
@@ -397,6 +427,39 @@ function togglePwBereich(){
     bereich.style.display='none';
     btn.textContent='Anzeigen';
   }
+}
+
+function switchProfilTab(tab){
+  document.getElementById('profil-tab').style.display=tab==='profil'?'block':'none';
+  document.getElementById('bewerbungen-tab').style.display=tab==='bewerbungen'?'block':'none';
+  document.getElementById('tab-profil-btn').classList.toggle('active',tab==='profil');
+  document.getElementById('tab-bewerbungen-btn').classList.toggle('active',tab==='bewerbungen');
+  if(tab==='bewerbungen') loadMeineBewerbungen();
+}
+
+async function loadMeineBewerbungen(){
+  var {data:{session}}=await sb.auth.getSession();
+  if(!session) return;
+  var {data}=await sb.from('bewerbungen')
+    .select('*, stellen:stellen_id(beruf, betrieb:betrieb_id(name))')
+    .eq('email', session.user.email)
+    .order('created_at',{ascending:false});
+  var liste=document.getElementById('meine-bewerbungen-liste');
+  if(!data||!data.length){
+    liste.innerHTML='<div style="text-align:center;padding:2rem;color:var(--text2)">😔 Noch keine Bewerbungen vorhanden.<br><br><a href="stellen.html" style="color:var(--ice);font-weight:600;text-decoration:none">Jetzt Stellen entdecken →</a></div>';
+    return;
+  }
+  var statusLabels={neu:'Neu',weitergeleitet:'Weitergeleitet',archiviert:'Archiviert'};
+  liste.innerHTML=data.map(b=>`
+    <div class="bewerbung-item">
+      <div class="bewerbung-job">${b.stellen?.beruf||'Ausbildungsstelle'}</div>
+      <div class="bewerbung-betrieb">${b.stellen?.betrieb?.name||'Partnerbetrieb'}</div>
+      <div class="bewerbung-footer">
+        <span class="bewerbung-datum">${new Date(b.created_at).toLocaleDateString('de-DE')}</span>
+        <span class="status-badge status-${b.status||'neu'}">${statusLabels[b.status]||'Neu'}</span>
+      </div>
+    </div>
+  `).join('');
 }
 
 async function doLogout(){await sb.auth.signOut();}
