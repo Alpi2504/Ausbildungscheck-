@@ -6,33 +6,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Passwort zurücksetzen – AusbildungsCheck</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<!-- Supabase ZUERST laden bevor irgendetwas anderes passiert -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script>
-// Token aus URL Query Parameter lesen - zuverlässiger als Hash
-var _token = null;
-var _refresh = null;
-var _isReset = false;
-
-(function(){
-  var params = new URLSearchParams(window.location.search);
-  var type = params.get('type');
-  var token = params.get('token');
-  var refresh = params.get('refresh');
-  if(type === 'recovery' && token){
-    _token = token;
-    _refresh = refresh || '';
-    _isReset = true;
-    // Parameter aus URL entfernen
-    history.replaceState(null, '', window.location.pathname);
-  }
-})();
-</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--dark:#021D3D;--navy:#042C53;--ice:#4FAADF;--ice-light:#EBF5FC;--gray:#F7F9FC;--gray2:#EEF2F7;--text:#0A1929;--text2:#5A7490}
 body{font-family:'DM Sans',sans-serif;background:var(--gray);color:var(--text);min-height:100vh}
-nav{display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:60px;background:#fff;border-bottom:1px solid var(--gray2)}
+nav{display:flex;align-items:center;padding:0 2.5rem;height:60px;background:#fff;border-bottom:1px solid var(--gray2)}
 .logo{font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;color:var(--dark);text-decoration:none}
 .logo span{color:var(--ice)}
 .main{max-width:440px;margin:0 auto;padding:3rem 1.5rem}
@@ -52,32 +31,27 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2.5r
 </style>
 </head>
 <body>
-<nav>
-  <a class="logo" href="index.html">Ausbildungs<span>Check</span></a>
-</nav>
-
+<nav><a class="logo" href="index.html">Ausbildungs<span>Check</span></a></nav>
 <div class="main">
 
-  <!-- E-MAIL EINGEBEN -->
   <div class="card" id="step-email">
     <div class="card-icon">🔐</div>
     <div class="card-title">Passwort vergessen?</div>
-    <div class="card-sub">Gib deine E-Mail ein und wir schicken dir einen Link zum Zurücksetzen.</div>
+    <div class="card-sub">Gib deine E-Mail ein und wir schicken dir einen Link.</div>
     <div class="error-msg" id="email-error"></div>
     <div class="success-msg" id="email-success"></div>
     <div class="form-group">
-      <label class="form-label">E-Mail Adresse *</label>
-      <input class="form-input" type="email" id="reset-email" placeholder="max@beispiel.de" onkeydown="if(event.key==='Enter')sendReset()">
+      <label class="form-label">E-Mail *</label>
+      <input class="form-input" type="email" id="reset-email" placeholder="max@beispiel.de">
     </div>
     <button class="submit-btn" onclick="sendReset()">Reset-Link senden 📧</button>
     <a href="konto.html" class="back-link">← Zurück zum Login</a>
   </div>
 
-  <!-- NEUES PASSWORT SETZEN -->
   <div class="card" id="step-neues-pw" style="display:none">
     <div class="card-icon">🔑</div>
-    <div class="card-title">Neues Passwort setzen</div>
-    <div class="card-sub">Fast geschafft! Gib dein neues Passwort ein.</div>
+    <div class="card-title">Neues Passwort</div>
+    <div class="card-sub">Gib dein neues Passwort ein.</div>
     <div class="error-msg" id="pw-error"></div>
     <div class="success-msg" id="pw-success"></div>
     <div class="form-group">
@@ -92,91 +66,70 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2.5r
   </div>
 
 </div>
-
 <script>
-const SUPABASE_URL='https://trccxzjdddhbqjgyzlkv.supabase.co';
-const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyY2N4empkZGRoYnFqZ3l6bGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDgyMjIsImV4cCI6MjA5NDA4NDIyMn0.xS5-9Tq1-i9_K9lYDuayomybBazHmnvY29K24LvRxaQ';
-const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
-  auth:{persistSession:true,storageKey:'ausbildungscheck-auth'}
+const sb = supabase.createClient(
+  'https://trccxzjdddhbqjgyzlkv.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyY2N4empkZGRoYnFqZ3l6bGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDgyMjIsImV4cCI6MjA5NDA4NDIyMn0.xS5-9Tq1-i9_K9lYDuayomybBazHmnvY29K24LvRxaQ',
+  {auth:{persistSession:true,storageKey:'ausbildungscheck-auth',detectSessionInUrl:true}}
+);
+
+// Supabase verarbeitet den Hash automatisch wenn detectSessionInUrl:true
+sb.auth.onAuthStateChange((event, session) => {
+  console.log('Auth event:', event);
+  if(event === 'PASSWORD_RECOVERY') {
+    document.getElementById('step-email').style.display = 'none';
+    document.getElementById('step-neues-pw').style.display = 'block';
+  }
 });
 
-// Wenn Token vorhanden → Session setzen und Formular zeigen
-async function init(){
-  if(_isReset && _token){
-    try {
-      var {error} = await sb.auth.setSession({
-        access_token: _token,
-        refresh_token: _refresh
-      });
-      if(!error){
-        document.getElementById('step-email').style.display='none';
-        document.getElementById('step-neues-pw').style.display='block';
-        return;
-      }
-    } catch(e){}
-  }
-
-  // Fallback: auf PASSWORD_RECOVERY Event hören
-  sb.auth.onAuthStateChange((event, session)=>{
-    if(event === 'PASSWORD_RECOVERY'){
-      document.getElementById('step-email').style.display='none';
-      document.getElementById('step-neues-pw').style.display='block';
-    }
-  });
-}
-
-init();
+// Auch direkt beim Laden prüfen
+sb.auth.getSession().then(({data:{session}}) => {
+  console.log('Session on load:', session);
+});
 
 async function sendReset(){
-  var email=document.getElementById('reset-email').value.trim();
-  document.getElementById('email-error').style.display='none';
-  document.getElementById('email-success').style.display='none';
+  var email = document.getElementById('reset-email').value.trim();
   if(!email){
-    document.getElementById('email-error').textContent='Bitte E-Mail eingeben!';
-    document.getElementById('email-error').style.display='block';
+    document.getElementById('email-error').textContent = 'Bitte E-Mail eingeben!';
+    document.getElementById('email-error').style.display = 'block';
     return;
   }
-  var {error}=await sb.auth.resetPasswordForEmail(email,{
-    redirectTo:'https://www.deinausbildungscheck.de/passwort.html'
+  document.getElementById('email-error').style.display = 'none';
+  var {error} = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://www.deinausbildungscheck.de/passwort'
   });
   if(error){
-    document.getElementById('email-error').textContent='Fehler: '+error.message;
-    document.getElementById('email-error').style.display='block';
+    document.getElementById('email-error').textContent = 'Fehler: ' + error.message;
+    document.getElementById('email-error').style.display = 'block';
   } else {
-    document.getElementById('email-success').textContent='✅ Reset-Link wurde gesendet an '+email+'. Bitte prüfe dein Postfach!';
-    document.getElementById('email-success').style.display='block';
-    document.getElementById('reset-email').value='';
+    document.getElementById('email-success').textContent = '✅ Reset-Link gesendet! Bitte prüfe dein Postfach.';
+    document.getElementById('email-success').style.display = 'block';
   }
 }
 
 async function setNeuesPw(){
-  var pw=document.getElementById('new-pw').value;
-  var pw2=document.getElementById('new-pw2').value;
-  document.getElementById('pw-error').style.display='none';
-  if(!pw||!pw2){
-    document.getElementById('pw-error').textContent='Bitte beide Felder ausfüllen!';
-    document.getElementById('pw-error').style.display='block';
+  var pw = document.getElementById('new-pw').value;
+  var pw2 = document.getElementById('new-pw2').value;
+  document.getElementById('pw-error').style.display = 'none';
+  if(!pw || pw.length < 6){
+    document.getElementById('pw-error').textContent = 'Passwort muss mindestens 6 Zeichen haben!';
+    document.getElementById('pw-error').style.display = 'block';
     return;
   }
-  if(pw.length<6){
-    document.getElementById('pw-error').textContent='Passwort muss mindestens 6 Zeichen haben!';
-    document.getElementById('pw-error').style.display='block';
+  if(pw !== pw2){
+    document.getElementById('pw-error').textContent = 'Passwörter stimmen nicht überein!';
+    document.getElementById('pw-error').style.display = 'block';
     return;
   }
-  if(pw!==pw2){
-    document.getElementById('pw-error').textContent='Passwörter stimmen nicht überein!';
-    document.getElementById('pw-error').style.display='block';
-    return;
-  }
-  var {error}=await sb.auth.updateUser({password:pw});
+  var {error} = await sb.auth.updateUser({password: pw});
   if(error){
-    document.getElementById('pw-error').textContent='Fehler: '+error.message;
-    document.getElementById('pw-error').style.display='block';
+    document.getElementById('pw-error').textContent = 'Fehler: ' + error.message;
+    document.getElementById('pw-error').style.display = 'block';
     return;
   }
-  document.getElementById('pw-success').textContent='✅ Passwort erfolgreich geändert! Du wirst weitergeleitet...';
-  document.getElementById('pw-success').style.display='block';
-  setTimeout(()=>window.location.href='konto.html',2000);
+  document.getElementById('pw-success').textContent = '✅ Passwort geändert! Du wirst weitergeleitet...';
+  document.getElementById('pw-success').style.display = 'block';
+  setTimeout(() => window.location.href = 'konto.html', 2000);
 }
 </script>
 </body>
