@@ -187,6 +187,11 @@ tr:hover td{background:var(--gray)}
     <!-- BEWERBUNGEN -->
     <div class="page" id="page-bewerbungen">
       <div class="page-title">Bewerbungen</div>
+      <div style="display:flex;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap">
+        <button id="filter-aktiv" onclick="setBewerbungFilter('aktiv')" style="background:var(--navy);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer">📨 Aktive</button>
+        <button id="filter-archiviert" onclick="setBewerbungFilter('archiviert')" style="background:#fff;color:var(--text2);border:1.5px solid var(--gray2);padding:8px 16px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer">📁 Archiviert</button>
+        <button id="filter-alle" onclick="setBewerbungFilter('alle')" style="background:#fff;color:var(--text2);border:1.5px solid var(--gray2);padding:8px 16px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer">📋 Alle</button>
+      </div>
       <div id="bewerbungen-list"><div class="empty-state"><div class="empty-icon">📨</div>Lädt...</div></div>
     </div>
 
@@ -536,10 +541,29 @@ async function deleteStelle(){
 }
 
 // BEWERBUNGEN
+var aktiverBewerbungFilter='aktiv';
+
+function setBewerbungFilter(filter){
+  aktiverBewerbungFilter=filter;
+  document.getElementById('filter-aktiv').style.background=filter==='aktiv'?'var(--navy)':'#fff';
+  document.getElementById('filter-aktiv').style.color=filter==='aktiv'?'#fff':'var(--text2)';
+  document.getElementById('filter-archiviert').style.background=filter==='archiviert'?'var(--navy)':'#fff';
+  document.getElementById('filter-archiviert').style.color=filter==='archiviert'?'#fff':'var(--text2)';
+  document.getElementById('filter-alle').style.background=filter==='alle'?'var(--navy)':'#fff';
+  document.getElementById('filter-alle').style.color=filter==='alle'?'#fff':'var(--text2)';
+  loadBewerbungen();
+}
+
 async function loadBewerbungen(){
-  var {data}=await sb.from('bewerbungen').select('*, stellen:stellen_id(beruf, frage1, frage2, betrieb:betrieb_id(name,email))').order('created_at',{ascending:false});
+  var query=sb.from('bewerbungen').select('*, stellen:stellen_id(beruf, frage1, frage2, betrieb:betrieb_id(name,email))').order('created_at',{ascending:false});
+  if(aktiverBewerbungFilter==='aktiv') query=query.in('status',['neu','weitergeleitet']);
+  else if(aktiverBewerbungFilter==='archiviert') query=query.eq('status','archiviert');
+  var {data}=await query;
   var list=document.getElementById('bewerbungen-list');
-  if(!data||!data.length){list.innerHTML='<div class="empty-state"><div class="empty-icon">📨</div>Noch keine Bewerbungen</div>';return;}
+  if(!data||!data.length){
+    list.innerHTML='<div class="empty-state"><div class="empty-icon">📨</div>Keine Bewerbungen gefunden</div>';
+    return;
+  }
   list.innerHTML=data.map(b=>`
     <div class="bewerbung-card">
       <div class="bewerbung-header">
@@ -547,7 +571,7 @@ async function loadBewerbungen(){
           <div class="bewerbung-name">${b.vorname||''} ${b.nachname||''}</div>
           <div class="bewerbung-stelle">${b.stellen?.beruf||'-'} · ${b.stellen?.betrieb?.name||'-'}</div>
         </div>
-        <span class="badge badge-${b.status==='neu'?'neu':'aktiv'}">${b.status}</span>
+        <span class="badge badge-${b.status==='neu'?'neu':b.status==='weitergeleitet'?'aktiv':'inaktiv'}">${b.status}</span>
       </div>
       <div class="bewerbung-info">
         <div class="info-item"><label>E-Mail</label><span>${b.email||'-'}</span></div>
@@ -562,12 +586,14 @@ async function loadBewerbungen(){
         ${b.antwort2?`<div class="antwort-item"><div class="antwort-frage">${b.stellen?.frage2||'Frage 2'}</div><div class="antwort-text">${b.antwort2}</div></div>`:''}
       </div>`:''}
       <div class="status-btns">
-        <button class="status-btn btn-weiterleiten" onclick="weiterleitenBewerbung('${b.id}','${b.stellen?.betrieb?.email||''}','${b.vorname||''} ${b.nachname||''}','${b.email||''}','${b.stellen?.beruf||''}')">📤 An Betrieb weiterleiten</button>
-        <button class="status-btn btn-archivieren" onclick="archivierenBewerbung('${b.id}')">Archivieren</button>
+        <button class="status-btn btn-weiterleiten" onclick="weiterleitenBewerbung('${b.id}','${b.stellen?.betrieb?.email||''}','${b.vorname||''} ${b.nachname||''}','${b.email||''}','${b.stellen?.beruf||''}')">📤 Weiterleiten</button>
+        ${b.status!=='archiviert'?`<button class="status-btn btn-archivieren" onclick="archivierenBewerbung('${b.id}')">📁 Archivieren</button>`:''}
+        <button class="status-btn" style="background:#FEE2E2;color:#EF4444" onclick="loeschenBewerbung('${b.id}')">🗑️ Löschen</button>
       </div>
     </div>
   `).join('');
 }
+
 
 async function weiterleitenBewerbung(id, betriebEmail, name, bewerberEmail, stelle){
   if(!betriebEmail){alert('Keine Betrieb-E-Mail hinterlegt!');return;}
@@ -577,6 +603,14 @@ async function weiterleitenBewerbung(id, betriebEmail, name, bewerberEmail, stel
   loadBewerbungen();
   loadDashboard();
   showToast('✅ Bewerbung weitergeleitet!');
+}
+
+async function loeschenBewerbung(id){
+  if(!confirm('Bewerbung wirklich löschen? Das kann nicht rückgängig gemacht werden!')) return;
+  await sb.from('bewerbungen').delete().eq('id',id);
+  loadBewerbungen();
+  loadDashboard();
+  showToast('🗑️ Bewerbung gelöscht');
 }
 
 async function archivierenBewerbung(id){
