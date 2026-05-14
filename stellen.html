@@ -642,4 +642,15 @@ window.addEventListener('resize',function(){
   .page-body{display:flex;flex-direction:column}
 }
 </style>
-
+<style>
+@media(max-width:768px){
+  .page-body{display:block !important;padding:.75rem !important;max-width:100% !important}
+  .filter-sidebar{width:100%;margin-bottom:.75rem}
+  .job-card{display:block !important;width:100% !important}
+  .job-logo{display:inline-flex;margin-bottom:.5rem}
+  .job-right{display:flex;flex-direction:row;justify-content:space-between;align-items:center;margin-top:.75rem}
+  .apply-btn{flex:1;margin-left:.5rem}
+  .jobs-list{gap:10px}
+  .header-search{margin:0 1rem}
+}
+</style>
