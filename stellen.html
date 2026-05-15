@@ -7,9 +7,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ausbildungsstellen finden – AusbildungsCheck</title>
 <meta name="description" content="Alle aktuellen Ausbildungsstellen bei Partnerbetrieben. Jetzt bewerben und in 2 Minuten deine Traumausbildung sichern.">
-<meta name="keywords" content="Ausbildungsstellen, Ausbildungsplätze, Azubi Stellen, Ausbildung bewerben, Berufsfelder">
-<meta name="author" content="AusbildungsCheck">
-<meta name="robots" content="index, follow">
 <meta property="og:title" content="Ausbildungsstellen finden – AusbildungsCheck">
 <meta property="og:description" content="Alle aktuellen Ausbildungsstellen bei Partnerbetrieben. Jetzt bewerben und in 2 Minuten deine Traumausbildung sichern.">
 <meta property="og:image" content="https://www.deinausbildungscheck.de/favicon.svg">
@@ -17,8 +14,6 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AusbildungsCheck">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ausbildungsstellen finden – AusbildungsCheck">
-<meta name="twitter:description" content="Alle aktuellen Ausbildungsstellen bei Partnerbetrieben. Jetzt bewerben und in 2 Minuten deine Traumausbildung sichern.">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
@@ -64,13 +59,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .jobs-count span{color:var(--ice)}
 .jobs-sort{font-size:13px;color:var(--text2);background:#fff;border:1.5px solid var(--gray2);padding:6px 12px;border-radius:8px;cursor:pointer}
 .jobs-list{display:flex;flex-direction:column;gap:12px}
-
-/* JOB CARD */
 .job-card{background:#fff;border:1.5px solid var(--gray2);border-radius:14px;padding:1.25rem 1.5rem;cursor:pointer;transition:all .2s;display:grid;grid-template-columns:auto 1fr auto;gap:1rem;align-items:center}
 .job-card:hover{border-color:var(--ice);box-shadow:0 6px 20px rgba(79,170,223,0.1);transform:translateY(-1px)}
 .job-card.featured{border-color:rgba(79,170,223,0.3);background:linear-gradient(135deg,#fff 0%,var(--ice-light) 100%)}
 .job-logo{width:52px;height:52px;border-radius:12px;background:var(--ice-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-.job-top-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.job-top-row{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap}
 .job-title-text{font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;color:var(--dark)}
 .job-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;letter-spacing:.5px}
 .job-badge.new{background:var(--ice-light);color:var(--ice)}
@@ -83,15 +76,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .apply-btn:hover{background:var(--ice)}
 .job-date{font-size:11px;color:var(--text2)}
 .empty-state{text-align:center;padding:3rem;color:var(--text2)}
-
 footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-top:3rem}
 .footer-logo{font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;color:#fff}
 .footer-logo span{color:var(--ice)}
 .footer-links{display:flex;gap:1.25rem}
 .footer-links a{font-size:12px;color:rgba(255,255,255,0.45);text-decoration:none}
 .footer-copy{font-size:11px;color:rgba(255,255,255,0.3)}
-
-/* ===== MODALS BASE ===== */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(2,13,29,0.6);z-index:200;align-items:center;justify-content:center;padding:1rem}
 .modal-overlay.open{display:flex}
 .modal{background:#fff;border-radius:20px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;padding:2rem}
@@ -102,8 +92,7 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
 .modal-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem}
 .modal-tag{font-size:12px;padding:4px 12px;border-radius:6px;background:var(--gray);color:var(--text2)}
 .modal-tag.highlight{background:var(--ice-light);color:var(--ice);font-weight:600}
-
-/* ===== DETAIL MODAL ===== */
+/* DETAIL */
 .detail-modal{max-width:560px}
 .detail-section{margin-bottom:1.5rem}
 .detail-section-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ice);margin-bottom:.75rem;display:flex;align-items:center;gap:6px}
@@ -112,14 +101,21 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
 .detail-list-item{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text);line-height:1.5}
 .detail-list-dot{width:7px;height:7px;border-radius:50%;background:var(--ice);flex-shrink:0;margin-top:6px}
 .detail-text{font-size:14px;color:var(--text);line-height:1.6}
-/* YouTube responsive */
 .yt-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;background:#000;margin-bottom:1.5rem}
 .yt-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;border-radius:12px}
-/* Big apply button at bottom of detail modal */
 .detail-apply-btn{width:100%;background:var(--navy);color:#fff;border:none;padding:14px;border-radius:12px;font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;cursor:pointer;margin-top:.5rem}
 .detail-apply-btn:hover{background:var(--ice)}
-
-/* AUTH CHOICE */
+/* SHARE */
+.share-bar{display:flex;align-items:center;gap:10px;background:var(--gray);border-radius:12px;padding:11px 14px;margin-bottom:1.25rem;flex-wrap:wrap}
+.share-bar-label{font-size:13px;color:var(--text2);font-weight:500;flex-shrink:0}
+.share-btns{display:flex;gap:8px;flex-wrap:wrap}
+.share-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;border:none;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap;transition:all .15s}
+.share-btn-wa{background:#25D366;color:#fff}
+.share-btn-wa:hover{background:#1ebe5d;color:#fff}
+.share-btn-copy{background:#fff;color:var(--navy);border:1.5px solid var(--gray2)}
+.share-btn-copy:hover{border-color:var(--ice);color:var(--ice)}
+.share-btn-copy.copied{background:var(--ice-light);color:var(--ice);border-color:var(--ice)}
+/* AUTH */
 .auth-choice{display:flex;flex-direction:column;gap:.75rem;margin-top:1rem}
 .choice-btn{display:flex;align-items:center;gap:12px;padding:1rem 1.25rem;border-radius:12px;border:1.5px solid var(--gray2);background:#fff;cursor:pointer;transition:all .2s;text-align:left;width:100%}
 .choice-btn:hover{border-color:var(--ice);background:var(--ice-light)}
@@ -129,15 +125,11 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
 .choice-icon{font-size:22px;flex-shrink:0}
 .choice-title{font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;color:var(--dark);display:block}
 .choice-sub{font-size:12px;color:var(--text2);display:block;margin-top:2px}
-
-/* PROFIL BANNER */
 .profil-banner{display:flex;align-items:center;gap:10px;background:var(--ice-light);border:1.5px solid rgba(79,170,223,0.25);border-radius:10px;padding:10px 14px;margin-bottom:1.25rem}
 .profil-banner-avatar{width:36px;height:36px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;color:#fff;flex-shrink:0}
 .profil-banner-name{font-size:13px;font-weight:600;color:var(--navy)}
 .profil-banner-sub{font-size:11px;color:var(--text2);margin-top:1px}
 .profil-banner-edit{margin-left:auto;font-size:12px;color:var(--ice);font-weight:600;text-decoration:none;white-space:nowrap}
-
-/* FORMULAR */
 .form-group{margin-bottom:1rem}
 .form-label{font-size:13px;font-weight:600;color:var(--dark);margin-bottom:.35rem;display:block}
 .form-input{width:100%;border:1.5px solid var(--gray2);border-radius:9px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .2s;background:#fff}
@@ -159,8 +151,6 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
 .divider{display:flex;align-items:center;gap:.75rem;margin:.75rem 0}
 .divider hr{flex:1;border:none;border-top:1px solid var(--gray2)}
 .divider span{font-size:12px;color:var(--text2)}
-
-/* HAMBURGER */
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;margin-left:.5rem}
 .hamburger span{display:block;width:22px;height:2px;background:var(--navy);border-radius:2px;transition:all .3s}
 .hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
@@ -173,7 +163,6 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
 </style>
 </head>
 <body>
-
 <nav>
   <a class="logo" href="index.html">Ausbildungs<span>Check</span></a>
   <div class="nav-links">
@@ -220,7 +209,6 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
       <div class="radius-ticks"><span>5 km</span><span>50 km</span><span>100 km</span></div>
     </div>
   </aside>
-
   <div>
     <div class="jobs-header">
       <div class="jobs-count"><span id="stellen-count">0</span> Stellen gefunden</div>
@@ -230,13 +218,11 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
         <option value="gehalt-desc">Gehalt absteigend</option>
       </select>
     </div>
-    <div class="jobs-list" id="jobs-list">
-      <div class="empty-state">⏳ Stellen werden geladen...</div>
-    </div>
+    <div class="jobs-list" id="jobs-list"><div class="empty-state">⏳ Stellen werden geladen...</div></div>
   </div>
 </div>
 
-<!-- ===== MODAL: DETAIL ANSICHT ===== -->
+<!-- DETAIL MODAL -->
 <div class="modal-overlay" id="modal-detail">
   <div class="modal detail-modal" style="max-width:560px">
     <div class="modal-header">
@@ -245,38 +231,38 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
       <div class="modal-title" id="detail-title"></div>
     </div>
     <div class="modal-tags" id="detail-tags"></div>
-
-    <!-- YouTube Video -->
-    <div id="detail-youtube-wrap" style="display:none">
-      <div class="yt-wrap">
-        <iframe id="detail-youtube-iframe" src="" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+    <!-- SHARE -->
+    <div class="share-bar">
+      <span class="share-bar-label">🔗 Teilen:</span>
+      <div class="share-btns">
+        <a id="share-wa-btn" class="share-btn share-btn-wa" href="#" target="_blank" rel="noopener">📱 WhatsApp</a>
+        <button id="share-copy-btn" class="share-btn share-btn-copy" onclick="linkKopieren()">📋 Link kopieren</button>
       </div>
     </div>
-
-    <!-- Tätigkeiten -->
+    <!-- YOUTUBE -->
+    <div id="detail-youtube-wrap" style="display:none">
+      <div class="yt-wrap"><iframe id="detail-youtube-iframe" src="" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe></div>
+    </div>
+    <!-- TÄTIGKEITEN -->
     <div class="detail-section" id="detail-taetigkeiten-section" style="display:none">
       <div class="detail-section-title">🔧 Das machst du</div>
       <div class="detail-list" id="detail-taetigkeiten-list"></div>
     </div>
-
-    <!-- Arbeitgeber-Wünsche -->
+    <!-- WÜNSCHE -->
     <div class="detail-section" id="detail-wuensche-section" style="display:none">
       <div class="detail-section-title">✅ Das wünschen wir uns</div>
       <div class="detail-list" id="detail-wuensche-list"></div>
     </div>
-
-    <!-- Beschreibung fallback -->
+    <!-- BESCHREIBUNG FALLBACK -->
     <div class="detail-section" id="detail-beschreibung-section" style="display:none">
       <div class="detail-section-title">ℹ️ Über die Stelle</div>
       <div class="detail-text" id="detail-beschreibung-text"></div>
     </div>
-
-    <!-- Bewerbungs-Button -->
     <button class="detail-apply-btn" onclick="bewerbenAusDetail()">Jetzt bewerben 🚀</button>
   </div>
 </div>
 
-<!-- ===== MODAL 1: AUTH AUSWAHL (nicht eingeloggt) ===== -->
+<!-- AUTH MODAL -->
 <div class="modal-overlay" id="modal-auth">
   <div class="modal">
     <div class="modal-header">
@@ -304,7 +290,7 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
   </div>
 </div>
 
-<!-- ===== MODAL 2: EINGELOGGT ===== -->
+<!-- EINGELOGGT MODAL -->
 <div class="modal-overlay" id="modal-eingeloggt">
   <div class="modal">
     <div class="modal-header">
@@ -315,10 +301,7 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
     <div class="modal-tags" id="eingeloggt-tags"></div>
     <div class="profil-banner">
       <div class="profil-banner-avatar" id="banner-avatar">?</div>
-      <div>
-        <div class="profil-banner-name" id="banner-name"></div>
-        <div class="profil-banner-sub" id="banner-sub"></div>
-      </div>
+      <div><div class="profil-banner-name" id="banner-name"></div><div class="profil-banner-sub" id="banner-sub"></div></div>
       <a href="konto.html" class="profil-banner-edit">Profil bearbeiten</a>
     </div>
     <div class="success-msg" id="success-eingeloggt">🎉 Bewerbung erfolgreich gesendet!</div>
@@ -333,7 +316,7 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
   </div>
 </div>
 
-<!-- ===== MODAL 3: GAST FORMULAR ===== -->
+<!-- GAST MODAL -->
 <div class="modal-overlay" id="modal-gast">
   <div class="modal" style="max-width:560px">
     <div class="modal-header">
@@ -364,14 +347,10 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
         <label class="form-label" id="gast-abschluss-label">Schulabschluss *</label>
         <select class="form-select" id="gast-abschluss">
           <option value="">Bitte auswählen...</option>
-          <option>Hauptschulabschluss</option>
-          <option>Qualifizierter Hauptschulabschluss</option>
-          <option>Mittlere Reife / Realschulabschluss</option>
-          <option>Erweiterter Realschulabschluss</option>
-          <option>Fachhochschulreife (Facabitur)</option>
-          <option>Allgemeine Hochschulreife (Abitur)</option>
-          <option>Förderschulabschluss</option>
-          <option>Kein Schulabschluss</option>
+          <option>Hauptschulabschluss</option><option>Qualifizierter Hauptschulabschluss</option>
+          <option>Mittlere Reife / Realschulabschluss</option><option>Erweiterter Realschulabschluss</option>
+          <option>Fachhochschulreife (Facabitur)</option><option>Allgemeine Hochschulreife (Abitur)</option>
+          <option>Förderschulabschluss</option><option>Kein Schulabschluss</option>
         </select>
       </div>
       <div id="gast-jahr-gruppe" style="display:none" class="form-group">
@@ -405,17 +384,12 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
 const SUPABASE_URL='https://trccxzjdddhbqjgyzlkv.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyY2N4empkZGRoYnFqZ3l6bGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDgyMjIsImV4cCI6MjA5NDA4NDIyMn0.xS5-9Tq1-i9_K9lYDuayomybBazHmnvY29K24LvRxaQ';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,storageKey:'ausbildungscheck-auth'}});
+var alleStellen=[],alleBerufsfelder=[],aktuelleStelle=null,aktuellerUser=null,aktuellesProfil=null;
 
-var alleStellen=[];
-var alleBerufsfelder=[];
-var aktuelleStelle=null;
-var aktuellerUser=null;
-var aktuellesProfil=null;
-
-sb.auth.getSession().then(async ({data:{session}})=>{
+sb.auth.getSession().then(async({data:{session}})=>{
   if(session){
     aktuellerUser=session.user;
-    var {data:profil}=await sb.from('profile').select('*').eq('id',session.user.id).single();
+    var{data:profil}=await sb.from('profile').select('*').eq('id',session.user.id).single();
     aktuellesProfil=profil;
     var btn=document.getElementById('nav-konto');
     if(btn){btn.textContent='👤 Mein Konto';btn.style.color='var(--ice)';}
@@ -423,7 +397,7 @@ sb.auth.getSession().then(async ({data:{session}})=>{
 });
 
 async function ladeStellen(){
-  var [{data:stellen},{data:berufsfelder}]=await Promise.all([
+  var[{data:stellen},{data:berufsfelder}]=await Promise.all([
     sb.from('stellen').select('*, betrieb:betrieb_id(name,email), berufsfeld:berufsfeld_id(name,emoji)').eq('aktiv',true).order('created_at',{ascending:false}),
     sb.from('berufsfelder').select('*').order('name')
   ]);
@@ -432,6 +406,13 @@ async function ladeStellen(){
   alleBerufsfelder=berufsfelder||[];
   bauFilterOptionen();
   var params=new URLSearchParams(window.location.search);
+  // Deep-Link: ?stelle=ID
+  var stelleParam=params.get('stelle');
+  if(stelleParam&&alleStellen.find(s=>s.id===stelleParam)){
+    zeigeStellen(stellen);
+    zeigeDetail(stelleParam);
+    return;
+  }
   var q=params.get('q');
   if(q){document.getElementById('search-input').value=q;filterStellen();}
   else zeigeStellen(stellen);
@@ -439,11 +420,7 @@ async function ladeStellen(){
 
 function bauFilterOptionen(){
   var el=document.getElementById('berufsfeld-filter');
-  el.innerHTML=alleBerufsfelder.map(b=>`
-    <div class="filter-option">
-      <input type="checkbox" id="bf-${b.id}" onchange="filterStellen()">
-      <label for="bf-${b.id}">${b.emoji||''} ${b.name}</label>
-    </div>`).join('');
+  el.innerHTML=alleBerufsfelder.map(b=>`<div class="filter-option"><input type="checkbox" id="bf-${b.id}" onchange="filterStellen()"><label for="bf-${b.id}">${b.emoji||''} ${b.name}</label></div>`).join('');
 }
 
 function zeigeStellen(data){
@@ -501,57 +478,50 @@ function sortStellen(val){
   zeigeStellen(sorted);
 }
 
-// ===== DETAIL MODAL =====
 function zeigeDetail(stelleId){
   var s=alleStellen.find(x=>x.id===stelleId);
   if(!s) return;
   aktuelleStelle=s;
-
   document.getElementById('detail-stelle').textContent=(s.betrieb?.name||'')+' · '+(s.standort||'');
   document.getElementById('detail-title').textContent=s.beruf||'';
   document.getElementById('detail-tags').innerHTML=tagsHtml(s);
 
+  // Share
+  var shareUrl='https://www.deinausbildungscheck.de/stellen.html?stelle='+s.id;
+  var shareText='Hey, schau mal – "'+( s.beruf||'Ausbildungsstelle')+'" bei '+(s.betrieb?.name||'einem Betrieb')+' in '+(s.standort||'deiner Region')+'! 👇\n';
+  document.getElementById('share-wa-btn').href='https://wa.me/?text='+encodeURIComponent(shareText+shareUrl);
+  document.getElementById('share-copy-btn').textContent='📋 Link kopieren';
+  document.getElementById('share-copy-btn').classList.remove('copied');
+  history.replaceState(null,'','stellen.html?stelle='+s.id);
+
   // YouTube
   var ytUrl=getYoutubeEmbed(s.youtube_url);
   var ytWrap=document.getElementById('detail-youtube-wrap');
-  if(ytUrl){
-    document.getElementById('detail-youtube-iframe').src=ytUrl;
-    ytWrap.style.display='block';
-  } else {
-    document.getElementById('detail-youtube-iframe').src='';
-    ytWrap.style.display='none';
-  }
+  if(ytUrl){document.getElementById('detail-youtube-iframe').src=ytUrl;ytWrap.style.display='block';}
+  else{document.getElementById('detail-youtube-iframe').src='';ytWrap.style.display='none';}
 
   // Tätigkeiten
-  var taetSection=document.getElementById('detail-taetigkeiten-section');
-  var taetList=document.getElementById('detail-taetigkeiten-list');
+  var taetSec=document.getElementById('detail-taetigkeiten-section');
   if(s.taetigkeiten&&s.taetigkeiten.trim()){
-    var zeilen=s.taetigkeiten.split('\n').map(z=>z.replace(/^[•\-*]\s*/,'')).filter(z=>z.trim());
-    taetList.innerHTML=zeilen.map(z=>`<div class="detail-list-item"><div class="detail-list-dot"></div><span>${z}</span></div>`).join('');
-    taetSection.style.display='block';
-  } else {
-    taetSection.style.display='none';
-  }
+    var z1=s.taetigkeiten.split('\n').map(z=>z.replace(/^[•\-*]\s*/,'')).filter(z=>z.trim());
+    document.getElementById('detail-taetigkeiten-list').innerHTML=z1.map(z=>`<div class="detail-list-item"><div class="detail-list-dot"></div><span>${z}</span></div>`).join('');
+    taetSec.style.display='block';
+  } else taetSec.style.display='none';
 
-  // Arbeitgeber-Wünsche
-  var wuenscheSection=document.getElementById('detail-wuensche-section');
-  var wuenscheList=document.getElementById('detail-wuensche-list');
+  // Wünsche
+  var wueschSec=document.getElementById('detail-wuensche-section');
   if(s.arbeitgeber_wuensche&&s.arbeitgeber_wuensche.trim()){
-    var zeilen2=s.arbeitgeber_wuensche.split('\n').map(z=>z.replace(/^[•\-*]\s*/,'')).filter(z=>z.trim());
-    wuenscheList.innerHTML=zeilen2.map(z=>`<div class="detail-list-item"><div class="detail-list-dot" style="background:#10B981"></div><span>${z}</span></div>`).join('');
-    wuenscheSection.style.display='block';
-  } else {
-    wuenscheSection.style.display='none';
-  }
+    var z2=s.arbeitgeber_wuensche.split('\n').map(z=>z.replace(/^[•\-*]\s*/,'')).filter(z=>z.trim());
+    document.getElementById('detail-wuensche-list').innerHTML=z2.map(z=>`<div class="detail-list-item"><div class="detail-list-dot" style="background:#10B981"></div><span>${z}</span></div>`).join('');
+    wueschSec.style.display='block';
+  } else wueschSec.style.display='none';
 
   // Beschreibung Fallback
-  var beschSection=document.getElementById('detail-beschreibung-section');
+  var beschSec=document.getElementById('detail-beschreibung-section');
   if(s.beschreibung&&s.beschreibung.trim()&&!s.taetigkeiten){
     document.getElementById('detail-beschreibung-text').textContent=s.beschreibung;
-    beschSection.style.display='block';
-  } else {
-    beschSection.style.display='none';
-  }
+    beschSec.style.display='block';
+  } else beschSec.style.display='none';
 
   document.getElementById('modal-detail').classList.add('open');
 }
@@ -562,22 +532,28 @@ function getYoutubeEmbed(url){
   return match?'https://www.youtube.com/embed/'+match[1]:null;
 }
 
-// "Jetzt bewerben" Button im Detail Modal
+function linkKopieren(){
+  var url='https://www.deinausbildungscheck.de/stellen.html?stelle='+aktuelleStelle.id;
+  navigator.clipboard.writeText(url).catch(()=>{
+    var ta=document.createElement('textarea');ta.value=url;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+  });
+  var btn=document.getElementById('share-copy-btn');
+  btn.textContent='✅ Kopiert!';btn.classList.add('copied');
+  setTimeout(()=>{btn.textContent='📋 Link kopieren';btn.classList.remove('copied');},2500);
+}
+
 function bewerbenAusDetail(){
   closeAllModals();
   if(!aktuelleStelle) return;
   setTimeout(()=>bewerbenKlick(aktuelleStelle.id),100);
 }
 
-// ===== BEWERBUNG FLOW =====
 function bewerbenKlick(stelleId){
   aktuelleStelle=alleStellen.find(s=>s.id===stelleId);
   if(!aktuelleStelle) return;
-  if(aktuellerUser&&aktuellesProfil){
-    zeigeEingeloggtModal();
-  } else {
-    zeigeAuthModal();
-  }
+  if(aktuellerUser&&aktuellesProfil) zeigeEingeloggtModal();
+  else zeigeAuthModal();
 }
 
 function zeigeAuthModal(){
@@ -590,8 +566,7 @@ function zeigeAuthModal(){
 }
 
 function zeigeEingeloggtModal(){
-  var s=aktuelleStelle;
-  var p=aktuellesProfil;
+  var s=aktuelleStelle,p=aktuellesProfil;
   document.getElementById('eingeloggt-stelle').textContent=(s.betrieb?.name||'')+' · '+(s.standort||'');
   document.getElementById('eingeloggt-title').textContent=s.beruf||'';
   document.getElementById('eingeloggt-tags').innerHTML=tagsHtml(s);
@@ -601,9 +576,8 @@ function zeigeEingeloggtModal(){
   document.getElementById('antwort2-eingeloggt').value='';
   document.getElementById('success-eingeloggt').style.display='none';
   document.getElementById('fragen-eingeloggt').style.display='block';
-  var name=(p.vorname||'')+' '+(p.nachname||'');
   document.getElementById('banner-avatar').textContent=(p.vorname||'?').charAt(0).toUpperCase();
-  document.getElementById('banner-name').textContent=name.trim()||aktuellerUser.email;
+  document.getElementById('banner-name').textContent=((p.vorname||'')+' '+(p.nachname||'')).trim()||aktuellerUser.email;
   document.getElementById('banner-sub').textContent=(p.strasse?p.strasse+', ':'')+( p.plz||'')+' '+(p.ort||'');
   document.getElementById('modal-eingeloggt').classList.add('open');
 }
@@ -629,57 +603,24 @@ function tagsHtml(s){
     (s.standort?`<span class="modal-tag">📍 ${s.standort}</span>`:'');
 }
 
-function goLogin(){
-  localStorage.setItem('bewerbung-stelle-id',aktuelleStelle.id);
-  window.location.href='konto.html?redirect=stellen';
-}
-function goRegister(){
-  localStorage.setItem('bewerbung-stelle-id',aktuelleStelle.id);
-  window.location.href='konto.html?tab=register&redirect=stellen';
-}
+function goLogin(){localStorage.setItem('bewerbung-stelle-id',aktuelleStelle.id);window.location.href='konto.html?redirect=stellen';}
+function goRegister(){localStorage.setItem('bewerbung-stelle-id',aktuelleStelle.id);window.location.href='konto.html?tab=register&redirect=stellen';}
 
-// SUBMIT EINGELOGGT
 async function submitEingeloggt(){
-  var bewerbungData={
-    stellen_id:aktuelleStelle.id,
-    vorname:aktuellesProfil.vorname,
-    nachname:aktuellesProfil.nachname,
-    email:aktuellerUser.email,
-    telefon:aktuellesProfil.telefon,
-    wohnort:(aktuellesProfil.strasse?aktuellesProfil.strasse+', ':'')+(aktuellesProfil.plz||'')+' '+(aktuellesProfil.ort||''),
-    schulabschluss:aktuellesProfil.schulabschluss,
-    noch_schueler:aktuellesProfil.noch_schueler,
-    antwort1:document.getElementById('antwort1-eingeloggt').value.trim(),
-    antwort2:document.getElementById('antwort2-eingeloggt').value.trim(),
-    status:'neu'
-  };
-  await sendBewerbung(bewerbungData);
+  var data={stellen_id:aktuelleStelle.id,vorname:aktuellesProfil.vorname,nachname:aktuellesProfil.nachname,email:aktuellerUser.email,telefon:aktuellesProfil.telefon,wohnort:(aktuellesProfil.strasse?aktuellesProfil.strasse+', ':'')+( aktuellesProfil.plz||'')+' '+(aktuellesProfil.ort||''),schulabschluss:aktuellesProfil.schulabschluss,noch_schueler:aktuellesProfil.noch_schueler,antwort1:document.getElementById('antwort1-eingeloggt').value.trim(),antwort2:document.getElementById('antwort2-eingeloggt').value.trim(),status:'neu'};
+  await sendBewerbung(data);
   document.getElementById('success-eingeloggt').style.display='block';
   document.getElementById('fragen-eingeloggt').style.display='none';
   setTimeout(closeAllModals,3000);
 }
 
-// SUBMIT GAST
 async function submitGast(){
-  var datenschutz=document.getElementById('gast-datenschutz').checked;
-  if(!datenschutz){alert('Bitte bestätige die Datenschutzerklärung!');return;}
+  if(!document.getElementById('gast-datenschutz').checked){alert('Bitte bestätige die Datenschutzerklärung!');return;}
   var vorname=document.getElementById('gast-vorname').value.trim();
   var email=document.getElementById('gast-email').value.trim();
   if(!vorname||!email){alert('Bitte Vorname und E-Mail ausfüllen!');return;}
-  var bewerbungData={
-    stellen_id:aktuelleStelle.id,
-    vorname,
-    nachname:document.getElementById('gast-nachname').value.trim(),
-    email,
-    telefon:document.getElementById('gast-telefon').value.trim(),
-    wohnort:document.getElementById('gast-wohnort').value.trim(),
-    schulabschluss:document.getElementById('gast-abschluss').value,
-    noch_schueler:document.getElementById('gast-schueler').checked,
-    antwort1:document.getElementById('gast-antwort1').value.trim(),
-    antwort2:document.getElementById('gast-antwort2').value.trim(),
-    status:'neu'
-  };
-  await sendBewerbung(bewerbungData);
+  var data={stellen_id:aktuelleStelle.id,vorname,nachname:document.getElementById('gast-nachname').value.trim(),email,telefon:document.getElementById('gast-telefon').value.trim(),wohnort:document.getElementById('gast-wohnort').value.trim(),schulabschluss:document.getElementById('gast-abschluss').value,noch_schueler:document.getElementById('gast-schueler').checked,antwort1:document.getElementById('gast-antwort1').value.trim(),antwort2:document.getElementById('gast-antwort2').value.trim(),status:'neu'};
+  await sendBewerbung(data);
   document.getElementById('success-gast').style.display='block';
   document.getElementById('gast-form-inhalt').style.display='none';
   setTimeout(closeAllModals,3000);
@@ -687,31 +628,15 @@ async function submitGast(){
 
 async function sendBewerbung(data){
   await sb.from('bewerbungen').insert(data);
-  fetch('https://trccxzjdddhbqjgyzlkv.supabase.co/functions/v1/bewerbung-weiterleiten',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':'Bearer '+SUPABASE_KEY},
-    body:JSON.stringify({bewerbung:{
-      ...data,
-      stelle:aktuelleStelle.beruf||'',
-      betrieb:aktuelleStelle.betrieb?.name||'',
-      betrieb_email:aktuelleStelle.betrieb?.email||'',
-      frage1:aktuelleStelle.frage1||'',
-      frage2:aktuelleStelle.frage2||''
-    }})
-  });
+  fetch('https://trccxzjdddhbqjgyzlkv.supabase.co/functions/v1/bewerbung-weiterleiten',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+SUPABASE_KEY},body:JSON.stringify({bewerbung:{...data,stelle:aktuelleStelle.beruf||'',betrieb:aktuelleStelle.betrieb?.name||'',betrieb_email:aktuelleStelle.betrieb?.email||'',frage1:aktuelleStelle.frage1||'',frage2:aktuelleStelle.frage2||''}})});
 }
 
 function closeAllModals(){
-  // YouTube iframe stoppen beim Schließen
   document.getElementById('detail-youtube-iframe').src='';
   document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.remove('open'));
+  history.replaceState(null,'','stellen.html');
 }
-document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',function(e){
-  if(e.target===this){
-    document.getElementById('detail-youtube-iframe').src='';
-    closeAllModals();
-  }
-}));
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',function(e){if(e.target===this)closeAllModals()}));
 
 function toggleSchuelerGast(){
   var checked=document.getElementById('gast-schueler').checked;
@@ -723,38 +648,18 @@ function toggleSchuelerGast(){
   opts.forEach(o=>{var opt=document.createElement('option');opt.value=o;opt.textContent=o;sel.appendChild(opt);});
 }
 
-// Nach Login zurückleiten
 var params=new URLSearchParams(window.location.search);
 if(params.get('redirect')==='stellen'){
   var stelleId=localStorage.getItem('bewerbung-stelle-id');
-  if(stelleId){
-    ladeStellen().then(()=>{
-      setTimeout(()=>{
-        aktuelleStelle=alleStellen.find(s=>s.id===stelleId);
-        if(aktuelleStelle&&aktuellerUser&&aktuellesProfil) zeigeEingeloggtModal();
-      },500);
-    });
-  } else ladeStellen();
+  if(stelleId){ladeStellen().then(()=>{setTimeout(()=>{aktuelleStelle=alleStellen.find(s=>s.id===stelleId);if(aktuelleStelle&&aktuellerUser&&aktuellesProfil)zeigeEingeloggtModal();},500);});}
+  else ladeStellen();
 } else ladeStellen();
 </script>
-
 <script>
-function toggleMenu(){
-  var menu=document.getElementById('mobile-menu');
-  var ham=document.getElementById('hamburger');
-  menu.classList.toggle('open');
-  ham.classList.toggle('open');
-}
-if(window.innerWidth<=768){
-  document.getElementById('hamburger').style.display='flex';
-}
-window.addEventListener('resize',function(){
-  var ham=document.getElementById('hamburger');
-  if(window.innerWidth<=768) ham.style.display='flex';
-  else{ham.style.display='none';document.getElementById('mobile-menu').classList.remove('open');}
-});
+function toggleMenu(){var menu=document.getElementById('mobile-menu');var ham=document.getElementById('hamburger');menu.classList.toggle('open');ham.classList.toggle('open');}
+if(window.innerWidth<=768){document.getElementById('hamburger').style.display='flex';}
+window.addEventListener('resize',function(){var ham=document.getElementById('hamburger');if(window.innerWidth<=768)ham.style.display='flex';else{ham.style.display='none';document.getElementById('mobile-menu').classList.remove('open');}});
 </script>
-
 <style>
 @media(max-width:768px){
   nav{padding:0 1rem;height:56px}
@@ -772,10 +677,10 @@ window.addEventListener('resize',function(){
   .apply-btn{flex:1;margin-left:.5rem;padding:11px}
   .jobs-list{gap:10px}
   .header-search{margin:0 1rem}
-  /* Detail Modal mobile */
   .modal{border-radius:20px 20px 0 0;max-height:92vh;position:fixed;bottom:0;left:0;right:0;max-width:100%}
   .modal-overlay{align-items:flex-end;padding:0}
   .detail-modal{max-width:100%}
+  .share-bar{flex-direction:column;align-items:flex-start;gap:8px}
   .form-row{grid-template-columns:1fr}
   footer{flex-direction:column;padding:1.25rem}
   .footer-links{flex-wrap:wrap}
