@@ -205,7 +205,7 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
         <span class="location-icon">📍</span>
       </div>
       <div class="radius-label"><span>Umkreis</span><strong id="radiusVal">25 km</strong></div>
-      <input type="range" class="radius-slider" min="5" max="100" value="25" step="5" oninput="document.getElementById('radiusVal').textContent=this.value+' km'">
+      <input type="range" class="radius-slider" min="5" max="100" value="25" step="5" oninput="document.getElementById('radiusVal').textContent=this.value+' km';filterStellen()">
       <div class="radius-ticks"><span>5 km</span><span>50 km</span><span>100 km</span></div>
     </div>
   </aside>
@@ -451,23 +451,87 @@ function zeigeStellen(data){
     </div>`).join('');
 }
 
+// Geocoding Cache & Helpers
+var geocodeCache={};
+
+async function geocodeCity(city){
+  if(!city||!city.trim()) return null;
+  var key=city.trim().toLowerCase();
+  if(geocodeCache[key]) return geocodeCache[key];
+  try{
+    var resp=await fetch('https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(city+', Deutschland')+'&format=json&limit=1',{headers:{'Accept-Language':'de'}});
+    var data=await resp.json();
+    if(data&&data.length){
+      var coords={lat:parseFloat(data[0].lat),lng:parseFloat(data[0].lon)};
+      geocodeCache[key]=coords;
+      return coords;
+    }
+  }catch(e){}
+  return null;
+}
+
+function haversine(lat1,lng1,lat2,lng2){
+  var R=6371,dLat=(lat2-lat1)*Math.PI/180,dLng=(lng2-lng1)*Math.PI/180;
+  var a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+// Debounce damit nicht bei jedem Tastendruck eine Geocoding-Anfrage geht
+var filterTimeout=null;
 function filterStellen(){
+  clearTimeout(filterTimeout);
+  filterTimeout=setTimeout(doFilter,400);
+}
+
+async function doFilter(){
   var search=document.getElementById('search-input').value.toLowerCase();
-  var ort=document.getElementById('ort-filter').value.toLowerCase();
+  var ort=document.getElementById('ort-filter').value.trim();
+  var radius=parseInt(document.querySelector('.radius-slider').value)||25;
   var checked=[...document.querySelectorAll('#berufsfeld-filter input:checked')].map(cb=>cb.id.replace('bf-',''));
-  var gefiltert=alleStellen.filter(s=>{
+
+  // Suchtext + Berufsfeld vorfiltern (synchron, schnell)
+  var vorfilter=alleStellen.filter(s=>{
     var mSearch=!search||(s.beruf||'').toLowerCase().includes(search)||(s.standort||'').toLowerCase().includes(search)||(s.betrieb?.name||'').toLowerCase().includes(search);
-    var mOrt=!ort||(s.standort||'').toLowerCase().includes(ort);
     var mBeruf=!checked.length||checked.includes(s.berufsfeld_id);
-    return mSearch&&mOrt&&mBeruf;
+    return mSearch&&mBeruf;
   });
+
+  if(!ort){zeigeStellen(vorfilter);return;}
+
+  // Ladeindikator
+  var ortInput=document.getElementById('ort-filter');
+  ortInput.style.borderColor='var(--ice)';
+
+  var userCoords=await geocodeCity(ort);
+  ortInput.style.borderColor=userCoords?'var(--ice)':'#EF4444';
+
+  if(!userCoords){
+    // Fallback: einfacher Textvergleich wenn Geocoding fehlschlägt
+    var fallback=vorfilter.filter(s=>(s.standort||'').toLowerCase().includes(ort.toLowerCase()));
+    zeigeStellen(fallback);
+    return;
+  }
+
+  // Alle Stellenorte geocodieren (gecacht nach erstem Mal)
+  var ergebnisse=await Promise.all(vorfilter.map(async s=>{
+    if(!s.standort) return null;
+    var jobCoords=await geocodeCity(s.standort);
+    if(!jobCoords) return s; // Stelle behalten wenn Ort nicht geocodiert werden kann
+    var dist=haversine(userCoords.lat,userCoords.lng,jobCoords.lat,jobCoords.lng);
+    return dist<=radius?{...s,_distanz:Math.round(dist)}:null;
+  }));
+
+  var gefiltert=ergebnisse.filter(Boolean).sort((a,b)=>(a._distanz||0)-(b._distanz||0));
   zeigeStellen(gefiltert);
 }
 
 function resetFilter(){
   document.getElementById('search-input').value='';
   document.getElementById('ort-filter').value='';
+  document.getElementById('ort-filter').style.borderColor='';
   document.querySelectorAll('#berufsfeld-filter input').forEach(cb=>cb.checked=false);
+  document.querySelector('.radius-slider').value=25;
+  document.getElementById('radiusVal').textContent='25 km';
   zeigeStellen(alleStellen);
 }
 
