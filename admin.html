@@ -68,10 +68,11 @@ tr:hover td{background:var(--gray)}
 /* MODAL */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(2,13,29,0.5);z-index:100;align-items:center;justify-content:center;padding:1rem}
 .modal-bg.open{display:flex}
-.modal-box{background:#fff;border-radius:16px;padding:2rem;width:100%;max-width:540px;max-height:90vh;overflow-y:auto}
+.modal-box{background:#fff;border-radius:16px;padding:2rem;width:100%;max-width:600px;max-height:90vh;overflow-y:auto}
 .modal-title{font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;color:var(--dark);margin-bottom:1.5rem}
 .form-group{margin-bottom:1rem}
 .form-label{font-size:13px;font-weight:600;color:var(--dark);margin-bottom:.35rem;display:block}
+.form-label-hint{font-size:11px;color:var(--text2);font-weight:400;margin-left:5px}
 .form-input{width:100%;border:1.5px solid var(--gray2);border-radius:9px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none}
 .form-input:focus{border-color:var(--ice)}
 .form-select{width:100%;border:1.5px solid var(--gray2);border-radius:9px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;background:#fff}
@@ -80,6 +81,9 @@ tr:hover td{background:var(--gray)}
 .btn-save{background:var(--navy);color:#fff;border:none;padding:10px 24px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
 .btn-cancel{background:transparent;color:var(--text2);border:1.5px solid var(--gray2);padding:10px 24px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;cursor:pointer}
 .btn-delete{background:#FEE2E2;color:var(--red);border:none;padding:10px 24px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
+
+/* SECTION DIVIDER in modal */
+.form-section{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ice);margin:1.5rem 0 .75rem;padding-bottom:.5rem;border-bottom:1.5px solid var(--ice-light)}
 
 /* BEWERBUNG DETAIL */
 .bewerbung-card{background:#fff;border-radius:14px;border:1.5px solid var(--gray2);padding:1.5rem;margin-bottom:1rem}
@@ -251,6 +255,9 @@ tr:hover td{background:var(--gray)}
   <div class="modal-box">
     <div class="modal-title" id="stelle-modal-title">Stelle hinzufügen</div>
     <input type="hidden" id="stelle-id">
+
+    <!-- BASISDATEN -->
+    <div class="form-section">Basisdaten</div>
     <div class="form-group"><label class="form-label">Betrieb *</label>
       <select class="form-select" id="stelle-betrieb"><option value="">Bitte auswählen...</option></select>
     </div>
@@ -266,7 +273,32 @@ tr:hover td{background:var(--gray)}
       <div class="form-group"><label class="form-label">Ausbildungsbeginn</label><input class="form-input" id="stelle-beginn" placeholder="Sep 2025"></div>
       <div class="form-group"><label class="form-label">Dauer</label><input class="form-input" id="stelle-dauer" placeholder="3 Jahre"></div>
     </div>
-    <div class="form-group"><label class="form-label">Beschreibung</label><textarea class="form-input" id="stelle-beschreibung" rows="3" placeholder="Kurze Beschreibung der Stelle..."></textarea></div>
+
+    <!-- STELLENBESCHREIBUNG -->
+    <div class="form-section">Stellenbeschreibung</div>
+    <div class="form-group">
+      <label class="form-label">Tätigkeiten <span class="form-label-hint">Was macht der Azubi?</span></label>
+      <textarea class="form-input" id="stelle-taetigkeiten" rows="5" placeholder="• Wartung und Reparatur von Fahrzeugen&#10;• Diagnose von Fehlern mit moderner Messtechnik&#10;• Einbau von Elektronik und Fahrerassistenzsystemen&#10;• Kundengespräche und Beratung&#10;(Zeilenweise eingeben – jede Zeile wird als Punkt dargestellt)"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Arbeitgeber-Wünsche <span class="form-label-hint">Was erwartet der Betrieb?</span></label>
+      <textarea class="form-input" id="stelle-arbeitgeber-wuensche" rows="5" placeholder="• Mindestens Hauptschulabschluss&#10;• Technisches Interesse und handwerkliches Geschick&#10;• Teamfähigkeit und Zuverlässigkeit&#10;• Führerschein Klasse B von Vorteil&#10;(Zeilenweise eingeben – jede Zeile wird als Punkt dargestellt)"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Kurzbeschreibung <span class="form-label-hint">Für die Stellenkarte (optional)</span></label>
+      <textarea class="form-input" id="stelle-beschreibung" rows="2" placeholder="Kurze Beschreibung der Stelle für die Übersicht..."></textarea>
+    </div>
+
+    <!-- YOUTUBE -->
+    <div class="form-section">YouTube-Video</div>
+    <div class="form-group">
+      <label class="form-label">YouTube-Link zum Ausbildungsberuf <span class="form-label-hint">optional</span></label>
+      <input class="form-input" id="stelle-youtube" placeholder="https://www.youtube.com/watch?v=... oder https://youtu.be/...">
+      <div style="font-size:12px;color:var(--text2);margin-top:4px">🎬 Das Video wird direkt im Detail-Modal des Azubis eingebettet</div>
+    </div>
+
+    <!-- FRAGEN & SETTINGS -->
+    <div class="form-section">Bewerberfragen & Einstellungen</div>
     <div class="form-group"><label class="form-label">Frage 1 für Bewerber</label><input class="form-input" id="stelle-frage1" placeholder="z.B. Warum interessiert dich dieser Beruf?"></div>
     <div class="form-group"><label class="form-label">Frage 2 für Bewerber</label><input class="form-input" id="stelle-frage2" placeholder="z.B. Hast du bereits Erfahrungen in diesem Bereich?"></div>
     <div class="form-group"><label class="form-label">Status</label>
@@ -275,6 +307,7 @@ tr:hover td{background:var(--gray)}
         <option value="false">Inaktiv</option>
       </select>
     </div>
+
     <div class="modal-btns">
       <button class="btn-delete" id="stelle-delete-btn" onclick="deleteStelle()" style="display:none">Löschen</button>
       <button class="btn-cancel" onclick="closeModal('stelle-modal')">Abbrechen</button>
@@ -383,12 +416,9 @@ async function loadBetriebe(){
     <td>${b.email}</td>
     <td>${b.telefon||'-'}</td>
     <td>${b.stellen?.length||0} Stellen</td>
-    <td>
-      <button class="action-btn" onclick="openBetriebModal('${b.id}')">✏️</button>
-    </td>
+    <td><button class="action-btn" onclick="openBetriebModal('${b.id}')">✏️</button></td>
   </tr>`).join('');
 
-  // Update betrieb select in stelle modal
   var sel=document.getElementById('stelle-betrieb');
   sel.innerHTML='<option value="">Bitte auswählen...</option>';
   data.forEach(b=>sel.innerHTML+=`<option value="${b.id}">${b.name}</option>`);
@@ -426,11 +456,8 @@ async function saveBetrieb(){
     adresse:document.getElementById('betrieb-adresse').value
   };
   if(!data.name||!data.email){alert('Bitte Name und E-Mail ausfüllen!');return;}
-  if(id){
-    await sb.from('betriebe').update(data).eq('id',id);
-  } else {
-    await sb.from('betriebe').insert(data);
-  }
+  if(id){await sb.from('betriebe').update(data).eq('id',id);}
+  else{await sb.from('betriebe').insert(data);}
   closeModal('betrieb-modal');
   await loadBetriebe();
   loadDashboard();
@@ -450,8 +477,7 @@ async function deleteBetrieb(){
 // STELLEN
 var stellenData=[];
 async function loadStellen(){
-  var {data, error}=await sb.from('stellen').select('*, betrieb:betrieb_id(name)').order('created_at',{ascending:false});
-  console.log('Stellen data:', data, 'Error:', error);
+  var {data,error}=await sb.from('stellen').select('*, betrieb:betrieb_id(name)').order('created_at',{ascending:false});
   stellenData=data||[];
   var tb=document.getElementById('stellen-table');
   if(error){tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:2rem;color:red">Fehler: '+error.message+'</td></tr>';return;}
@@ -467,20 +493,16 @@ async function loadStellen(){
 }
 
 function openStelleModal(id){
-  document.getElementById('stelle-id').value='';
-  document.getElementById('stelle-beruf').value='';
-  document.getElementById('stelle-gehalt').value='';
-  document.getElementById('stelle-standort').value='';
-  document.getElementById('stelle-beginn').value='';
-  document.getElementById('stelle-dauer').value='';
-  document.getElementById('stelle-beschreibung').value='';
-  document.getElementById('stelle-frage1').value='';
-  document.getElementById('stelle-frage2').value='';
+  // Reset alle Felder
+  ['stelle-id','stelle-beruf','stelle-gehalt','stelle-standort','stelle-beginn','stelle-dauer',
+   'stelle-beschreibung','stelle-taetigkeiten','stelle-arbeitgeber-wuensche','stelle-youtube',
+   'stelle-frage1','stelle-frage2'].forEach(f=>document.getElementById(f).value='');
   document.getElementById('stelle-aktiv').value='true';
   document.getElementById('stelle-betrieb').value='';
   document.getElementById('stelle-berufsfeld').value='';
   document.getElementById('stelle-delete-btn').style.display='none';
   document.getElementById('stelle-modal-title').textContent='Stelle hinzufügen';
+
   if(id){
     var s=stellenData.find(x=>x.id===id);
     if(s){
@@ -491,6 +513,9 @@ function openStelleModal(id){
       document.getElementById('stelle-beginn').value=s.beginn||'';
       document.getElementById('stelle-dauer').value=s.dauer||'';
       document.getElementById('stelle-beschreibung').value=s.beschreibung||'';
+      document.getElementById('stelle-taetigkeiten').value=s.taetigkeiten||'';
+      document.getElementById('stelle-arbeitgeber-wuensche').value=s.arbeitgeber_wuensche||'';
+      document.getElementById('stelle-youtube').value=s.youtube_url||'';
       document.getElementById('stelle-frage1').value=s.frage1||'';
       document.getElementById('stelle-frage2').value=s.frage2||'';
       document.getElementById('stelle-aktiv').value=s.aktiv?'true':'false';
@@ -514,16 +539,16 @@ async function saveStelle(){
     beginn:document.getElementById('stelle-beginn').value,
     dauer:document.getElementById('stelle-dauer').value,
     beschreibung:document.getElementById('stelle-beschreibung').value,
+    taetigkeiten:document.getElementById('stelle-taetigkeiten').value,
+    arbeitgeber_wuensche:document.getElementById('stelle-arbeitgeber-wuensche').value,
+    youtube_url:document.getElementById('stelle-youtube').value,
     frage1:document.getElementById('stelle-frage1').value,
     frage2:document.getElementById('stelle-frage2').value,
     aktiv:document.getElementById('stelle-aktiv').value==='true'
   };
   if(!data.beruf||!data.betrieb_id){alert('Bitte Betrieb und Beruf ausfüllen!');return;}
-  if(id){
-    await sb.from('stellen').update(data).eq('id',id);
-  } else {
-    await sb.from('stellen').insert(data);
-  }
+  if(id){await sb.from('stellen').update(data).eq('id',id);}
+  else{await sb.from('stellen').insert(data);}
   closeModal('stelle-modal');
   await loadStellen();
   loadDashboard();
@@ -594,8 +619,7 @@ async function loadBewerbungen(){
   `).join('');
 }
 
-
-async function weiterleitenBewerbung(id, betriebEmail, name, bewerberEmail, stelle){
+async function weiterleitenBewerbung(id,betriebEmail,name,bewerberEmail,stelle){
   if(!betriebEmail){alert('Keine Betrieb-E-Mail hinterlegt!');return;}
   var mailto='mailto:'+betriebEmail+'?subject=Neue Bewerbung: '+encodeURIComponent(stelle)+'&body='+encodeURIComponent('Hallo,\n\nes liegt eine neue Bewerbung für die Stelle "'+stelle+'" vor.\n\nBewerber: '+name+'\nE-Mail: '+bewerberEmail+'\n\nBitte nehmen Sie Kontakt auf.\n\nMit freundlichen Grüßen\nAusbildungsCheck');
   window.open(mailto);
@@ -659,20 +683,15 @@ async function savePreis(id){
 
 // BEWERBER
 async function loadBewerber(){
-  var {data,error}=await sb.from("bewerber_view").select("*");
-  var tb=document.getElementById("bewerber-table");
-  if(error||!data||!data.length){tb.innerHTML="<tr><td colspan=6 style=\"text-align:center;padding:2rem;color:#5A7490\">Noch keine registrierten Bewerber</td></tr>";return;}
-  tb.innerHTML=data.map(b=>`<tr><td><strong>${b.vorname||"-"} ${b.nachname||""}</strong></td><td>${b.email||"-"}</td><td>${(b.strasse||"")+", "+(b.plz||"")+" "+(b.ort||"-")}</td><td>${b.telefon||"-"}</td><td>${b.schulabschluss||"-"}${b.noch_schueler&&b.abschluss_jahr?" (voraus. "+b.abschluss_jahr+")":""}</td><td>${new Date(b.created_at).toLocaleDateString("de-DE")}</td></tr>`).join("");
-}
-async function loadBewerber_OLD(){
-  var {data}=await sb.from('profile').select('*').order('created_at',{ascending:false});
+  var {data,error}=await sb.from('bewerber_view').select('*');
   var tb=document.getElementById('bewerber-table');
-  if(!data||!data.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:2rem;color:#5A7490">Noch keine registrierten Bewerber</td></tr>';return;}
+  if(error||!data||!data.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:2rem;color:#5A7490">Noch keine registrierten Bewerber</td></tr>';return;}
   tb.innerHTML=data.map(b=>`<tr>
-    <td><strong>${b.vorname||''} ${b.nachname||''}</strong></td>
-    <td>${b.strasse||'-'}, ${b.plz||''} ${b.ort||''}</td>
+    <td><strong>${b.vorname||'-'} ${b.nachname||''}</strong></td>
+    <td>${b.email||'-'}</td>
+    <td>${(b.strasse||'')+', '+(b.plz||'')+' '+(b.ort||'-')}</td>
     <td>${b.telefon||'-'}</td>
-    <td>${b.schulabschluss||'-'}${b.noch_schueler&&b.abschluss_jahr?' (voraussichtlich '+b.abschluss_jahr+')':''}</td>
+    <td>${b.schulabschluss||'-'}${b.noch_schueler&&b.abschluss_jahr?' (voraus. '+b.abschluss_jahr+')':''}</td>
     <td>${new Date(b.created_at).toLocaleDateString('de-DE')}</td>
   </tr>`).join('');
 }
@@ -691,7 +710,6 @@ async function loadBerufsfelder(){
     <td><button class="action-btn" onclick="openBerufsfeldModal('${b.id}')">✏️</button></td>
   </tr>`).join('');
 
-  // Update berufsfeld select in stelle modal
   var sel=document.getElementById('stelle-berufsfeld');
   sel.innerHTML='<option value="">Bitte auswählen...</option>';
   data.forEach(b=>sel.innerHTML+=`<option value="${b.id}">${b.emoji||''} ${b.name}</option>`);
