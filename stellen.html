@@ -227,8 +227,13 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
   <div class="modal detail-modal" style="max-width:560px">
     <div class="modal-header">
       <button class="modal-close" onclick="closeAllModals()">✕</button>
-      <div class="modal-stelle" id="detail-stelle"></div>
-      <div class="modal-title" id="detail-title"></div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:.75rem">
+        <div id="detail-logo" style="width:48px;height:48px;border-radius:11px;background:var(--ice-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden"></div>
+        <div>
+          <div class="modal-stelle" id="detail-stelle"></div>
+          <div class="modal-title" id="detail-title"></div>
+        </div>
+      </div>
     </div>
     <div class="modal-tags" id="detail-tags"></div>
     <!-- SHARE -->
@@ -398,7 +403,7 @@ sb.auth.getSession().then(async({data:{session}})=>{
 
 async function ladeStellen(){
   var[{data:stellen},{data:berufsfelder}]=await Promise.all([
-    sb.from('stellen').select('*, betrieb:betrieb_id(name,email), berufsfeld:berufsfeld_id(name,emoji)').eq('aktiv',true).order('created_at',{ascending:false}),
+    sb.from('stellen').select('*, betrieb:betrieb_id(name,email,logo_url), berufsfeld:berufsfeld_id(name,emoji)').eq('aktiv',true).order('created_at',{ascending:false}),
     sb.from('berufsfelder').select('*').order('name')
   ]);
   if(!stellen){document.getElementById('jobs-list').innerHTML='<div class="empty-state">😔 Keine Stellen gefunden</div>';return;}
@@ -429,7 +434,7 @@ function zeigeStellen(data){
   if(!data.length){list.innerHTML='<div class="empty-state">😔 Keine Stellen gefunden</div>';return;}
   list.innerHTML=data.map((s,i)=>`
     <div class="job-card ${i===0?'featured':''}" onclick="zeigeDetail('${s.id}')">
-      <div class="job-logo">${s.berufsfeld?.emoji||s.beruf?.charAt(0)||'📋'}</div>
+      <div class="job-logo">${s.betrieb?.logo_url?`<img src="${s.betrieb.logo_url}" alt="${s.betrieb.name}" style="width:100%;height:100%;object-fit:contain;border-radius:10px">`:s.berufsfeld?.emoji||s.beruf?.charAt(0)||'📋'}</div>
       <div>
         <div class="job-top-row">
           <span class="job-title-text">${s.beruf||'Ausbildungsstelle'}</span>
@@ -549,6 +554,13 @@ function zeigeDetail(stelleId){
   document.getElementById('detail-stelle').textContent=(s.betrieb?.name||'')+' · '+(s.standort||'');
   document.getElementById('detail-title').textContent=s.beruf||'';
   document.getElementById('detail-tags').innerHTML=tagsHtml(s);
+  // Logo im Modal
+  var logoEl=document.getElementById('detail-logo');
+  if(s.betrieb?.logo_url){
+    logoEl.innerHTML=`<img src="${s.betrieb.logo_url}" alt="${s.betrieb.name||''}" style="width:100%;height:100%;object-fit:contain;border-radius:9px">`;
+  } else {
+    logoEl.innerHTML=s.berufsfeld?.emoji||s.beruf?.charAt(0)||'📋';
+  }
 
   // Share
   var shareUrl='https://www.deinausbildungscheck.de/stellen.html?stelle='+s.id;
