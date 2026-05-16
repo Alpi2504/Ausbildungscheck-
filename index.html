@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="apple-touch-icon" href="favicon.svg">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AusbildungsCheck – Deine Ausbildung. Deine Zukunft.</title>
 <meta name="description" content="Finde deine Ausbildungsstelle bei geprüften Partnerbetrieben in deiner Region. Direkt bewerben, echte Einblicke, faire Gehaltsinfos.">
@@ -19,6 +19,13 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AusbildungsCheck – Deine Ausbildung. Deine Zukunft.">
 <meta name="twitter:description" content="Finde deine Ausbildungsstelle bei geprüften Partnerbetrieben in deiner Region. Direkt bewerben, echte Einblicke, faire Gehaltsinfos.">
+<!-- PWA -->
+<meta name="theme-color" content="#042C53">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AusbildungsCheck">
+<link rel="manifest" href="/manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
@@ -116,8 +123,6 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,0.06);paddin
 .footer-links{display:flex;gap:1.25rem}
 .footer-links a{font-size:12px;color:rgba(255,255,255,0.45);text-decoration:none}
 .footer-copy{font-size:11px;color:rgba(255,255,255,0.3)}
-
-/* MOBILE */
 @media(max-width:768px){
   nav{padding:0 1rem;height:56px}
   .nav-links{display:none}
@@ -142,7 +147,6 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,0.06);paddin
 </style>
 </head>
 <body>
-
 <nav>
   <a class="logo" href="index.html">Ausbildungs<span>Check</span></a>
   <div class="nav-links">
@@ -264,7 +268,6 @@ const SUPABASE_URL='https://trccxzjdddhbqjgyzlkv.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyY2N4empkZGRoYnFqZ3l6bGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDgyMjIsImV4cCI6MjA5NDA4NDIyMn0.xS5-9Tq1-i9_K9lYDuayomybBazHmnvY29K24LvRxaQ';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,storageKey:'ausbildungscheck-auth'}});
 
-// Login Status
 sb.auth.getSession().then(({data:{session}})=>{
   if(session){
     document.getElementById('nav-konto').textContent='👤 Mein Konto';
@@ -279,16 +282,13 @@ async function ladeStartseite(){
     sb.from('betriebe').select('id',{count:'exact'}),
     sb.from('berufsfelder').select('name,emoji').order('name').limit(6)
   ]);
-
   if(stellen) document.getElementById('stat-stellen').textContent=stellen.length+' Aktuelle Stellen';
   if(betriebe) document.getElementById('stat-betriebe').textContent=(betriebe.length||0)+' Partnerbetriebe';
-
   if(berufsfelder&&berufsfelder.length){
     document.getElementById('search-tags').innerHTML=berufsfelder.map(b=>
       `<span class="search-tag" onclick="goSearchTerm('${b.name}')">${b.emoji||''} ${b.name}</span>`
     ).join('');
   }
-
   var grid=document.getElementById('jobs-grid');
   if(!stellen||!stellen.length){
     grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text2)">Bald sind hier die ersten Stellen zu finden! 🚀</div>';
@@ -324,6 +324,14 @@ function toggleMenu(){
 }
 
 ladeStartseite();
+</script>
+<!-- PWA Service Worker -->
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('/sw.js');
+  });
+}
 </script>
 </body>
 </html>
