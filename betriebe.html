@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="apple-touch-icon" href="favicon.svg">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ausbildungsbetrieb werden – AusbildungsCheck</title>
 <meta name="description" content="Schalte deine Ausbildungsstelle auf AusbildungsCheck und erreiche motivierte Bewerber aus deiner Region. Jetzt Partnerwerden.">
@@ -19,6 +19,13 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ausbildungsbetrieb werden – AusbildungsCheck">
 <meta name="twitter:description" content="Schalte deine Ausbildungsstelle auf AusbildungsCheck und erreiche motivierte Bewerber aus deiner Region. Jetzt Partnerwerden.">
+<!-- PWA -->
+<meta name="theme-color" content="#042C53">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AusbildungsCheck">
+<link rel="manifest" href="/manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -33,7 +40,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .nav-links a.active{color:var(--ice);font-weight:700}
 .nav-cta{background:var(--navy);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
 .nav-login{background:transparent;color:var(--navy);border:1.5px solid rgba(4,44,83,0.2);padding:7px 16px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:5px}
-
 .hero{background:var(--navy);padding:100px 2rem 5rem;position:relative;overflow:hidden}
 .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 100% 50%,rgba(79,170,223,0.1),transparent 60%)}
 .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(79,170,223,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(79,170,223,0.04) 1px,transparent 1px);background-size:50px 50px}
@@ -57,7 +63,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .applicant-name{font-size:13px;font-weight:600;color:#fff}
 .applicant-role{font-size:11px;color:rgba(255,255,255,0.4)}
 .applicant-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;background:rgba(79,170,223,0.15);color:var(--ice);margin-left:auto}
-
 .vorteile{background:var(--gray);padding:4rem 2rem}
 .max-w{max-width:1100px;margin:0 auto}
 .center{text-align:center}
@@ -69,7 +74,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .vorteil-icon{font-size:28px;margin-bottom:.75rem}
 .vorteil-title{font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;color:var(--dark);margin-bottom:.4rem}
 .vorteil-desc{font-size:13px;color:var(--text2);line-height:1.6}
-
 .pakete{background:#fff;padding:4rem 2rem}
 .pakete-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;max-width:860px;margin:0 auto}
 .paket-card{border:1.5px solid var(--gray2);border-radius:20px;padding:2rem;position:relative}
@@ -91,7 +95,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .paket-btn{width:100%;padding:13px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none}
 .paket-btn.primary{background:var(--navy);color:#fff !important}
 .paket-btn.outline{background:transparent;color:var(--navy) !important;border:1.5px solid rgba(4,44,83,0.2)}
-
 .kontakt{background:var(--gray);padding:4rem 2rem}
 .kontakt-inner{max-width:680px;margin:0 auto;background:#fff;border-radius:20px;border:1.5px solid var(--gray2);padding:2.5rem}
 .form-group{margin-bottom:1rem}
@@ -106,15 +109,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .paket-option-title{font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;color:var(--dark);margin-bottom:3px}
 .paket-option-price{font-size:11px;color:var(--text2)}
 .submit-btn{width:100%;background:#4FAADF !important;color:#fff !important;border:none;padding:15px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:.5rem;-webkit-text-fill-color:#fff !important;box-shadow:0 4px 16px rgba(79,170,223,0.35)}
-
 footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
 .footer-logo{font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;color:#fff}
 .footer-logo span{color:var(--ice)}
 .footer-links{display:flex;gap:1.25rem}
 .footer-links a{font-size:12px;color:rgba(255,255,255,0.45);text-decoration:none}
 .footer-copy{font-size:11px;color:rgba(255,255,255,0.3)}
-</style>
-<style>
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;margin-left:.5rem}
 .hamburger span{display:block;width:22px;height:2px;background:var(--navy);border-radius:2px;transition:all .3s}
 .hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
@@ -124,10 +124,25 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
 .mobile-menu.open{display:flex}
 .mobile-menu a{font-size:15px;padding:12px 0;border-bottom:1px solid var(--gray2);color:var(--text);text-decoration:none;font-weight:500;display:flex;align-items:center;gap:10px}
 .mobile-menu a:last-child{border-bottom:none}
+@media(max-width:768px){
+  nav{padding:0 1rem;height:56px}
+  .nav-links a:not(.active),.nav-login{display:none}
+  .hamburger{display:flex !important}
+  .hero{padding:76px 1.25rem 2rem}
+  .hero-inner{grid-template-columns:1fr !important;gap:1.5rem}
+  .hero-card{display:none}
+  .hero h1{font-size:28px !important}
+  .hero-btns{flex-direction:column}
+  .hero-btns a,.hero-btns button{width:100%;text-align:center}
+  .pakete-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .paket-select{grid-template-columns:1fr}
+  footer{flex-direction:column;padding:1.25rem}
+  .footer-links{flex-wrap:wrap}
+}
 </style>
 </head>
 <body>
-
 <nav>
   <a class="logo" href="index.html">Ausbildungs<span>Check</span></a>
   <div class="nav-links">
@@ -135,9 +150,7 @@ footer{background:var(--dark);padding:1.5rem 2rem;display:flex;align-items:cente
     <a href="stellen.html">Stellen</a>
     <a href="betriebe.html" class="active">Für Betriebe</a>
     <a href="konto.html" class="nav-login" id="nav-konto">👤 Anmelden</a>
-    
   </div>
-
   <button class="hamburger" style="display:none" onclick="toggleMenu()" id="hamburger"><span></span><span></span><span></span></button>
 </nav>
 <div class="mobile-menu" id="mobile-menu">
@@ -308,62 +321,32 @@ function submitBetriebe(){
   if(!datenschutz){alert('Bitte bestätige die Datenschutzerklärung!');return;}
   var form=document.getElementById('betriebe-form');
   var data=new FormData(form);
-  fetch('https://formspree.io/f/xdabywro',{
-    method:'POST',body:data,headers:{'Accept':'application/json'}
-  }).then(function(r){
-    if(r.ok){
-      document.getElementById('betriebe-success').style.display='block';
-      form.reset();
-      selectOption(1);
-    } else {
-      alert('Fehler beim Senden. Bitte versuche es nochmal.');
-    }
+  fetch('https://formspree.io/f/xdabywro',{method:'POST',body:data,headers:{'Accept':'application/json'}})
+  .then(function(r){
+    if(r.ok){document.getElementById('betriebe-success').style.display='block';form.reset();selectOption(1);}
+    else{alert('Fehler beim Senden. Bitte versuche es nochmal.');}
   }).catch(function(){alert('Verbindungsfehler. Bitte versuche es nochmal.');});
 }
-</script>
-
-<script>
 function toggleMenu(){
   var menu=document.getElementById('mobile-menu');
   var ham=document.getElementById('hamburger');
   menu.classList.toggle('open');
   ham.classList.toggle('open');
 }
-// Show hamburger on mobile
-if(window.innerWidth<=768){
-  document.getElementById('hamburger').style.display='flex';
-}
+if(window.innerWidth<=768){document.getElementById('hamburger').style.display='flex';}
 window.addEventListener('resize',function(){
   var ham=document.getElementById('hamburger');
   if(window.innerWidth<=768) ham.style.display='flex';
-  else {ham.style.display='none';document.getElementById('mobile-menu').classList.remove('open');}
+  else{ham.style.display='none';document.getElementById('mobile-menu').classList.remove('open');}
 });
+</script>
+<!-- PWA Service Worker -->
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('/sw.js');
+  });
+}
 </script>
 </body>
 </html>
-<style>
-@media(max-width:768px){
-  nav{padding:0 1rem;height:56px}
-  .nav-links a:not(.active),.nav-login{display:none}
-  .hamburger{display:flex !important}
-  .hero{padding:80px 1.25rem 2rem}
-  .hero h1,.page-title{font-size:28px}
-  .pakete-grid{grid-template-columns:1fr}
-  .how-grid{grid-template-columns:1fr}
-  .kontakt-grid{grid-template-columns:1fr}
-  .form-row{grid-template-columns:1fr}
-  footer{flex-direction:column;padding:1.25rem}
-  .footer-links{flex-wrap:wrap}
-  .paket-select{grid-template-columns:1fr}
-}
-</style>
-<style>
-@media(max-width:768px){
-  .hero{padding:76px 1.25rem 2rem}
-  .hero-inner{grid-template-columns:1fr !important;gap:1.5rem}
-  .hero-card{display:none}
-  .hero h1{font-size:28px !important}
-  .hero-btns{flex-direction:column}
-  .hero-btns a,.hero-btns button{width:100%;text-align:center}
-}
-</style>
