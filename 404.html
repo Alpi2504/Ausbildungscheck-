@@ -3,8 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Seite nicht gefunden – AusbildungsCheck</title>
+<!-- PWA -->
+<meta name="theme-color" content="#042C53">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AusbildungsCheck">
+<link rel="manifest" href="/manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -33,7 +41,6 @@ footer{background:var(--dark);padding:1.25rem 2rem;display:flex;align-items:cent
 <nav>
   <a class="logo" href="index.html">Ausbildungs<span>Check</span></a>
 </nav>
-
 <div class="main">
   <div class="content">
     <div class="error-code">404</div>
@@ -45,7 +52,6 @@ footer{background:var(--dark);padding:1.25rem 2rem;display:flex;align-items:cent
     </div>
   </div>
 </div>
-
 <footer>
   <div class="footer-logo">Ausbildungs<span>Check</span></div>
   <div class="footer-links">
@@ -53,5 +59,13 @@ footer{background:var(--dark);padding:1.25rem 2rem;display:flex;align-items:cent
     <a href="#">Impressum</a>
   </div>
 </footer>
+<!-- PWA Service Worker -->
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('/sw.js');
+  });
+}
+</script>
 </body>
 </html>
