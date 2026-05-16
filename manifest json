@@ -1,0 +1,43 @@
+{
+  "name": "AusbildungsCheck",
+  "short_name": "AusbildungsCheck",
+  "description": "Finde deine Traumausbildung – direkt bei Partnerbetrieben bewerben",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#042C53",
+  "theme_color": "#042C53",
+  "lang": "de",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "categories": ["education", "jobs"],
+  "shortcuts": [
+    {
+      "name": "Stellen ansehen",
+      "short_name": "Stellen",
+      "description": "Alle Ausbildungsstellen",
+      "url": "/stellen.html",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Mein Konto",
+      "short_name": "Konto",
+      "description": "Mein Profil & Bewerbungen",
+      "url": "/konto.html",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
