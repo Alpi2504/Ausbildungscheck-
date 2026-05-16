@@ -84,6 +84,16 @@ tr:hover td{background:var(--gray)}
 
 /* SECTION DIVIDER in modal */
 .form-section{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ice);margin:1.5rem 0 .75rem;padding-bottom:.5rem;border-bottom:1.5px solid var(--ice-light)}
+/* LOGO UPLOAD */
+.logo-upload-wrap{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+.logo-preview{width:64px;height:64px;border-radius:12px;background:var(--ice-light);border:1.5px solid var(--gray2);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;overflow:hidden}
+.logo-preview img{width:100%;height:100%;object-fit:contain;border-radius:10px}
+.logo-upload-btn{flex:1}
+.logo-upload-input{display:none}
+.logo-upload-label{display:inline-flex;align-items:center;gap:6px;background:var(--ice-light);color:var(--ice);border:1.5px solid rgba(79,170,223,0.3);padding:9px 16px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.logo-upload-label:hover{background:var(--ice);color:#fff}
+.logo-upload-hint{font-size:11px;color:var(--text2);margin-top:4px}
+.logo-uploading{font-size:12px;color:var(--ice);margin-top:4px;display:none}
 
 /* BEWERBUNG DETAIL */
 .bewerbung-card{background:#fff;border-radius:14px;border:1.5px solid var(--gray2);padding:1.5rem;margin-bottom:1rem}
@@ -242,6 +252,20 @@ tr:hover td{background:var(--gray)}
     <div class="form-group"><label class="form-label">E-Mail *</label><input class="form-input" id="betrieb-email" type="email" placeholder="info@firma.de"></div>
     <div class="form-group"><label class="form-label">Telefon</label><input class="form-input" id="betrieb-telefon" placeholder="+49 123 456789"></div>
     <div class="form-group"><label class="form-label">Adresse</label><input class="form-input" id="betrieb-adresse" placeholder="Musterstraße 1, 12345 Stadt"></div>
+    <!-- LOGO UPLOAD -->
+    <div class="form-group">
+      <label class="form-label">Firmenlogo</label>
+      <div class="logo-upload-wrap">
+        <div class="logo-preview" id="betrieb-logo-preview">🏢</div>
+        <div class="logo-upload-btn">
+          <label class="logo-upload-label" for="betrieb-logo-input">📁 Logo hochladen</label>
+          <input type="file" id="betrieb-logo-input" class="logo-upload-input" accept="image/*" onchange="uploadBetriebLogo(this)">
+          <div class="logo-upload-hint">PNG, JPG oder SVG · max. 2 MB</div>
+          <div class="logo-uploading" id="betrieb-logo-uploading">⏳ Wird hochgeladen...</div>
+        </div>
+      </div>
+      <input type="hidden" id="betrieb-logo-url">
+    </div>
     <div class="modal-btns">
       <button class="btn-delete" id="betrieb-delete-btn" onclick="deleteBetrieb()" style="display:none">Löschen</button>
       <button class="btn-cancel" onclick="closeModal('betrieb-modal')">Abbrechen</button>
@@ -430,6 +454,10 @@ function openBetriebModal(id){
   document.getElementById('betrieb-email').value='';
   document.getElementById('betrieb-telefon').value='';
   document.getElementById('betrieb-adresse').value='';
+  document.getElementById('betrieb-logo-url').value='';
+  document.getElementById('betrieb-logo-preview').innerHTML='🏢';
+  document.getElementById('betrieb-logo-input').value='';
+  document.getElementById('betrieb-logo-uploading').style.display='none';
   document.getElementById('betrieb-delete-btn').style.display='none';
   document.getElementById('betrieb-modal-title').textContent='Betrieb hinzufügen';
   if(id){
@@ -440,11 +468,30 @@ function openBetriebModal(id){
       document.getElementById('betrieb-email').value=b.email||'';
       document.getElementById('betrieb-telefon').value=b.telefon||'';
       document.getElementById('betrieb-adresse').value=b.adresse||'';
+      document.getElementById('betrieb-logo-url').value=b.logo_url||'';
+      if(b.logo_url){
+        document.getElementById('betrieb-logo-preview').innerHTML=`<img src="${b.logo_url}" alt="Logo">`;
+      }
       document.getElementById('betrieb-delete-btn').style.display='block';
       document.getElementById('betrieb-modal-title').textContent='Betrieb bearbeiten';
     }
   }
   document.getElementById('betrieb-modal').classList.add('open');
+}
+
+async function uploadBetriebLogo(input){
+  var file=input.files[0];
+  if(!file) return;
+  if(file.size>2*1024*1024){alert('Datei zu groß! Maximal 2 MB.');input.value='';return;}
+  document.getElementById('betrieb-logo-uploading').style.display='block';
+  var ext=file.name.split('.').pop();
+  var filename='logos/'+Date.now()+'.'+ext;
+  var {data,error}=await sb.storage.from('betrieb-logos').upload(filename,file,{upsert:true});
+  document.getElementById('betrieb-logo-uploading').style.display='none';
+  if(error){alert('Upload fehlgeschlagen: '+error.message);return;}
+  var {data:{publicUrl}}=sb.storage.from('betrieb-logos').getPublicUrl(filename);
+  document.getElementById('betrieb-logo-url').value=publicUrl;
+  document.getElementById('betrieb-logo-preview').innerHTML=`<img src="${publicUrl}" alt="Logo">`;
 }
 
 async function saveBetrieb(){
@@ -453,7 +500,8 @@ async function saveBetrieb(){
     name:document.getElementById('betrieb-name').value,
     email:document.getElementById('betrieb-email').value,
     telefon:document.getElementById('betrieb-telefon').value,
-    adresse:document.getElementById('betrieb-adresse').value
+    adresse:document.getElementById('betrieb-adresse').value,
+    logo_url:document.getElementById('betrieb-logo-url').value||null
   };
   if(!data.name||!data.email){alert('Bitte Name und E-Mail ausfüllen!');return;}
   if(id){await sb.from('betriebe').update(data).eq('id',id);}
